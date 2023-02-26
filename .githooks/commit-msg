@@ -17,5 +17,6 @@ fi
 echo -e "\e[31mThe commit message does not meet the Conventional Commit standard\e[0m"
 echo "An example of a valid message is: "
 echo "  feat(auth): add the auth controller"
+echo "available types: (build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test)"
 echo "More details at: https://www.conventionalcommits.org/en/v1.0.0/#summary"
 exit 1

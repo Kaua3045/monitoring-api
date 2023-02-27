@@ -27,6 +27,6 @@ public class ClientID extends Identifier {
 
     @Override
     public String getValue() {
-        return null;
+        return value;
     }
 }

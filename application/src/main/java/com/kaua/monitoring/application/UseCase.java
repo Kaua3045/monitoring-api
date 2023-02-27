@@ -1,6 +1,6 @@
 package com.kaua.monitoring.application;
 
-public abstract class UseCase<IN, OUT> {
+public abstract class UseCase<OUT, IN> {
 
-    public abstract IN execute(OUT aCommand);
+    public abstract OUT execute(IN aCommand);
 }

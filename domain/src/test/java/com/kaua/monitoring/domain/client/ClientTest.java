@@ -28,6 +28,8 @@ public class ClientTest {
         Assertions.assertNull(aClient.getAvatarUrl());
         Assertions.assertFalse(aClient.isEmailVerified());
         Assertions.assertEquals(expectedType, aClient.getType());
+        Assertions.assertNotNull(aClient.getCreatedAt());
+        Assertions.assertNotNull(aClient.getUpdatedAt());
     }
 
     @Test

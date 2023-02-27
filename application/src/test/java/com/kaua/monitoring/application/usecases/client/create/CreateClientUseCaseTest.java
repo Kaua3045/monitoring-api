@@ -1,7 +1,5 @@
 package com.kaua.monitoring.application.usecases.client.create;
 
-import com.kaua.monitoring.application.exceptions.DomainException;
-import com.kaua.monitoring.application.exceptions.EmailAlreadyExistsException;
 import com.kaua.monitoring.application.gateways.ClientGateway;
 import com.kaua.monitoring.domain.client.Client;
 import com.kaua.monitoring.domain.client.ClientType;

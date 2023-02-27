@@ -1,6 +1,9 @@
 package com.kaua.monitoring.application.usecases.client.create;
 
+import com.kaua.monitoring.application.exceptions.DomainException;
+import com.kaua.monitoring.application.exceptions.EmailAlreadyExistsException;
 import com.kaua.monitoring.application.gateways.ClientGateway;
+import com.kaua.monitoring.domain.client.Client;
 import com.kaua.monitoring.domain.client.ClientType;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -11,6 +14,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Objects;
+import java.util.Optional;
 
 import static org.mockito.AdditionalAnswers.returnsFirstArg;
 import static org.mockito.Mockito.*;
@@ -80,6 +84,35 @@ public class CreateClientUseCaseTest {
         Assertions.assertEquals(expectedErrorTwo, actualException.getErrors().get(1).message());
         Assertions.assertEquals(expectedErrorThree, actualException.getErrors().get(2).message());
 
+        Mockito.verify(clientGateway, times(0)).create(any());
+    }
+
+    @Test
+    public void givenAnValidCommand_whenCallsCreateClientUseCase_shouldReturnEmailAlreadyExists() {
+        final var expectedName = "kauã";
+        final var expectedEmail = "kaua@mail.com";
+        final var expectedPassword = "12345678";
+
+        final var expectedErrorMessage = "Email already exists";
+
+        when(clientGateway.findByEmail(eq(expectedEmail)))
+                .thenReturn(Optional.of(Client.newClient(
+                        expectedName,
+                        expectedEmail,
+                        expectedPassword
+                )));
+
+        final var aCommand = new CreateClientCommand(
+                expectedName,
+                expectedEmail,
+                expectedPassword
+        );
+
+        final var actualException = usecase.execute(aCommand).getLeft();
+
+        Assertions.assertEquals(expectedErrorMessage, actualException.getErrors().get(0).message());
+
+        Mockito.verify(clientGateway, times(1)).findByEmail(expectedEmail);
         Mockito.verify(clientGateway, times(0)).create(any());
     }
 }

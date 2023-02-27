@@ -1,10 +1,13 @@
 package com.kaua.monitoring.domain.client;
 
 import com.kaua.monitoring.domain.Aggregate;
+import com.kaua.monitoring.domain.exceptions.Error;
 import com.kaua.monitoring.domain.utils.InstantUtils;
 import lombok.Getter;
 
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 public class Client extends Aggregate<ClientID> {
@@ -17,6 +20,8 @@ public class Client extends Aggregate<ClientID> {
     private final ClientType type;
     private final Instant createdAt;
     private final Instant updatedAt;
+
+    private final int PASSWORD_MIN_LENGTH = 8;
 
     public Client(
             final ClientID clientID,
@@ -59,5 +64,27 @@ public class Client extends Aggregate<ClientID> {
                 now,
                 now
         );
+    }
+
+    @Override
+    public List<Error> validate() {
+        final List<Error> errors = new ArrayList<>();
+
+        if (name == null || name.isBlank()) {
+            errors.add(new Error("'name' should not be null or empty"));
+        }
+
+        if (email == null || email.isBlank()) {
+            errors.add(new Error("'email' should not be null or empty"));
+        }
+
+        if (password == null || password.isBlank()) {
+            errors.add(new Error("'password' should not be null or empty"));
+        }
+
+        if (password.length() < PASSWORD_MIN_LENGTH) {
+            errors.add(new Error("'password' must contain 8 characters at least"));
+        }
+        return errors;
     }
 }

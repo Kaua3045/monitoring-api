@@ -15,12 +15,12 @@ public class Profile extends Aggregate<ProfileID> {
     private VersionAccountType type;
 
     public Profile(
-            final String aId,
+            final ProfileID profileID,
             final String aUserId,
             final String aAvatarUrl,
             final VersionAccountType aType
     ) {
-        super(aId);
+        super(profileID);
         this.userId = aUserId;
         this.avatarUrl = aAvatarUrl;
         this.type = aType;
@@ -28,7 +28,7 @@ public class Profile extends Aggregate<ProfileID> {
 
     public static Profile newProfile(final String aUserId, final String avatarUrl) {
         return new Profile(
-                ProfileID.unique().getValue(),
+                ProfileID.unique(),
                 aUserId,
                 avatarUrl,
                 VersionAccountType.FREE

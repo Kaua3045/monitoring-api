@@ -6,7 +6,7 @@ import java.util.List;
 
 public abstract class Aggregate<ID extends Identifier> extends EntityIdentifier<ID> {
 
-    protected Aggregate(String id) {
+    protected Aggregate(ID id) {
         super(id);
     }
 

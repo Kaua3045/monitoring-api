@@ -4,14 +4,14 @@ import java.util.Objects;
 
 public abstract class EntityIdentifier<ID extends Identifier> {
 
-    protected final String id;
+    protected final ID id;
 
 
-    protected EntityIdentifier(String id) {
+    protected EntityIdentifier(ID id) {
         this.id = Objects.requireNonNull(id, "'id' should not be null");
     }
 
-    public String getId() {
+    public ID getId() {
         return id;
     }
 

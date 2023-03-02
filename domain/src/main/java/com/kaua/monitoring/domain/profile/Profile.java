@@ -30,4 +30,10 @@ public class Profile extends Aggregate<ProfileID> {
                 VersionAccountType.FREE
         );
     }
+
+    public Profile update(final String avatarUrl, final VersionAccountType type) {
+        this.avatarUrl = avatarUrl;
+        this.type = type;
+        return this;
+    }
 }

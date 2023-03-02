@@ -16,4 +16,18 @@ public class ProfileTest {
         Assertions.assertEquals(expectedUserId, aProfile.getUserId());
         Assertions.assertNull(aProfile.getAvatarUrl());
     }
+
+    @Test
+    public void givenAnInvalidValues_whenCallsNewProfile_shouldReturnErrorList() {
+        final String expectedUserId = null;
+        final var expectedAvatarUrl = "url/imaginaria";
+
+        final var expectedErrorMessage = "'userId' should not be null or empty";
+
+        final var aProfile = Profile.newProfile(expectedUserId, expectedAvatarUrl);
+
+        final var actualExceptions = aProfile.validate();
+
+        Assertions.assertEquals(expectedErrorMessage, actualExceptions.get(0).message());
+    }
 }

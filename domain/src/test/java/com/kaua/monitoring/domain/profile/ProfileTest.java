@@ -14,6 +14,7 @@ public class ProfileTest {
 
         Assertions.assertNotNull(aProfile.getId());
         Assertions.assertEquals(expectedUserId, aProfile.getUserId());
+        Assertions.assertEquals(aProfile.getType(), VersionAccountType.FREE);
         Assertions.assertNull(aProfile.getAvatarUrl());
     }
 

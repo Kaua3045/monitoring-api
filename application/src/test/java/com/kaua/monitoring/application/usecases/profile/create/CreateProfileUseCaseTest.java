@@ -41,4 +41,18 @@ public class CreateProfileUseCaseTest {
         Assertions.assertEquals(expectedAvatarUrl, actualProfile.avatarUrl());
         Assertions.assertEquals(expectedType.name(), actualProfile.type());
     }
+
+    @Test
+    public void givenAnInvalidValues_whenCallsCreate_shouldReturnDomainException() {
+        final String expectedUserId = null;
+        final var expectedAvatarUrl = "url/imaginaria";
+
+        final var expectedErrorMessage = "'userId' should not be null or empty";
+
+        final var aCommand = new CreateProfileCommand(expectedUserId, expectedAvatarUrl);
+
+        final var actualExceptions = useCase.execute(aCommand).getLeft();
+
+        Assertions.assertEquals(expectedErrorMessage, actualExceptions.getErrors().get(0).message());
+    }
 }

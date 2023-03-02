@@ -2,6 +2,7 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '3.0.3'
     id 'io.spring.dependency-management' version '1.1.0'
+    id 'org.flywaydb.flyway' version '9.8.1'
 }
 
 group 'com.kaua.monitoring.infrastructure'
@@ -18,6 +19,10 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 
+    implementation 'org.flywaydb:flyway-core'
+
+    runtimeOnly 'org.postgresql:postgresql'
+
     compileOnly 'org.projectlombok:lombok:1.18.24'
     annotationProcessor 'org.projectlombok:lombok:1.18.24'
 
@@ -30,4 +35,11 @@ dependencies {
 
 test {
     useJUnitPlatform()
+}
+
+flyway {
+    url = System.getenv('FLYWAY_DB') ?: 'jdbc:postgresql://localhost:5432/monitoring'
+    user = System.getenv('FLYWAY_USER') ?: 'postgres'
+    password = System.getenv('FLYWAY_PASS') ?: '123456'
+    cleanDisabled = false
 }

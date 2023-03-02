@@ -2,14 +2,12 @@ package com.kaua.monitoring.infrastructure.profile.persistence;
 
 import com.kaua.monitoring.domain.profile.Profile;
 import com.kaua.monitoring.domain.profile.ProfileID;
-import com.kaua.monitoring.infrastructure.utils.EntityConvert;
 
-public final class ProfileJpaFactory extends EntityConvert<ProfileJpaEntity, Profile> {
+public final class ProfileJpaFactory {
 
     private ProfileJpaFactory() {}
 
-    @Override
-    public ProfileJpaEntity toEntity(Profile aDomain) {
+    public static ProfileJpaEntity toEntity(Profile aDomain) {
         return new ProfileJpaEntity(
                 aDomain.getId().getValue(),
                 aDomain.getUserId(),
@@ -18,8 +16,7 @@ public final class ProfileJpaFactory extends EntityConvert<ProfileJpaEntity, Pro
         );
     }
 
-    @Override
-    public Profile toDomain(ProfileJpaEntity aEntity) {
+    public static Profile toDomain(ProfileJpaEntity aEntity) {
         return new Profile(
                 ProfileID.from(aEntity.getId()),
                 aEntity.getUserId(),

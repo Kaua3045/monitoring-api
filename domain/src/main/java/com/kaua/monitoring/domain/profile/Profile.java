@@ -1,7 +1,11 @@
 package com.kaua.monitoring.domain.profile;
 
 import com.kaua.monitoring.domain.Aggregate;
+import com.kaua.monitoring.domain.exceptions.Error;
 import lombok.Getter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 public class Profile extends Aggregate<ProfileID> {
@@ -35,5 +39,16 @@ public class Profile extends Aggregate<ProfileID> {
         this.avatarUrl = avatarUrl;
         this.type = type;
         return this;
+    }
+
+    @Override
+    public List<Error> validate() {
+        final var errors = new ArrayList<Error>();
+
+        if (userId == null || userId.isBlank()) {
+            errors.add(new Error("'userId' should not be null or empty"));
+        }
+
+        return errors;
     }
 }

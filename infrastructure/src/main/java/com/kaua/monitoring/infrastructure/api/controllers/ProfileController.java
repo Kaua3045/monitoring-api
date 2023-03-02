@@ -1,4 +1,4 @@
-package com.kaua.monitoring.infrastructure.controllers;
+package com.kaua.monitoring.infrastructure.api.controllers;
 
 import com.kaua.monitoring.application.usecases.profile.create.CreateProfileCommand;
 import com.kaua.monitoring.application.usecases.profile.create.CreateProfileUseCase;

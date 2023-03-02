@@ -4,7 +4,7 @@ import com.kaua.monitoring.domain.profile.VersionAccountType;
 import jakarta.persistence.*;
 import lombok.Data;
 
-@Table(name = "tb_profile")
+@Table(name = "profiles")
 @Entity
 @Data
 public class ProfileJpaEntity {

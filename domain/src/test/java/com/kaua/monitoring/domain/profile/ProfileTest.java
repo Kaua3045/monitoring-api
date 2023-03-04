@@ -3,6 +3,7 @@ package com.kaua.monitoring.domain.profile;
 import com.kaua.monitoring.domain.exceptions.Error;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.Executable;
 
 import java.util.List;
 
@@ -27,6 +28,37 @@ public class ProfileTest {
         Assertions.assertEquals(expectedEmail, aProfile.getEmail());
         Assertions.assertEquals(aProfile.getType(), VersionAccountType.FREE);
         Assertions.assertNull(aProfile.getAvatarUrl());
+    }
+
+    @Test
+    public void givenAnValidValues_whenCallsUpdate_shouldReturnProfileUpdated() {
+        final var expectedUserId = "123";
+        final var expectedUsername = "kaua";
+        final var expectedEmail = "kaua@teste.com";
+        final var expectedAvatarUrl = "imaginaria";
+        final var expectedVersionType = VersionAccountType.PREMIUM;
+
+        final var aProfile = Profile.newProfile(
+                expectedUserId,
+                "ka",
+                expectedEmail,
+                null);
+
+        final var actualProfile = aProfile.update(
+                expectedUsername,
+                expectedAvatarUrl,
+                expectedVersionType
+        );
+        final var actualProfileValidate = actualProfile.validate();
+
+        Assertions.assertEquals(0, actualProfileValidate.size());
+
+        Assertions.assertNotNull(aProfile.getId());
+        Assertions.assertEquals(expectedUserId, actualProfile.getUserId());
+        Assertions.assertEquals(expectedUsername, actualProfile.getUsername());
+        Assertions.assertEquals(expectedEmail, actualProfile.getEmail());
+        Assertions.assertEquals(expectedVersionType, actualProfile.getType());
+        Assertions.assertEquals(expectedAvatarUrl, actualProfile.getAvatarUrl());
     }
 
     @Test

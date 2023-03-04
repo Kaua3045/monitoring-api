@@ -8,6 +8,7 @@ import com.kaua.monitoring.application.usecases.profile.retrieve.get.GetProfileB
 import com.kaua.monitoring.application.usecases.profile.retrieve.get.GetProfileCommand;
 import com.kaua.monitoring.infrastructure.exceptions.UserIdDoesNotMatchException;
 import com.kaua.monitoring.infrastructure.profile.inputs.CreateProfileBody;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.oauth2.jwt.JwtDecoders;
 import org.springframework.stereotype.Component;
 
@@ -16,6 +17,9 @@ public class ProfileService {
 
     private final CreateProfileUseCase createProfileUseCase;
     private final GetProfileByUserIdUseCase getProfileByUserIdUseCase;
+
+    @Value("${spring.security.oauth2.resourceserver.jwt.issuer-uri}")
+    private String issuerUri;
 
     public ProfileService(
             final CreateProfileUseCase createProfileUseCase,
@@ -26,7 +30,7 @@ public class ProfileService {
     }
 
     public CreateProfileOutput createProfile(String token, CreateProfileBody body) {
-        final var decoderInstance = JwtDecoders.fromIssuerLocation("http://localhost:8081/auth/realms/teste");
+        final var decoderInstance = JwtDecoders.fromIssuerLocation(issuerUri);
         final var tokenDecoded = decoderInstance.decode(token.substring(7));
 
         if (!tokenDecoded.getSubject().equalsIgnoreCase(body.userId())) {

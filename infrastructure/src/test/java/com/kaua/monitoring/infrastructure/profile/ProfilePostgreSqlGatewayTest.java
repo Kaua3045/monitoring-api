@@ -83,4 +83,21 @@ public class ProfilePostgreSqlGatewayTest {
         Assertions.assertEquals(expectedAvatarUrl, actualProfile.getAvatarUrl());
         Assertions.assertEquals(expectedVersionType, actualProfile.getType());
     }
+
+    @Test
+    public void givenAnValidId_whenCallsDeleteById_shouldBeOk() {
+        final var aProfile = Profile.newProfile(
+                "12345676",
+                "a",
+                "a@mail.com",
+                null
+        );
+        final var expectedProfileId = aProfile.getId().getValue();
+
+        Assertions.assertEquals(0, profileRepository.count());
+        profileRepository.save(ProfileJpaFactory.toEntity(aProfile));
+        Assertions.assertEquals(1, profileRepository.count());
+
+        Assertions.assertDoesNotThrow(() -> profileGateway.deleteById(expectedProfileId));
+    }
 }

@@ -20,10 +20,16 @@ public class ProfilePostgreSqlGatewayTest {
     @Test
     public void givenAnValidValues_whenCallsCreate_shouldReturnProfile() {
         final var expectedUserId = "123";
+        final var expectedUsername = "kaua";
+        final var expectedEmail = "kaua@teste.com";
         final String expectedAvatarUrl = null;
         final var expectedVersionType = VersionAccountType.FREE;
 
-        final var aProfile = Profile.newProfile(expectedUserId, expectedAvatarUrl);
+        final var aProfile = Profile.newProfile(
+                expectedUserId,
+                expectedUsername,
+                expectedEmail,
+                expectedAvatarUrl);
 
         Assertions.assertEquals(0, profileRepository.count());
 

@@ -15,6 +15,7 @@ import java.lang.annotation.*;
 @DataJpaTest
 @ComponentScan(
         basePackages = "com.kaua.monitoring",
+        useDefaultFilters = false,
         includeFilters = {
                 @ComponentScan.Filter(type = FilterType.REGEX, pattern = ".*PostgreSqlGateway")
         }

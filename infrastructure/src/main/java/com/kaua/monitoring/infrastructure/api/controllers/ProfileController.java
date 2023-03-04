@@ -17,9 +17,9 @@ public class ProfileController implements ProfileAPI {
     }
 
     @Override
-    public ResponseEntity<?> create(CreateProfileBody body) {
+    public ResponseEntity<?> create(String authorization, CreateProfileBody body) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(this.profileService.createProfile(body));
+                .body(this.profileService.createProfile(authorization, body));
     }
 }

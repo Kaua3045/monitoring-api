@@ -21,10 +21,14 @@ public class DefaultUpdateProfileUseCase extends UpdateProfileUseCase {
         final var aProfileExists = this.profileGateway.findById(aCommand.profileId())
                 .orElseThrow(() -> new NotFoundException(Profile.class, aCommand.profileId()));
 
+        final var aType = aCommand.type() == null
+                ? aProfileExists.getType()
+                : VersionAccountType.valueOf(aCommand.type());
+
         final var aProfileUpdated = aProfileExists.update(
                 aCommand.username(),
                 aCommand.avatarUrl(),
-                VersionAccountType.valueOf(aCommand.type())
+                aType
         );
 
         final var aProfileUpdatedValidate = aProfileUpdated.validate();

@@ -8,8 +8,11 @@ import com.kaua.monitoring.application.usecases.profile.outputs.CreateProfileOut
 import com.kaua.monitoring.application.usecases.profile.outputs.ProfileOutput;
 import com.kaua.monitoring.application.usecases.profile.retrieve.get.GetProfileByUserIdUseCase;
 import com.kaua.monitoring.application.usecases.profile.retrieve.get.GetProfileCommand;
+import com.kaua.monitoring.application.usecases.profile.update.UpdateProfileCommand;
+import com.kaua.monitoring.application.usecases.profile.update.UpdateProfileUseCase;
 import com.kaua.monitoring.infrastructure.exceptions.UserIdDoesNotMatchException;
 import com.kaua.monitoring.infrastructure.profile.inputs.CreateProfileBody;
+import com.kaua.monitoring.infrastructure.profile.inputs.UpdateProfileBody;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.oauth2.jwt.JwtDecoders;
 import org.springframework.stereotype.Component;
@@ -19,6 +22,7 @@ public class ProfileService {
 
     private final CreateProfileUseCase createProfileUseCase;
     private final GetProfileByUserIdUseCase getProfileByUserIdUseCase;
+    private final UpdateProfileUseCase updateProfileUseCase;
     private final DeleteProfileUseCase deleteProfileUseCase;
 
     @Value("${spring.security.oauth2.resourceserver.jwt.issuer-uri}")
@@ -27,10 +31,12 @@ public class ProfileService {
     public ProfileService(
             final CreateProfileUseCase createProfileUseCase,
             final GetProfileByUserIdUseCase getProfileByUserIdUseCase,
+            final UpdateProfileUseCase updateProfileUseCase,
             final DeleteProfileUseCase deleteProfileUseCase
     ) {
         this.createProfileUseCase = createProfileUseCase;
         this.getProfileByUserIdUseCase = getProfileByUserIdUseCase;
+        this.updateProfileUseCase = updateProfileUseCase;
         this.deleteProfileUseCase = deleteProfileUseCase;
     }
 
@@ -61,6 +67,22 @@ public class ProfileService {
         final var aResult = this.getProfileByUserIdUseCase.execute(aCommand);
 
         return aResult;
+    }
+
+    public ProfileOutput updateProfile(String profileId, UpdateProfileBody body) {
+        final var aCommand = new UpdateProfileCommand(
+                profileId,
+                body.username(),
+                body.avatarUrl(),
+                body.type()
+        );
+        final var aResult = this.updateProfileUseCase.execute(aCommand);
+
+        if (aResult.isLeft()) {
+            throw aResult.getLeft();
+        }
+
+        return aResult.getRight();
     }
 
     public void deleteProfile(String profileId) {

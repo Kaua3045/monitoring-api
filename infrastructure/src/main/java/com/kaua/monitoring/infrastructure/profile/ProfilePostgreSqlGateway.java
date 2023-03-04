@@ -37,7 +37,8 @@ public class ProfilePostgreSqlGateway implements ProfileGateway {
 
     @Override
     public Profile update(Profile aProfile) {
-        return null;
+        final var aEntity = this.profileRepository.save(ProfileJpaFactory.toEntity(aProfile));
+        return ProfileJpaFactory.toDomain(aEntity);
     }
 
     @Override

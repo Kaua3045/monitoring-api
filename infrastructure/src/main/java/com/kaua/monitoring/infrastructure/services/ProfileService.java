@@ -2,6 +2,8 @@ package com.kaua.monitoring.infrastructure.services;
 
 import com.kaua.monitoring.application.usecases.profile.create.CreateProfileCommand;
 import com.kaua.monitoring.application.usecases.profile.create.CreateProfileUseCase;
+import com.kaua.monitoring.application.usecases.profile.delete.DeleteProfileCommand;
+import com.kaua.monitoring.application.usecases.profile.delete.DeleteProfileUseCase;
 import com.kaua.monitoring.application.usecases.profile.outputs.CreateProfileOutput;
 import com.kaua.monitoring.application.usecases.profile.outputs.ProfileOutput;
 import com.kaua.monitoring.application.usecases.profile.retrieve.get.GetProfileByUserIdUseCase;
@@ -17,16 +19,19 @@ public class ProfileService {
 
     private final CreateProfileUseCase createProfileUseCase;
     private final GetProfileByUserIdUseCase getProfileByUserIdUseCase;
+    private final DeleteProfileUseCase deleteProfileUseCase;
 
     @Value("${spring.security.oauth2.resourceserver.jwt.issuer-uri}")
     private String issuerUri;
 
     public ProfileService(
             final CreateProfileUseCase createProfileUseCase,
-            final GetProfileByUserIdUseCase getProfileByUserIdUseCase
+            final GetProfileByUserIdUseCase getProfileByUserIdUseCase,
+            final DeleteProfileUseCase deleteProfileUseCase
     ) {
         this.createProfileUseCase = createProfileUseCase;
         this.getProfileByUserIdUseCase = getProfileByUserIdUseCase;
+        this.deleteProfileUseCase = deleteProfileUseCase;
     }
 
     public CreateProfileOutput createProfile(String token, CreateProfileBody body) {
@@ -56,5 +61,10 @@ public class ProfileService {
         final var aResult = this.getProfileByUserIdUseCase.execute(aCommand);
 
         return aResult;
+    }
+
+    public void deleteProfile(String profileId) {
+        final var aCommand = new DeleteProfileCommand(profileId);
+        this.deleteProfileUseCase.execute(aCommand);
     }
 }

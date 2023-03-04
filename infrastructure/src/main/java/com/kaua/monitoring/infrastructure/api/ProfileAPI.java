@@ -19,4 +19,7 @@ public interface ProfileAPI {
             produces = MediaType.APPLICATION_JSON_VALUE
     )
     ResponseEntity<?> getByUserId(@PathVariable String userId);
+
+    @DeleteMapping(value = "{profileId}")
+    ResponseEntity<?> deleteById(@PathVariable String profileId);
 }

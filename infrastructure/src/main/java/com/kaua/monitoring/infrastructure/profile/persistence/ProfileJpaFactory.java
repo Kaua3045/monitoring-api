@@ -11,6 +11,8 @@ public final class ProfileJpaFactory {
         return new ProfileJpaEntity(
                 aDomain.getId().getValue(),
                 aDomain.getUserId(),
+                aDomain.getUsername(),
+                aDomain.getEmail(),
                 aDomain.getAvatarUrl(),
                 aDomain.getType()
         );
@@ -20,6 +22,8 @@ public final class ProfileJpaFactory {
         return new Profile(
                 ProfileID.from(aEntity.getId()),
                 aEntity.getUserId(),
+                aEntity.getUsername(),
+                aEntity.getEmail(),
                 aEntity.getAvatarUrl(),
                 aEntity.getType()
         );

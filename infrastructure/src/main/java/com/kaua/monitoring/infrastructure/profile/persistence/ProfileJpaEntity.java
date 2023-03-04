@@ -15,6 +15,12 @@ public class ProfileJpaEntity {
     @Column(name = "user_id", nullable = false)
     private String userId;
 
+    @Column(name = "username", nullable = false)
+    private String username;
+
+    @Column(name = "email", nullable = false)
+    private String email;
+
     @Column(name = "avatar_url")
     private String avatarUrl;
 
@@ -26,11 +32,15 @@ public class ProfileJpaEntity {
     public ProfileJpaEntity(
             final String id,
             final String userId,
+            final String username,
+            final String email,
             final String avatarUrl,
             final VersionAccountType type
     ) {
         this.id = id;
         this.userId = userId;
+        this.username = username;
+        this.email = email;
         this.avatarUrl = avatarUrl;
         this.type = type;
     }

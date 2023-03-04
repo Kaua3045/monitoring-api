@@ -15,7 +15,7 @@ public interface ProfileAPI {
     ResponseEntity<?> create(@RequestHeader String authorization, @RequestBody CreateProfileBody body);
 
     @GetMapping(
-            value = "{id}",
+            value = "{userId}",
             produces = MediaType.APPLICATION_JSON_VALUE
     )
     ResponseEntity<?> getByUserId(@PathVariable String userId);

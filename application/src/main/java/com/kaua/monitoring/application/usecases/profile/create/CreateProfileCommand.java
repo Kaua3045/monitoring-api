@@ -1,4 +1,9 @@
 package com.kaua.monitoring.application.usecases.profile.create;
 
-public record CreateProfileCommand(String userId, String avatarUrl) {
+public record CreateProfileCommand(
+        String userId,
+        String username,
+        String email,
+        String avatarUrl
+) {
 }

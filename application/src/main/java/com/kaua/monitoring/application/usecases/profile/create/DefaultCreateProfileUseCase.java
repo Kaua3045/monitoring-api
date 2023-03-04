@@ -25,7 +25,11 @@ public class DefaultCreateProfileUseCase extends CreateProfileUseCase {
             return Either.left(DomainException.with(UserIdAlreadyExistsException.with()));
         }
 
-        final var aProfile = Profile.newProfile(aCommand.userId(), aCommand.avatarUrl());
+        final var aProfile = Profile.newProfile(
+                aCommand.userId(),
+                aCommand.username(),
+                aCommand.email(),
+                aCommand.avatarUrl());
 
         final var aProfileValidate = aProfile.validate();
 
@@ -38,6 +42,8 @@ public class DefaultCreateProfileUseCase extends CreateProfileUseCase {
         return Either.right(new CreateProfileOutput(
                 aProfile.getId().getValue(),
                 aProfile.getUserId(),
+                aProfile.getUsername(),
+                aProfile.getEmail(),
                 aProfile.getAvatarUrl(),
                 aProfile.getType().name()
         ));

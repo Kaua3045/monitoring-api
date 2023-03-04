@@ -25,7 +25,8 @@ public class ProfilePostgreSqlGateway implements ProfileGateway {
 
     @Override
     public Optional<Profile> findById(String profileId) {
-        return Optional.empty();
+        return this.profileRepository.findById(profileId)
+                .map(ProfileJpaFactory::toDomain);
     }
 
     @Override
@@ -41,6 +42,8 @@ public class ProfilePostgreSqlGateway implements ProfileGateway {
 
     @Override
     public void deleteById(String profileId) {
-
+        if (this.profileRepository.existsById(profileId)) {
+            this.profileRepository.deleteById(profileId);
+        }
     }
 }

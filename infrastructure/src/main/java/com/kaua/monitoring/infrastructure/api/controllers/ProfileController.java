@@ -22,4 +22,11 @@ public class ProfileController implements ProfileAPI {
                 .status(HttpStatus.CREATED)
                 .body(this.profileService.createProfile(authorization, body));
     }
+
+    @Override
+    public ResponseEntity<?> getByUserId(String userId) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(this.profileService.getByUserIdProfile(userId));
+    }
 }

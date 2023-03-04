@@ -2,6 +2,7 @@ package com.kaua.monitoring.infrastructure.api.controllers;
 
 import com.kaua.monitoring.infrastructure.api.ProfileAPI;
 import com.kaua.monitoring.infrastructure.profile.inputs.CreateProfileBody;
+import com.kaua.monitoring.infrastructure.profile.inputs.UpdateProfileBody;
 import com.kaua.monitoring.infrastructure.services.ProfileService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +29,13 @@ public class ProfileController implements ProfileAPI {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(this.profileService.getByUserIdProfile(userId));
+    }
+
+    @Override
+    public ResponseEntity<?> updateProfile(String profileId, UpdateProfileBody body) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(this.profileService.updateProfile(profileId, body));
     }
 
     @Override

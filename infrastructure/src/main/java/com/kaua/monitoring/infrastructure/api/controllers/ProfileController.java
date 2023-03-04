@@ -29,4 +29,12 @@ public class ProfileController implements ProfileAPI {
                 .status(HttpStatus.OK)
                 .body(this.profileService.getByUserIdProfile(userId));
     }
+
+    @Override
+    public ResponseEntity<?> deleteById(String profileId) {
+        this.profileService.deleteProfile(profileId);
+        return ResponseEntity
+                .status(HttpStatus.NO_CONTENT)
+                .build();
+    }
 }

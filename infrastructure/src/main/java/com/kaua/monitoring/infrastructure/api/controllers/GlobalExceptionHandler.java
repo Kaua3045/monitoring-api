@@ -1,6 +1,7 @@
 package com.kaua.monitoring.infrastructure.api.controllers;
 
 import com.kaua.monitoring.application.exceptions.DomainException;
+import com.kaua.monitoring.application.exceptions.NotFoundException;
 import com.kaua.monitoring.infrastructure.exceptions.UserIdDoesNotMatchException;
 import com.kaua.monitoring.infrastructure.utils.ApiError;
 import org.springframework.http.HttpStatus;
@@ -22,6 +23,12 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(UserIdDoesNotMatchException.class)
     public ResponseEntity<?> handleUserIdDoesNotMatchException(final UserIdDoesNotMatchException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(new ApiError(ex.getMessage(), Collections.emptyList()));
+    }
+
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<?> handleNotFoundException(final NotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(new ApiError(ex.getMessage(), Collections.emptyList()));
     }
 }

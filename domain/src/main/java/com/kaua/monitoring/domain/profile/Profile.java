@@ -47,6 +47,24 @@ public class Profile extends Aggregate<ProfileID> {
         );
     }
 
+    public static Profile with(
+            final ProfileID profileID,
+            final String aUserId,
+            final String aUsername,
+            final String aEmail,
+            final String aAvatarUrl,
+            final VersionAccountType aType
+    ) {
+        return new Profile(
+                profileID,
+                aUserId,
+                aUsername,
+                aEmail,
+                aAvatarUrl,
+                aType
+        );
+    }
+
     public Profile update(final String username, final String avatarUrl, final VersionAccountType type) {
         this.username = username;
         this.avatarUrl = avatarUrl;

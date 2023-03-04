@@ -10,6 +10,8 @@ public interface ProfileGateway {
 
     Optional<Profile> findById(final String profileId);
 
+    Optional<Profile> findByUserId(final String userId);
+
     Profile update(final Profile aProfile);
 
     void deleteById(final String profileId);

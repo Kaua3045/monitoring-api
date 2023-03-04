@@ -100,4 +100,40 @@ public class ProfilePostgreSqlGatewayTest {
 
         Assertions.assertDoesNotThrow(() -> profileGateway.deleteById(expectedProfileId));
     }
+
+    @Test
+    public void givenAnValidValues_whenCallsUpdate_shouldReturnProfileUpdated() {
+        final var expectedUserId = "123";
+        final var expectedUsername = "kaua";
+        final var expectedEmail = "kaua@teste.com";
+        final String expectedAvatarUrl = "imaginaria";
+        final var expectedVersionType = VersionAccountType.PREMIUM;
+
+        final var aProfile = Profile.newProfile(
+                expectedUserId,
+                "ka",
+                expectedEmail,
+                null);
+
+        Assertions.assertEquals(0, profileRepository.count());
+
+        profileRepository.save(ProfileJpaFactory.toEntity(aProfile));
+
+        Assertions.assertEquals(1, profileRepository.count());
+
+        final var actualProfile = profileGateway.update(Profile.with(
+                aProfile.getId(),
+                expectedUserId,
+                expectedUsername,
+                expectedEmail,
+                expectedAvatarUrl,
+                expectedVersionType
+        ));
+
+        Assertions.assertNotNull(actualProfile);
+        Assertions.assertEquals(aProfile.getId().getValue(), actualProfile.getId().getValue());
+        Assertions.assertEquals(expectedUserId, actualProfile.getUserId());
+        Assertions.assertEquals(expectedAvatarUrl, actualProfile.getAvatarUrl());
+        Assertions.assertEquals(expectedVersionType, actualProfile.getType());
+    }
 }

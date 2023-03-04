@@ -1,6 +1,7 @@
 package com.kaua.monitoring.application.usecases.profile.create;
 
 import com.kaua.monitoring.application.exceptions.DomainException;
+import com.kaua.monitoring.application.exceptions.UserIdAlreadyExistsException;
 import com.kaua.monitoring.application.exceptions.either.Either;
 import com.kaua.monitoring.application.gateways.ProfileGateway;
 import com.kaua.monitoring.application.usecases.profile.outputs.CreateProfileOutput;
@@ -18,6 +19,12 @@ public class DefaultCreateProfileUseCase extends CreateProfileUseCase {
 
     @Override
     public Either<DomainException, CreateProfileOutput> execute(CreateProfileCommand aCommand) {
+        final var aProfileExists = this.profileGateway.findByUserId(aCommand.userId());
+
+        if (aProfileExists.isPresent()) {
+            return Either.left(DomainException.with(UserIdAlreadyExistsException.with()));
+        }
+
         final var aProfile = Profile.newProfile(aCommand.userId(), aCommand.avatarUrl());
 
         final var aProfileValidate = aProfile.validate();

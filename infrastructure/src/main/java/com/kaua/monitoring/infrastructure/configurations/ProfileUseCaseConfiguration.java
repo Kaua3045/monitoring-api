@@ -3,6 +3,8 @@ package com.kaua.monitoring.infrastructure.configurations;
 import com.kaua.monitoring.application.gateways.ProfileGateway;
 import com.kaua.monitoring.application.usecases.profile.create.CreateProfileUseCase;
 import com.kaua.monitoring.application.usecases.profile.create.DefaultCreateProfileUseCase;
+import com.kaua.monitoring.application.usecases.profile.delete.DefaultDeleteProfileUseCase;
+import com.kaua.monitoring.application.usecases.profile.delete.DeleteProfileUseCase;
 import com.kaua.monitoring.application.usecases.profile.retrieve.get.DefaultGetProfileByUserIdUseCase;
 import com.kaua.monitoring.application.usecases.profile.retrieve.get.GetProfileByUserIdUseCase;
 import org.springframework.context.annotation.Bean;
@@ -25,5 +27,10 @@ public class ProfileUseCaseConfiguration {
     @Bean
     public GetProfileByUserIdUseCase getProfileByUserIdUseCase() {
         return new DefaultGetProfileByUserIdUseCase(profileGateway);
+    }
+
+    @Bean
+    public DeleteProfileUseCase deleteProfileUseCase() {
+        return new DefaultDeleteProfileUseCase(profileGateway);
     }
 }

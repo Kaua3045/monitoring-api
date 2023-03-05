@@ -3,7 +3,6 @@ package com.kaua.monitoring.application.usecases.link.outputs;
 import com.kaua.monitoring.domain.links.Link;
 
 import java.time.ZoneId;
-import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.Locale;

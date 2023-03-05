@@ -83,7 +83,7 @@ public class Link extends Aggregate<LinkID> {
             errors.add(new Error("'executeDate' should not be null"));
         }
 
-        if (executeDate != null && executeDate.isAfter(Instant.now())) {
+        if (executeDate != null && executeDate.isBefore(Instant.now())) {
             errors.add(new Error("'executeDate' cannot be a date that has already passed"));
         }
 

@@ -45,7 +45,7 @@ public class LinkTest {
     public void givenAnValidValues_whenCallsUpdate_shouldReturnLinkUpdated() {
         final var expectedTitle = "monitoring";
         final var expectedUrl = "https://teste.com";
-        final var expectedExecuteDate = Instant.now();
+        final var expectedExecuteDate = Instant.now().plus(5, ChronoUnit.MINUTES);
         final var expectedRepeat = true;
         final var expectedProfile = Profile.
                 newProfile(
@@ -90,6 +90,7 @@ public class LinkTest {
         final var expectedErrorsList = List.of(
                 new Error("'title' should not be null or empty"),
                 new Error("'url' you must provide a valid url"),
+                new Error("'executeDate' cannot be a date that has already passed"),
                 new Error("'profile' should not be null")
         );
 

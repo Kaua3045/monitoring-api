@@ -96,7 +96,7 @@ public class Link extends Aggregate<LinkID> {
 
     private boolean isUrlValid(final String aUrl) {
         try {
-            final var a = new URL(aUrl).toURI();
+            new URL(aUrl).toURI();
             return true;
         } catch (MalformedURLException | URISyntaxException e) {
             return false;

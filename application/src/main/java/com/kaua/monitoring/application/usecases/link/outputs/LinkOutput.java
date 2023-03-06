@@ -4,6 +4,7 @@ import com.kaua.monitoring.domain.links.Link;
 
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 
 public record LinkOutput(
         String id,
@@ -18,7 +19,9 @@ public record LinkOutput(
         final var aFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")
                 .withZone(ZoneId.of("America/Sao_Paulo"));
 
-        final var aExecuteDateFormatted = aFormatter.format(aLink.getExecuteDate());
+        // Se tirar o plus retorna -3 horas
+        final var aExecuteDateFormatted = aFormatter.format(aLink.getExecuteDate()
+                .plus(3, ChronoUnit.HOURS));
 
         return new LinkOutput(
                 aLink.getId().getValue(),

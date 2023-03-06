@@ -10,8 +10,6 @@ import com.kaua.monitoring.infrastructure.link.inputs.CreateLinkBody;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 
 @Component
 public class LinkService {
@@ -25,10 +23,7 @@ public class LinkService {
     }
 
     public CreateLinkOutput createLink(CreateLinkBody body) {
-        final var executeDate = LocalDateTime.ofInstant(
-                Instant.ofEpochMilli(body.executeDate()),
-                ZoneId.of("America/Sao_Paulo")
-        );
+        final var executeDate = Instant.ofEpochMilli(body.executeDate());
 
         final var aCommand = new CreateLinkCommand(
                 body.title(),

@@ -2,6 +2,7 @@ package com.kaua.monitoring.application.usecases.link.outputs;
 
 import com.kaua.monitoring.domain.links.Link;
 
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 
 public record LinkOutput(
@@ -14,10 +15,10 @@ public record LinkOutput(
 ) {
 
     public static LinkOutput from(final Link aLink) {
-        final var aFormatter = DateTimeFormatter
-                .ofPattern("dd/MM/yyyy HH:mm:ss");
+        final var aFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")
+                .withZone(ZoneId.of("America/Sao_Paulo"));
 
-        final var aExecuteDateFormatted = aLink.getExecuteDate().format(aFormatter);
+        final var aExecuteDateFormatted = aFormatter.format(aLink.getExecuteDate());
 
         return new LinkOutput(
                 aLink.getId().getValue(),

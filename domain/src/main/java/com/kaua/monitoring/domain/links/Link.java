@@ -8,7 +8,7 @@ import lombok.Getter;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,7 +17,7 @@ public class Link extends Aggregate<LinkID> {
 
     private String title;
     private String url;
-    private LocalDateTime executeDate;
+    private Instant executeDate;
     private boolean repeat;
     private Profile profile;
 
@@ -25,7 +25,7 @@ public class Link extends Aggregate<LinkID> {
             final LinkID aLinkID,
             final String aTitle,
             final String aUrl,
-            final LocalDateTime aExecuteDate,
+            final Instant aExecuteDate,
             final boolean aRepeat,
             final Profile aProfile
     ) {
@@ -40,7 +40,7 @@ public class Link extends Aggregate<LinkID> {
     public static Link newLink(
             final String aTitle,
             final String aUrl,
-            final LocalDateTime aExecuteDate,
+            final Instant aExecuteDate,
             final boolean aRepeat,
             final Profile aProfile
     ) {
@@ -57,7 +57,7 @@ public class Link extends Aggregate<LinkID> {
     public Link update(
             final String aTitle,
             final String aUrl,
-            final LocalDateTime aExecuteDate,
+            final Instant aExecuteDate,
             final boolean aRepeat
     ) {
         this.title = aTitle;
@@ -83,7 +83,7 @@ public class Link extends Aggregate<LinkID> {
             errors.add(new Error("'executeDate' should not be null"));
         }
 
-        if (executeDate != null && executeDate.isBefore(LocalDateTime.now())) {
+        if (executeDate != null && executeDate.isBefore(Instant.now())) {
             errors.add(new Error("'executeDate' cannot be a date that has already passed"));
         }
 

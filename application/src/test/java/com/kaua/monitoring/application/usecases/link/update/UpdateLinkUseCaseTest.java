@@ -14,8 +14,6 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Objects;
@@ -37,9 +35,7 @@ public class UpdateLinkUseCaseTest {
     public void givenAnValidValues_whenCallsUpdate_shouldReturnLinkId() {
         final var expectedTitle = "teste";
         final var expectedUrl = "https://teste.com";
-        final var expectedExecuteDate = LocalDateTime.ofInstant(
-                Instant.now().plus(5, ChronoUnit.DAYS),
-                ZoneId.of("America/Sao_Paulo"));
+        final var expectedExecuteDate = Instant.now().plus(10, ChronoUnit.DAYS);
         final var expectedRepeat = false;
         final var expectedProfile = Profile
                 .newProfile(
@@ -52,9 +48,7 @@ public class UpdateLinkUseCaseTest {
         final var aLink = Link.newLink(
                 "a",
                 "https://localhost.com",
-                LocalDateTime.ofInstant(
-                        Instant.now().plus(5, ChronoUnit.DAYS),
-                        ZoneId.of("America/Sao_Paulo")),
+                Instant.now().plus(5, ChronoUnit.DAYS),
                 true,
                 expectedProfile
         );
@@ -96,7 +90,7 @@ public class UpdateLinkUseCaseTest {
     public void givenAnInvalidValues_whenCallsUpdate_shouldReturnDomainErrors() {
         final String expectedTitle = null;
         final var expectedUrl = "";
-        final LocalDateTime expectedExecuteDate = null;
+        final Instant expectedExecuteDate = null;
         final var expectedRepeat = true;
         final var expectedProfile = Profile
                 .newProfile(
@@ -109,9 +103,7 @@ public class UpdateLinkUseCaseTest {
         final var aLink = Link.newLink(
                 "a",
                 "https://localhost.com",
-                LocalDateTime.ofInstant(
-                        Instant.now().plus(5, ChronoUnit.DAYS),
-                        ZoneId.of("America/Sao_Paulo")),
+                Instant.now().plus(5, ChronoUnit.DAYS),
                 true,
                 expectedProfile
         );
@@ -146,9 +138,7 @@ public class UpdateLinkUseCaseTest {
     public void givenAnValidValuesAndInvalidId_whenCallsUpdate_shouldThrowNotFoundException() {
         final var expectedTitle = "teste";
         final var expectedUrl = "https://teste.com";
-        final var expectedExecuteDate = LocalDateTime.ofInstant(
-                Instant.now().plus(5, ChronoUnit.DAYS),
-                ZoneId.of("America/Sao_Paulo"));
+        final var expectedExecuteDate = Instant.now().plus(5, ChronoUnit.DAYS);
         final var expectedRepeat = false;
         final var expectedId = "123";
         final var expectedErrorMessage = "Link with ID 123 was not found";

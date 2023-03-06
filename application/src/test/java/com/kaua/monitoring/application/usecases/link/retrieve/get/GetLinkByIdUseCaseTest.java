@@ -12,12 +12,11 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.Optional;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class GetLinkByIdUseCaseTest {
@@ -32,10 +31,7 @@ public class GetLinkByIdUseCaseTest {
     public void givenAnValidId_whenCallsFindById_shouldReturnLink() {
         final var expectedTitle = "teste";
         final var expectedUrl = "https://localhost.com";
-        final var expectedExecuteDate = LocalDateTime.ofInstant(
-                Instant.now().plus(5, ChronoUnit.DAYS),
-                ZoneId.of("America/Sao_Paulo")
-        );
+        final var expectedExecuteDate = Instant.now().plus(5, ChronoUnit.DAYS);
         final var expectedRepeat = true;
         final var expectedProfile = Profile
                 .newProfile(

@@ -22,4 +22,11 @@ public class LinkController implements LinkAPI {
                 .status(HttpStatus.CREATED)
                 .body(this.linkService.createLink(body));
     }
+
+    @Override
+    public ResponseEntity<?> getLinkById(String id) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(this.linkService.getLinkById(id));
+    }
 }

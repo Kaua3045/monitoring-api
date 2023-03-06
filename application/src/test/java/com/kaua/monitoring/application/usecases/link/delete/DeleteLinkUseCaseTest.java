@@ -12,6 +12,8 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 
 import static org.mockito.Mockito.*;
@@ -30,7 +32,9 @@ public class DeleteLinkUseCaseTest {
         final var aLink = Link.newLink(
                 "teste",
                 "https://localhost.com",
-                Instant.now().plus(5, ChronoUnit.DAYS),
+                LocalDateTime.ofInstant(
+                        Instant.now().plus(5, ChronoUnit.DAYS),
+                        ZoneId.of("America/Sao_Paulo")),
                 true,
                 Profile.newProfile(
                         "123",

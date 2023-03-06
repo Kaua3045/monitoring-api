@@ -14,6 +14,8 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Objects;
@@ -38,7 +40,9 @@ public class CreateLinkUseCaseTest {
     public void givenAnValidValues_whenCallsCreate_shouldReturnLinkId() {
         final var expectedTitle = "teste";
         final var expectedUrl = "https://localhost.com";
-        final var expectedExecuteDate = Instant.now().plus(1, ChronoUnit.DAYS);
+        final var expectedExecuteDate = LocalDateTime.ofInstant(
+                Instant.now().plus(5, ChronoUnit.DAYS),
+                ZoneId.of("America/Sao_Paulo"));
         final var expectedRepeat = true;
         final var expectedProfile = Profile.
                 newProfile(
@@ -83,7 +87,9 @@ public class CreateLinkUseCaseTest {
     public void givenAnInvalidValues_whenCallsCreate_shouldReturnDomainErrors() {
         final String expectedTitle = null;
         final var expectedUrl = "a";
-        final var expectedExecuteDate = Instant.parse("2007-12-03T10:15:30.00Z");
+        final var expectedExecuteDate = LocalDateTime.ofInstant(
+                Instant.parse("2007-12-03T10:15:30.00Z"),
+                ZoneId.of("America/Sao_Paulo"));
         final var expectedRepeat = true;
         final var expectedProfile = Profile.
                 newProfile(
@@ -122,7 +128,10 @@ public class CreateLinkUseCaseTest {
     public void givenAnValidValuesAndInvalidProfile_whenCallsCreate_shouldThrowNotFoundException() {
         final var expectedTitle = "teste";
         final var expectedUrl = "https://localhost.com";
-        final var expectedExecuteDate = Instant.now().plus(5, ChronoUnit.MINUTES);
+        final var expectedExecuteDate = LocalDateTime.ofInstant(
+                Instant.now().plus(5, ChronoUnit.DAYS),
+                ZoneId.of("America/Sao_Paulo")
+        );
         final var expectedRepeat = true;
         final var expectedProfile = "123";
 

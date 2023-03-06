@@ -13,6 +13,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
@@ -44,14 +46,18 @@ public class ListLinkByProfileIdUseCaseTest {
                 Link.newLink(
                         "teste 1",
                         "https://localhost.com",
-                        Instant.now().plus(5, ChronoUnit.DAYS),
+                        LocalDateTime.ofInstant(
+                                Instant.now().plus(5, ChronoUnit.DAYS),
+                                ZoneId.of("America/Sao_Paulo")),
                         true,
                         expectedProfile
                 ),
                 Link.newLink(
                         "teste 2",
                         "https://localhost.com",
-                        Instant.now().plus(5, ChronoUnit.DAYS),
+                        LocalDateTime.ofInstant(
+                                Instant.now().plus(5, ChronoUnit.DAYS),
+                                ZoneId.of("America/Sao_Paulo")),
                         false,
                         expectedProfile
                 )

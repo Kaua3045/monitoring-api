@@ -9,17 +9,18 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.Optional;
 
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class GetLinkByIdUseCase {
+public class GetLinkByIdUseCaseTest {
 
     @InjectMocks
     private DefaultGetLinkByIdUseCase useCase;
@@ -31,7 +32,10 @@ public class GetLinkByIdUseCase {
     public void givenAnValidId_whenCallsFindById_shouldReturnLink() {
         final var expectedTitle = "teste";
         final var expectedUrl = "https://localhost.com";
-        final var expectedExecuteDate = Instant.now().plus(5, ChronoUnit.DAYS);
+        final var expectedExecuteDate = LocalDateTime.ofInstant(
+                Instant.now().plus(5, ChronoUnit.DAYS),
+                ZoneId.of("America/Sao_Paulo")
+        );
         final var expectedRepeat = true;
         final var expectedProfile = Profile
                 .newProfile(

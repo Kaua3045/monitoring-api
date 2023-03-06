@@ -11,6 +11,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 
 @PostgreSqlGatewayTest
@@ -38,7 +40,10 @@ public class LinkPostgreSqlGatewayTest {
 
         final var expectedTitle = "teste";
         final var expectedUrl = "https://localhost.com";
-        final var expectedExecuteDate = Instant.now().plus(5, ChronoUnit.DAYS);
+        final var expectedExecuteDate = LocalDateTime.ofInstant(
+                Instant.now().plus(5, ChronoUnit.DAYS),
+                ZoneId.of("America/Sao_Paulo"));
+
         final var expectedRepeat = true;
 
         final var aLink = Link.newLink(

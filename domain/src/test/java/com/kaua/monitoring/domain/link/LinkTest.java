@@ -7,6 +7,8 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
@@ -16,7 +18,10 @@ public class LinkTest {
     public void givenAnValidValues_whenCallsNewLink_shouldReturnLinkCreated() {
         final var expectedTitle = "monitoring";
         final var expectedUrl = "https://teste.com";
-        final var expectedExecuteDate = Instant.now();
+        final var expectedExecuteDate = LocalDateTime.ofInstant(
+                Instant.now().plus(5, ChronoUnit.DAYS),
+                ZoneId.of("America/Sao_Paulo")
+        );;
         final var expectedRepeat = true;
         final var expectedProfile = Profile.
                 newProfile(
@@ -45,7 +50,10 @@ public class LinkTest {
     public void givenAnValidValues_whenCallsUpdate_shouldReturnLinkUpdated() {
         final var expectedTitle = "monitoring";
         final var expectedUrl = "https://teste.com";
-        final var expectedExecuteDate = Instant.now().plus(5, ChronoUnit.MINUTES);
+        final var expectedExecuteDate = LocalDateTime.ofInstant(
+                Instant.now().plus(5, ChronoUnit.DAYS),
+                ZoneId.of("America/Sao_Paulo")
+        );
         final var expectedRepeat = true;
         final var expectedProfile = Profile.
                 newProfile(
@@ -57,7 +65,10 @@ public class LinkTest {
         final var aLink = Link.newLink(
                 "a",
                 "https://localhost.com",
-                Instant.now().plus(1, ChronoUnit.DAYS),
+                LocalDateTime.ofInstant(
+                        Instant.now().plus(5, ChronoUnit.DAYS),
+                        ZoneId.of("America/Sao_Paulo")
+                ),
                 false,
                 expectedProfile
         );
@@ -83,7 +94,10 @@ public class LinkTest {
     public void givenAnInvalidValues_whenCallsNewLink_shouldReturnErrorsList() {
         final String expectedTitle = null;
         final var expectedUrl = "a";
-        final var expectedExecuteDate = Instant.parse("2007-12-03T10:15:30.00Z");
+        final var expectedExecuteDate = LocalDateTime.ofInstant(
+                Instant.parse("2007-12-03T10:15:30.00Z"),
+                ZoneId.of("America/Sao_Paulo")
+        );
         final var expectedRepeat = true;
         final Profile expectedProfile = null;
 

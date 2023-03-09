@@ -19,4 +19,10 @@ public interface LinkAPI {
             produces = MediaType.APPLICATION_JSON_VALUE
     )
     ResponseEntity<?> getLinkById(@PathVariable String id);
+
+    @GetMapping(
+            value = "/list/{profileId}",
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    ResponseEntity<?> getAllLinksByProfileId(@PathVariable String profileId);
 }

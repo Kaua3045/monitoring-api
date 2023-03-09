@@ -4,7 +4,7 @@ import com.kaua.monitoring.infrastructure.profile.persistence.ProfileJpaEntity;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
 
 @Table(name = "links")
 @Entity
@@ -21,7 +21,7 @@ public class LinkJpaEntity {
     private String url;
 
     @Column(name = "execute_date", nullable = false)
-    private Instant executeDate;
+    private LocalDateTime executeDate;
 
     @Column(name = "repeat", nullable = false)
     private boolean repeat;
@@ -36,7 +36,7 @@ public class LinkJpaEntity {
             final String id,
             final String title,
             final String url,
-            final Instant executeDate,
+            final LocalDateTime executeDate,
             final boolean repeat,
             final ProfileJpaEntity profile
     ) {

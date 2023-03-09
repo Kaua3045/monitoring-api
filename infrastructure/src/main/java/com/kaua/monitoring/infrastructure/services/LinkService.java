@@ -6,24 +6,33 @@ import com.kaua.monitoring.application.usecases.link.outputs.CreateLinkOutput;
 import com.kaua.monitoring.application.usecases.link.outputs.LinkOutput;
 import com.kaua.monitoring.application.usecases.link.retrieve.get.GetLinkByIdCommand;
 import com.kaua.monitoring.application.usecases.link.retrieve.get.GetLinkByIdUseCase;
+import com.kaua.monitoring.application.usecases.link.retrieve.list.profileId.ListLinkByProfileIdCommand;
+import com.kaua.monitoring.application.usecases.link.retrieve.list.profileId.ListLinkByProfileIdUseCase;
 import com.kaua.monitoring.infrastructure.link.inputs.CreateLinkBody;
 import org.springframework.stereotype.Component;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Component
 public class LinkService {
 
     private final CreateLinkUseCase createLinkUseCase;
     private final GetLinkByIdUseCase getLinkByIdUseCase;
+    private final ListLinkByProfileIdUseCase listLinkByProfileIdUseCase;
 
-    public LinkService(final CreateLinkUseCase createLinkUseCase, final GetLinkByIdUseCase getLinkByIdUseCase) {
+    public LinkService(
+            final CreateLinkUseCase createLinkUseCase,
+            final GetLinkByIdUseCase getLinkByIdUseCase,
+            final ListLinkByProfileIdUseCase listLinkByProfileIdUseCase
+    ) {
         this.createLinkUseCase = createLinkUseCase;
         this.getLinkByIdUseCase = getLinkByIdUseCase;
+        this.listLinkByProfileIdUseCase = listLinkByProfileIdUseCase;
     }
 
     public CreateLinkOutput createLink(CreateLinkBody body) {
-        final var executeDate = Instant.ofEpochMilli(body.executeDate());
+        final var executeDate = LocalDateTime.parse(body.executeDate());
 
         final var aCommand = new CreateLinkCommand(
                 body.title(),
@@ -45,5 +54,10 @@ public class LinkService {
     public LinkOutput getLinkById(String id) {
         final var aCommand = new GetLinkByIdCommand(id);
         return this.getLinkByIdUseCase.execute(aCommand);
+    }
+
+    public List<LinkOutput> getAllLinksByProfileId(String profileId) {
+        final var aCommand = new ListLinkByProfileIdCommand(profileId);
+        return this.listLinkByProfileIdUseCase.execute(aCommand);
     }
 }

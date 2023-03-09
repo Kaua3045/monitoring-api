@@ -9,6 +9,9 @@ spring:
       resourceserver:
         jwt:
           issuer-uri: http://localhost:8081/auth/realms/teste
+  batch:
+    jdbc:
+      initialize-schema: always
   datasource:
     url: jdbc:postgresql://${postgres.url}/${postgres.schema}
     username: ${postgres.username}

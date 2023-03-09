@@ -29,4 +29,11 @@ public class LinkController implements LinkAPI {
                 .status(HttpStatus.OK)
                 .body(this.linkService.getLinkById(id));
     }
+
+    @Override
+    public ResponseEntity<?> getAllLinksByProfileId(String profileId) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(this.linkService.getAllLinksByProfileId(profileId));
+    }
 }

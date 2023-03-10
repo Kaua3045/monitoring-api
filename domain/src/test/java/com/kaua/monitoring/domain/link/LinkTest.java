@@ -2,6 +2,7 @@ package com.kaua.monitoring.domain.link;
 
 import com.kaua.monitoring.domain.exceptions.Error;
 import com.kaua.monitoring.domain.links.Link;
+import com.kaua.monitoring.domain.links.LinkExecutions;
 import com.kaua.monitoring.domain.profile.Profile;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -17,7 +18,7 @@ public class LinkTest {
         final var expectedTitle = "monitoring";
         final var expectedUrl = "https://teste.com";
         final var expectedExecuteDate = Instant.now().plus(5, ChronoUnit.DAYS);
-        final var expectedRepeat = true;
+        final var expectedRepeat = LinkExecutions.NO_REPEAT;
         final var expectedProfile = Profile.
                 newProfile(
                         "123",
@@ -37,7 +38,7 @@ public class LinkTest {
         Assertions.assertEquals(expectedTitle, aLink.getTitle());
         Assertions.assertEquals(expectedUrl, aLink.getUrl());
         Assertions.assertEquals(expectedExecuteDate, aLink.getExecuteDate());
-        Assertions.assertEquals(expectedRepeat, aLink.isRepeat());
+        Assertions.assertEquals(expectedRepeat, aLink.getLinkExecution());
         Assertions.assertEquals(expectedProfile, aLink.getProfile());
     }
 
@@ -46,7 +47,7 @@ public class LinkTest {
         final var expectedTitle = "monitoring";
         final var expectedUrl = "https://teste.com";
         final var expectedExecuteDate = Instant.now().plus(5, ChronoUnit.DAYS);
-        final var expectedRepeat = true;
+        final var expectedRepeat = LinkExecutions.TWO_TIMES_A_MONTH;
         final var expectedProfile = Profile.
                 newProfile(
                         "123",
@@ -58,7 +59,7 @@ public class LinkTest {
                 "a",
                 "https://localhost.com",
                 Instant.now().plus(5, ChronoUnit.DAYS),
-                false,
+                LinkExecutions.NO_REPEAT,
                 expectedProfile
         );
 
@@ -75,7 +76,7 @@ public class LinkTest {
         Assertions.assertEquals(expectedTitle, aLinkUpdated.getTitle());
         Assertions.assertEquals(expectedUrl, aLinkUpdated.getUrl());
         Assertions.assertEquals(expectedExecuteDate, aLinkUpdated.getExecuteDate());
-        Assertions.assertEquals(expectedRepeat, aLinkUpdated.isRepeat());
+        Assertions.assertEquals(expectedRepeat, aLinkUpdated.getLinkExecution());
         Assertions.assertEquals(expectedProfile, aLinkUpdated.getProfile());
     }
 
@@ -84,13 +85,14 @@ public class LinkTest {
         final String expectedTitle = null;
         final var expectedUrl = "a";
         final var expectedExecuteDate = Instant.parse("2007-12-03T10:15:30.00Z");
-        final var expectedRepeat = true;
+        final LinkExecutions expectedRepeat = null;
         final Profile expectedProfile = null;
 
         final var expectedErrorsList = List.of(
                 new Error("'title' should not be null or empty"),
                 new Error("'url' you must provide a valid url"),
                 new Error("'executeDate' cannot be a date that has already passed"),
+                new Error("'linkExecution' should not be null"),
                 new Error("'profile' should not be null")
         );
 

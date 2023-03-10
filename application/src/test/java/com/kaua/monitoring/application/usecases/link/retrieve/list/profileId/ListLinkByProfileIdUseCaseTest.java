@@ -3,14 +3,18 @@ package com.kaua.monitoring.application.usecases.link.retrieve.list.profileId;
 import com.kaua.monitoring.application.exceptions.NotFoundException;
 import com.kaua.monitoring.application.gateways.LinkGateway;
 import com.kaua.monitoring.application.gateways.ProfileGateway;
+import com.kaua.monitoring.application.usecases.link.outputs.LinkOutput;
 import com.kaua.monitoring.domain.links.Link;
 import com.kaua.monitoring.domain.links.LinkExecutions;
+import com.kaua.monitoring.domain.pagination.Pagination;
+import com.kaua.monitoring.domain.pagination.SearchQuery;
 import com.kaua.monitoring.domain.profile.Profile;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.Instant;
@@ -18,8 +22,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 
-import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class ListLinkByProfileIdUseCaseTest {
@@ -43,7 +46,7 @@ public class ListLinkByProfileIdUseCaseTest {
         );
         final var expectedLinks = List.of(
                 Link.newLink(
-                        "teste 1",
+                        "local",
                         "https://localhost.com",
                         Instant.now().plus(5, ChronoUnit.DAYS),
                         LinkExecutions.NO_REPEAT,
@@ -58,18 +61,53 @@ public class ListLinkByProfileIdUseCaseTest {
                 )
         );
 
+        final var expectedPage = 0;
+        final var expectedPerPage = 10;
+        final var expectedTerms = "T";
+        final var expectedSort = "executeDate";
+        final var expectedDirection = "asc";
+        final var expectedTotal = 2;
+
+        final var expectedItems = expectedLinks.stream()
+                        .map(LinkOutput::from)
+                                .toList();
+
+        final var expectedPagination = new Pagination<>(
+                expectedPage,
+                expectedPerPage,
+                expectedTotal,
+                expectedLinks
+        );
+
         when(profileGateway.findById(any()))
                 .thenReturn(Optional.of(expectedProfile));
 
-        when(linkGateway.findAllByProfileId(any()))
-                .thenReturn(expectedLinks);
+        when(linkGateway.findAllByProfileId(any(), any()))
+                .thenReturn(expectedPagination);
 
-        final var aCommand = new ListLinkByProfileIdCommand(expectedProfile.getId().getValue());
+        final var aQuery = new SearchQuery(
+                expectedPage,
+                expectedPerPage,
+                expectedTerms,
+                expectedSort,
+                expectedDirection
+        );
 
-        final var actualLinks = useCase.execute(aCommand);
+        final var aCommand = new ListLinkByProfileIdCommand(
+                expectedProfile.getId().getValue(),
+                aQuery
+        );
 
-        Assertions.assertEquals(expectedLinks.get(0).getTitle(), actualLinks.get(0).title());
-        Assertions.assertEquals(expectedLinks.get(1).getTitle(), actualLinks.get(1).title());
+        final var actualOutput = useCase.execute(aCommand);
+
+        Assertions.assertEquals(expectedPage, actualOutput.currentPage());
+        Assertions.assertEquals(expectedPerPage, actualOutput.perPage());
+        Assertions.assertEquals(expectedTotal, actualOutput.total());
+        Assertions.assertEquals(expectedItems, actualOutput.items());
+
+        Mockito.verify(profileGateway, times(1)).findById(aCommand.profileId());
+        Mockito.verify(linkGateway, times(1))
+                .findAllByProfileId(aCommand.profileId(), aQuery);
     }
 
     @Test
@@ -82,17 +120,49 @@ public class ListLinkByProfileIdUseCaseTest {
         );
         final var expectedLinks = List.<Link>of();
 
+        final var expectedPage = 0;
+        final var expectedPerPage = 10;
+        final var expectedTerms = "T";
+        final var expectedSort = "executeDate";
+        final var expectedDirection = "asc";
+        final var expectedTotal = 2;
+
+        final var expectedItems = expectedLinks.stream()
+                .map(LinkOutput::from)
+                .toList();
+
+        final var expectedPagination = new Pagination<>(
+                expectedPage,
+                expectedPerPage,
+                expectedTotal,
+                expectedLinks
+        );
+
         when(profileGateway.findById(any()))
                 .thenReturn(Optional.of(expectedProfile));
 
-        when(linkGateway.findAllByProfileId(any()))
-                .thenReturn(expectedLinks);
+        when(linkGateway.findAllByProfileId(any(), any()))
+                .thenReturn(expectedPagination);
 
-        final var aCommand = new ListLinkByProfileIdCommand(expectedProfile.getId().getValue());
+        final var aQuery = new SearchQuery(
+                expectedPage,
+                expectedPerPage,
+                expectedTerms,
+                expectedSort,
+                expectedDirection
+        );
+
+        final var aCommand = new ListLinkByProfileIdCommand(
+                expectedProfile.getId().getValue(),
+                aQuery
+        );
 
         final var actualLinks = useCase.execute(aCommand);
 
-        Assertions.assertEquals(expectedLinks.size(), actualLinks.size());
+        Assertions.assertEquals(expectedItems.size(), actualLinks.items().size());
+
+        Mockito.verify(profileGateway, times(1)).findById(aCommand.profileId());
+        Mockito.verify(linkGateway, times(1)).findAllByProfileId(any(), any());
     }
 
     @Test
@@ -103,7 +173,15 @@ public class ListLinkByProfileIdUseCaseTest {
         when(profileGateway.findById(any()))
                 .thenReturn(Optional.empty());
 
-        final var aCommand = new ListLinkByProfileIdCommand(expectedProfile);
+        final var aCommand = new ListLinkByProfileIdCommand(
+                expectedProfile,
+                new SearchQuery(
+                        0,
+                        10,
+                        "T",
+                        "executeDate",
+                        "asc"
+                ));
 
         final var actualException = Assertions.assertThrows(
                 NotFoundException.class,

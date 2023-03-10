@@ -1,3 +1,6 @@
+-- H2 not exists timestamptz
+CREATE DOMAIN IF NOT EXISTS timestamptz AS TIMESTAMP;
+
 CREATE TABLE links (
     id VARCHAR(36) NOT NULL PRIMARY KEY,
     title VARCHAR(255) NOT NULL,

@@ -19,4 +19,7 @@ public interface LinkAPI {
             produces = MediaType.APPLICATION_JSON_VALUE
     )
     ResponseEntity<?> getLinkById(@PathVariable String id);
+
+    @DeleteMapping(value = "{id}")
+    ResponseEntity<?> deleteLinkById(@PathVariable String id);
 }

@@ -11,7 +11,8 @@ import com.kaua.monitoring.application.usecases.link.retrieve.get.GetLinkByIdUse
 import com.kaua.monitoring.infrastructure.link.inputs.CreateLinkBody;
 import org.springframework.stereotype.Component;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 @Component
 public class LinkService {
@@ -31,13 +32,15 @@ public class LinkService {
     }
 
     public CreateLinkOutput createLink(CreateLinkBody body) {
-        final var executeDate = Instant.ofEpochMilli(body.executeDate());
+        final var aLocalDateTime = LocalDateTime.parse(body.executeDate());
+        final var aZonedDateTime = aLocalDateTime.atZone(ZoneId.systemDefault())
+                .withZoneSameInstant(ZoneId.of("UTC"));
 
         final var aCommand = new CreateLinkCommand(
                 body.title(),
                 body.url(),
-                executeDate,
-                body.repeat(),
+                aZonedDateTime.toInstant(),
+                body.linkExecution(),
                 body.profileId()
         );
 

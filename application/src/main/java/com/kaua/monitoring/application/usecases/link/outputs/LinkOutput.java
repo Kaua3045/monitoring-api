@@ -2,9 +2,9 @@ package com.kaua.monitoring.application.usecases.link.outputs;
 
 import com.kaua.monitoring.domain.links.Link;
 
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
 
 public record LinkOutput(
         String id,
@@ -16,12 +16,14 @@ public record LinkOutput(
 ) {
 
     public static LinkOutput from(final Link aLink) {
-        final var aFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")
-                .withZone(ZoneId.of("America/Sao_Paulo"));
+        final var aConvertToZoneId = LocalDateTime
+                .ofInstant(
+                        aLink.getExecuteDate(),
+                        ZoneId.of("America/Sao_Paulo")
+                );
 
-        // Se tirar o plus retorna -3 horas
-        final var aExecuteDateFormatted = aFormatter.format(aLink.getExecuteDate()
-                .plus(3, ChronoUnit.HOURS));
+        final var aFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+        final var aExecuteDateFormatted = aFormatter.format(aConvertToZoneId);
 
         return new LinkOutput(
                 aLink.getId().getValue(),

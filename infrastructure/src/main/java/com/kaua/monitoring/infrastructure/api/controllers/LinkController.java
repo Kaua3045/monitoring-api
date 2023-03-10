@@ -29,4 +29,12 @@ public class LinkController implements LinkAPI {
                 .status(HttpStatus.OK)
                 .body(this.linkService.getLinkById(id));
     }
+
+    @Override
+    public ResponseEntity<?> deleteLinkById(String id) {
+        this.linkService.deleteLinkById(id);
+        return ResponseEntity
+                .status(HttpStatus.NO_CONTENT)
+                .build();
+    }
 }

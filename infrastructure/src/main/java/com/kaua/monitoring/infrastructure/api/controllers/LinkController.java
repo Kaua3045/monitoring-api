@@ -1,5 +1,7 @@
 package com.kaua.monitoring.infrastructure.api.controllers;
 
+import com.kaua.monitoring.application.usecases.link.outputs.LinkOutput;
+import com.kaua.monitoring.domain.pagination.Pagination;
 import com.kaua.monitoring.infrastructure.api.LinkAPI;
 import com.kaua.monitoring.infrastructure.link.inputs.CreateLinkBody;
 import com.kaua.monitoring.infrastructure.services.LinkService;
@@ -28,6 +30,25 @@ public class LinkController implements LinkAPI {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(this.linkService.getLinkById(id));
+    }
+
+    @Override
+    public Pagination<LinkOutput> getAllLinkByProfileId(
+            String profileId,
+            String search,
+            int page,
+            int perPage,
+            String sort,
+            String direction
+    ) {
+        return this.linkService.getAllLinkByProfileId(
+                profileId,
+                search,
+                page,
+                perPage,
+                sort,
+                direction
+        );
     }
 
     @Override

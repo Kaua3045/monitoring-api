@@ -4,6 +4,7 @@ import com.kaua.monitoring.application.exceptions.NotFoundException;
 import com.kaua.monitoring.application.gateways.LinkGateway;
 import com.kaua.monitoring.application.gateways.ProfileGateway;
 import com.kaua.monitoring.domain.links.Link;
+import com.kaua.monitoring.domain.links.LinkExecutions;
 import com.kaua.monitoring.domain.profile.Profile;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -45,14 +46,14 @@ public class ListLinkByProfileIdUseCaseTest {
                         "teste 1",
                         "https://localhost.com",
                         Instant.now().plus(5, ChronoUnit.DAYS),
-                        true,
+                        LinkExecutions.NO_REPEAT,
                         expectedProfile
                 ),
                 Link.newLink(
                         "teste 2",
                         "https://localhost.com",
                         Instant.now().plus(5, ChronoUnit.DAYS),
-                        false,
+                        LinkExecutions.TWO_TIMES_A_MONTH,
                         expectedProfile
                 )
         );

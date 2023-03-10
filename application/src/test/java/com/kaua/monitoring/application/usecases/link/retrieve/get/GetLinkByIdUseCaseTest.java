@@ -3,6 +3,7 @@ package com.kaua.monitoring.application.usecases.link.retrieve.get;
 import com.kaua.monitoring.application.exceptions.NotFoundException;
 import com.kaua.monitoring.application.gateways.LinkGateway;
 import com.kaua.monitoring.domain.links.Link;
+import com.kaua.monitoring.domain.links.LinkExecutions;
 import com.kaua.monitoring.domain.profile.Profile;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -32,7 +33,7 @@ public class GetLinkByIdUseCaseTest {
         final var expectedTitle = "teste";
         final var expectedUrl = "https://localhost.com";
         final var expectedExecuteDate = Instant.now().plus(5, ChronoUnit.DAYS);
-        final var expectedRepeat = true;
+        final var expectedRepeat = LinkExecutions.NO_REPEAT;
         final var expectedProfile = Profile
                 .newProfile(
                         "123",
@@ -62,7 +63,7 @@ public class GetLinkByIdUseCaseTest {
         Assertions.assertEquals(expectedTitle, actualLink.title());
         Assertions.assertEquals(expectedUrl, actualLink.url());
         Assertions.assertNotNull(actualLink.executeDateFormatted());
-        Assertions.assertEquals(expectedRepeat, actualLink.repeat());
+        Assertions.assertEquals(expectedRepeat.name(), actualLink.linkExecutions());
         Assertions.assertEquals(expectedProfile.getId().getValue(), actualLink.profileId());
     }
 

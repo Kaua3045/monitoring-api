@@ -1,6 +1,7 @@
 package com.kaua.monitoring.infrastructure.link;
 
 import com.kaua.monitoring.domain.links.Link;
+import com.kaua.monitoring.domain.links.LinkExecutions;
 import com.kaua.monitoring.domain.profile.Profile;
 import com.kaua.monitoring.infrastructure.PostgreSqlGatewayTest;
 import com.kaua.monitoring.infrastructure.link.persistence.LinkJpaFactory;
@@ -41,7 +42,7 @@ public class LinkPostgreSqlGatewayTest {
         final var expectedUrl = "https://localhost.com";
         final var expectedExecuteDate = Instant.now().plus(5, ChronoUnit.DAYS);
 
-        final var expectedRepeat = true;
+        final var expectedRepeat = LinkExecutions.NO_REPEAT;
 
         final var aLink = Link.newLink(
                 expectedTitle,
@@ -61,7 +62,7 @@ public class LinkPostgreSqlGatewayTest {
         Assertions.assertEquals(aLink.getTitle(), actualLink.getTitle());
         Assertions.assertEquals(aLink.getUrl(), actualLink.getUrl());
         Assertions.assertEquals(aLink.getExecuteDate(), actualLink.getExecuteDate());
-        Assertions.assertEquals(aLink.isRepeat(), actualLink.isRepeat());
+        Assertions.assertEquals(aLink.getLinkExecution(), actualLink.getLinkExecution());
         Assertions.assertEquals(aLink.getProfile().getId().getValue(), actualLink.getProfile().getId().getValue());
 
         final var actualEntity = linkRepository.findById(aLink.getId().getValue()).get();
@@ -70,7 +71,7 @@ public class LinkPostgreSqlGatewayTest {
         Assertions.assertEquals(aLink.getTitle(), actualEntity.getTitle());
         Assertions.assertEquals(aLink.getUrl(), actualEntity.getUrl());
         Assertions.assertEquals(aLink.getExecuteDate(), actualEntity.getExecuteDate());
-        Assertions.assertEquals(aLink.isRepeat(), actualEntity.isRepeat());
+        Assertions.assertEquals(aLink.getLinkExecution(), actualEntity.getLinkExecution());
         Assertions.assertEquals(aLink.getProfile().getId().getValue(), actualEntity.getProfile().getId());
     }
 
@@ -89,7 +90,7 @@ public class LinkPostgreSqlGatewayTest {
         final var expectedUrl = "https://localhost.com";
         final var expectedExecuteDate = Instant.now().plus(5, ChronoUnit.DAYS);
 
-        final var expectedRepeat = true;
+        final var expectedRepeat = LinkExecutions.ON_SPECIFIC_DAY;
 
         final var aLink = Link.newLink(
                 expectedTitle,
@@ -111,7 +112,7 @@ public class LinkPostgreSqlGatewayTest {
         Assertions.assertEquals(aLink.getTitle(), actualLink.getTitle());
         Assertions.assertEquals(aLink.getUrl(), actualLink.getUrl());
         Assertions.assertEquals(aLink.getExecuteDate(), actualLink.getExecuteDate());
-        Assertions.assertEquals(aLink.isRepeat(), actualLink.isRepeat());
+        Assertions.assertEquals(aLink.getLinkExecution(), actualLink.getLinkExecution());
         Assertions.assertEquals(aLink.getProfile().getId().getValue(), actualLink.getProfile().getId().getValue());
     }
 
@@ -130,7 +131,7 @@ public class LinkPostgreSqlGatewayTest {
         final var expectedUrl = "https://localhost.com";
         final var expectedExecuteDate = Instant.now().plus(5, ChronoUnit.DAYS);
 
-        final var expectedRepeat = true;
+        final var expectedRepeat = LinkExecutions.TWO_TIMES_A_MONTH;
 
         final var aLink = Link.newLink(
                 expectedTitle,

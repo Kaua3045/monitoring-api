@@ -4,6 +4,7 @@ import com.kaua.monitoring.application.exceptions.NotFoundException;
 import com.kaua.monitoring.application.gateways.LinkGateway;
 import com.kaua.monitoring.domain.exceptions.Error;
 import com.kaua.monitoring.domain.links.Link;
+import com.kaua.monitoring.domain.links.LinkExecutions;
 import com.kaua.monitoring.domain.profile.Profile;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -36,7 +37,7 @@ public class UpdateLinkUseCaseTest {
         final var expectedTitle = "teste";
         final var expectedUrl = "https://teste.com";
         final var expectedExecuteDate = Instant.now().plus(10, ChronoUnit.DAYS);
-        final var expectedRepeat = false;
+        final var expectedRepeat = LinkExecutions.EVERY_DAYS.name();
         final var expectedProfile = Profile
                 .newProfile(
                         "123",
@@ -49,7 +50,7 @@ public class UpdateLinkUseCaseTest {
                 "a",
                 "https://localhost.com",
                 Instant.now().plus(5, ChronoUnit.DAYS),
-                true,
+                LinkExecutions.TWO_TIMES_A_MONTH,
                 expectedProfile
         );
 
@@ -81,7 +82,7 @@ public class UpdateLinkUseCaseTest {
                 && Objects.equals(expectedTitle, link.getTitle())
                 && Objects.equals(expectedUrl, link.getUrl())
                 && Objects.equals(expectedExecuteDate, link.getExecuteDate())
-                && Objects.equals(expectedRepeat, link.isRepeat())
+                && Objects.equals(expectedRepeat, link.getLinkExecution().name())
                 && Objects.equals(expectedProfile, link.getProfile())
         ));
     }
@@ -91,7 +92,7 @@ public class UpdateLinkUseCaseTest {
         final String expectedTitle = null;
         final var expectedUrl = "";
         final Instant expectedExecuteDate = null;
-        final var expectedRepeat = true;
+        final var expectedRepeat = LinkExecutions.EVERY_DAYS.name();
         final var expectedProfile = Profile
                 .newProfile(
                         "123",
@@ -104,7 +105,7 @@ public class UpdateLinkUseCaseTest {
                 "a",
                 "https://localhost.com",
                 Instant.now().plus(5, ChronoUnit.DAYS),
-                true,
+                LinkExecutions.NO_REPEAT,
                 expectedProfile
         );
 
@@ -139,7 +140,7 @@ public class UpdateLinkUseCaseTest {
         final var expectedTitle = "teste";
         final var expectedUrl = "https://teste.com";
         final var expectedExecuteDate = Instant.now().plus(5, ChronoUnit.DAYS);
-        final var expectedRepeat = false;
+        final var expectedRepeat = LinkExecutions.ON_SPECIFIC_DAY.name();
         final var expectedId = "123";
         final var expectedErrorMessage = "Link with ID 123 was not found";
 

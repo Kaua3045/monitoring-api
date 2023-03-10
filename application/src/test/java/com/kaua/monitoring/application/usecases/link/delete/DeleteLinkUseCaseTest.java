@@ -2,6 +2,7 @@ package com.kaua.monitoring.application.usecases.link.delete;
 
 import com.kaua.monitoring.application.gateways.LinkGateway;
 import com.kaua.monitoring.domain.links.Link;
+import com.kaua.monitoring.domain.links.LinkExecutions;
 import com.kaua.monitoring.domain.profile.Profile;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -31,7 +32,7 @@ public class DeleteLinkUseCaseTest {
                 "teste",
                 "https://localhost.com",
                 Instant.now().plus(5, ChronoUnit.DAYS),
-                true,
+                LinkExecutions.NO_REPEAT,
                 Profile.newProfile(
                         "123",
                         "kaua",

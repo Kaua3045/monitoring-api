@@ -4,6 +4,7 @@ import com.kaua.monitoring.application.exceptions.NotFoundException;
 import com.kaua.monitoring.application.gateways.LinkGateway;
 import com.kaua.monitoring.application.gateways.ProfileGateway;
 import com.kaua.monitoring.domain.exceptions.Error;
+import com.kaua.monitoring.domain.links.LinkExecutions;
 import com.kaua.monitoring.domain.profile.Profile;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -39,7 +40,7 @@ public class CreateLinkUseCaseTest {
         final var expectedTitle = "teste";
         final var expectedUrl = "https://localhost.com";
         final var expectedExecuteDate = Instant.now().plus(5, ChronoUnit.DAYS);
-        final var expectedRepeat = true;
+        final var expectedRepeat = LinkExecutions.NO_REPEAT.name();
         final var expectedProfile = Profile.
                 newProfile(
                         "123",
@@ -74,7 +75,7 @@ public class CreateLinkUseCaseTest {
                 && Objects.equals(expectedTitle, link.getTitle())
                 && Objects.equals(expectedUrl, link.getUrl())
                 && Objects.equals(expectedExecuteDate, link.getExecuteDate())
-                && Objects.equals(expectedRepeat, link.isRepeat())
+                && Objects.equals(expectedRepeat, link.getLinkExecution().name())
                 && Objects.equals(expectedProfile, link.getProfile())
         ));
     }
@@ -84,7 +85,7 @@ public class CreateLinkUseCaseTest {
         final String expectedTitle = null;
         final var expectedUrl = "a";
         final var expectedExecuteDate = Instant.parse("2007-12-03T10:15:30.00Z");
-        final var expectedRepeat = true;
+        final var expectedRepeat = LinkExecutions.ON_SPECIFIC_DAY.name();
         final var expectedProfile = Profile.
                 newProfile(
                         "123",
@@ -123,7 +124,7 @@ public class CreateLinkUseCaseTest {
         final var expectedTitle = "teste";
         final var expectedUrl = "https://localhost.com";
         final var expectedExecuteDate = Instant.now().plus(5, ChronoUnit.DAYS);
-        final var expectedRepeat = true;
+        final var expectedRepeat = LinkExecutions.EVERY_DAYS.name();
         final var expectedProfile = "123";
 
         final var expectedErrorMessage = "Profile with ID 123 was not found";

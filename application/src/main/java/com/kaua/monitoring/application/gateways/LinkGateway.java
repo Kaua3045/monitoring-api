@@ -1,8 +1,9 @@
 package com.kaua.monitoring.application.gateways;
 
 import com.kaua.monitoring.domain.links.Link;
+import com.kaua.monitoring.domain.pagination.Pagination;
+import com.kaua.monitoring.domain.pagination.SearchQuery;
 
-import java.util.List;
 import java.util.Optional;
 
 public interface LinkGateway {
@@ -11,7 +12,7 @@ public interface LinkGateway {
 
     Optional<Link> findById(final String id);
 
-    List<Link> findAllByProfileId(final String profileId);
+    Pagination<Link> findAllByProfileId(final String profileId, final SearchQuery aQuery);
 
     Link update(final Link aLink);
 

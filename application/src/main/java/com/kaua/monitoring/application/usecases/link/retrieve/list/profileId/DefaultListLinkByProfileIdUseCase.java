@@ -4,9 +4,8 @@ import com.kaua.monitoring.application.exceptions.NotFoundException;
 import com.kaua.monitoring.application.gateways.LinkGateway;
 import com.kaua.monitoring.application.gateways.ProfileGateway;
 import com.kaua.monitoring.application.usecases.link.outputs.LinkOutput;
+import com.kaua.monitoring.domain.pagination.Pagination;
 import com.kaua.monitoring.domain.profile.Profile;
-
-import java.util.List;
 
 public class DefaultListLinkByProfileIdUseCase extends ListLinkByProfileIdUseCase {
 
@@ -19,12 +18,11 @@ public class DefaultListLinkByProfileIdUseCase extends ListLinkByProfileIdUseCas
     }
 
     @Override
-    public List<LinkOutput> execute(ListLinkByProfileIdCommand aCommand) {
+    public Pagination<LinkOutput> execute(ListLinkByProfileIdCommand aCommand) {
         final var profileExists = this.profileGateway.findById(aCommand.profileId())
                 .orElseThrow(() -> new NotFoundException(Profile.class, aCommand.profileId()));
 
-        return this.linkGateway.findAllByProfileId(profileExists.getId().getValue())
-                .stream().map(LinkOutput::from)
-                .toList();
+        return this.linkGateway.findAllByProfileId(profileExists.getId().getValue(), aCommand.aQuery())
+                .map(LinkOutput::from);
     }
 }

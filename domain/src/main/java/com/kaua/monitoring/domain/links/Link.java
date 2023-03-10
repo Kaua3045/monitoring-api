@@ -18,7 +18,7 @@ public class Link extends Aggregate<LinkID> {
     private String title;
     private String url;
     private Instant executeDate;
-    private boolean repeat;
+    private LinkExecutions linkExecution;
     private Profile profile;
 
     public Link(
@@ -26,14 +26,14 @@ public class Link extends Aggregate<LinkID> {
             final String aTitle,
             final String aUrl,
             final Instant aExecuteDate,
-            final boolean aRepeat,
+            final LinkExecutions aLinkExecution,
             final Profile aProfile
     ) {
         super(aLinkID);
         this.title = aTitle;
         this.url = aUrl;
         this.executeDate = aExecuteDate;
-        this.repeat = aRepeat;
+        this.linkExecution = aLinkExecution;
         this.profile = aProfile;
     }
 
@@ -41,7 +41,7 @@ public class Link extends Aggregate<LinkID> {
             final String aTitle,
             final String aUrl,
             final Instant aExecuteDate,
-            final boolean aRepeat,
+            final LinkExecutions aLinkExecution,
             final Profile aProfile
     ) {
         return new Link(
@@ -49,7 +49,7 @@ public class Link extends Aggregate<LinkID> {
                 aTitle,
                 aUrl,
                 aExecuteDate,
-                aRepeat,
+                aLinkExecution,
                 aProfile
         );
     }
@@ -58,12 +58,12 @@ public class Link extends Aggregate<LinkID> {
             final String aTitle,
             final String aUrl,
             final Instant aExecuteDate,
-            final boolean aRepeat
+            final LinkExecutions aLinkExecution
     ) {
         this.title = aTitle;
         this.url = aUrl;
         this.executeDate = aExecuteDate;
-        this.repeat = aRepeat;
+        this.linkExecution = aLinkExecution;
         return this;
     }
 
@@ -85,6 +85,10 @@ public class Link extends Aggregate<LinkID> {
 
         if (executeDate != null && executeDate.isBefore(Instant.now())) {
             errors.add(new Error("'executeDate' cannot be a date that has already passed"));
+        }
+
+        if (linkExecution == null) {
+            errors.add(new Error("'linkExecution' should not be null"));
         }
 
         if (profile == null) {

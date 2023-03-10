@@ -11,7 +11,7 @@ public record LinkOutput(
         String title,
         String url,
         String executeDateFormatted,
-        boolean repeat,
+        String repeat,
         String profileId
 ) {
 
@@ -28,7 +28,7 @@ public record LinkOutput(
                 aLink.getTitle(),
                 aLink.getUrl(),
                 aExecuteDateFormatted,
-                aLink.isRepeat(),
+                aLink.getLinkExecution().name(),
                 aLink.getProfile().getId().getValue()
         );
     }

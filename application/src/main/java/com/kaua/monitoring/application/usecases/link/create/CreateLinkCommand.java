@@ -6,7 +6,7 @@ public record CreateLinkCommand(
         String title,
         String url,
         Instant executeDate,
-        boolean repeat,
+        String linkExecution,
         String profileId
 ) {
 }

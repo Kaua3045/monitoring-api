@@ -6,6 +6,7 @@ import com.kaua.monitoring.application.exceptions.either.Either;
 import com.kaua.monitoring.application.gateways.LinkGateway;
 import com.kaua.monitoring.application.usecases.link.outputs.UpdateLinkOutput;
 import com.kaua.monitoring.domain.links.Link;
+import com.kaua.monitoring.domain.links.LinkExecutions;
 
 public class DefaultUpdateLinkUseCase extends UpdateLinkUseCase {
 
@@ -24,7 +25,7 @@ public class DefaultUpdateLinkUseCase extends UpdateLinkUseCase {
                 aCommand.title(),
                 aCommand.url(),
                 aCommand.executeDate(),
-                aCommand.repeat()
+                LinkExecutions.valueOf(aCommand.repeat())
         );
 
         final var aLinkValidated = aLinkUpdated.validate();

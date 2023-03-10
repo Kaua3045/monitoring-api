@@ -7,6 +7,7 @@ import com.kaua.monitoring.application.gateways.LinkGateway;
 import com.kaua.monitoring.application.gateways.ProfileGateway;
 import com.kaua.monitoring.application.usecases.link.outputs.CreateLinkOutput;
 import com.kaua.monitoring.domain.links.Link;
+import com.kaua.monitoring.domain.links.LinkExecutions;
 import com.kaua.monitoring.domain.profile.Profile;
 
 public class DefaultCreateLinkUseCase extends CreateLinkUseCase {
@@ -31,7 +32,7 @@ public class DefaultCreateLinkUseCase extends CreateLinkUseCase {
                 aCommand.title(),
                 aCommand.url(),
                 aCommand.executeDate(),
-                aCommand.repeat(),
+                LinkExecutions.valueOf(aCommand.linkExecution()),
                 profileExists
         );
 

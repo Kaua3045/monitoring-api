@@ -3,6 +3,7 @@ package com.kaua.monitoring.infrastructure.link;
 import com.kaua.monitoring.domain.links.Link;
 import com.kaua.monitoring.domain.profile.Profile;
 import com.kaua.monitoring.infrastructure.PostgreSqlGatewayTest;
+import com.kaua.monitoring.infrastructure.link.persistence.LinkJpaFactory;
 import com.kaua.monitoring.infrastructure.link.persistence.LinkRepository;
 import com.kaua.monitoring.infrastructure.profile.persistence.ProfileJpaFactory;
 import com.kaua.monitoring.infrastructure.profile.persistence.ProfileRepository;
@@ -71,5 +72,80 @@ public class LinkPostgreSqlGatewayTest {
         Assertions.assertEquals(aLink.getExecuteDate(), actualEntity.getExecuteDate());
         Assertions.assertEquals(aLink.isRepeat(), actualEntity.isRepeat());
         Assertions.assertEquals(aLink.getProfile().getId().getValue(), actualEntity.getProfile().getId());
+    }
+
+    @Test
+    public void givenAnValidId_whenCallsFindById_shouldReturnLink() {
+        final var expectedProfile = Profile
+                .newProfile(
+                        "123",
+                        "kaua",
+                        "kaua@teste.com",
+                        null
+                );
+        profileRepository.save(ProfileJpaFactory.toEntity(expectedProfile));
+
+        final var expectedTitle = "teste";
+        final var expectedUrl = "https://localhost.com";
+        final var expectedExecuteDate = Instant.now().plus(5, ChronoUnit.DAYS);
+
+        final var expectedRepeat = true;
+
+        final var aLink = Link.newLink(
+                expectedTitle,
+                expectedUrl,
+                expectedExecuteDate,
+                expectedRepeat,
+                expectedProfile
+        );
+
+        Assertions.assertEquals(0, linkRepository.count());
+
+        linkRepository.save(LinkJpaFactory.toEntity(aLink));
+
+        Assertions.assertEquals(1, linkRepository.count());
+
+        final var actualLink = linkGateway.findById(aLink.getId().getValue()).get();
+
+        Assertions.assertEquals(aLink.getId().getValue(), actualLink.getId().getValue());
+        Assertions.assertEquals(aLink.getTitle(), actualLink.getTitle());
+        Assertions.assertEquals(aLink.getUrl(), actualLink.getUrl());
+        Assertions.assertEquals(aLink.getExecuteDate(), actualLink.getExecuteDate());
+        Assertions.assertEquals(aLink.isRepeat(), actualLink.isRepeat());
+        Assertions.assertEquals(aLink.getProfile().getId().getValue(), actualLink.getProfile().getId().getValue());
+    }
+
+    @Test
+    public void givenAnValidId_whenCallsDeleteById_shouldBeOk() {
+        final var expectedProfile = Profile
+                .newProfile(
+                        "123",
+                        "kaua",
+                        "kaua@teste.com",
+                        null
+                );
+        profileRepository.save(ProfileJpaFactory.toEntity(expectedProfile));
+
+        final var expectedTitle = "teste";
+        final var expectedUrl = "https://localhost.com";
+        final var expectedExecuteDate = Instant.now().plus(5, ChronoUnit.DAYS);
+
+        final var expectedRepeat = true;
+
+        final var aLink = Link.newLink(
+                expectedTitle,
+                expectedUrl,
+                expectedExecuteDate,
+                expectedRepeat,
+                expectedProfile
+        );
+
+        Assertions.assertEquals(0, linkRepository.count());
+
+        linkRepository.save(LinkJpaFactory.toEntity(aLink));
+
+        Assertions.assertEquals(1, linkRepository.count());
+
+        Assertions.assertDoesNotThrow(() -> linkGateway.deleteById(aLink.getId().getValue()));
     }
 }

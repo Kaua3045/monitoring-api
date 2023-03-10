@@ -1,5 +1,6 @@
 package com.kaua.monitoring.infrastructure.link.persistence;
 
+import com.kaua.monitoring.domain.links.LinkExecutions;
 import com.kaua.monitoring.infrastructure.profile.persistence.ProfileJpaEntity;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -23,8 +24,8 @@ public class LinkJpaEntity {
     @Column(name = "execute_date", nullable = false)
     private Instant executeDate;
 
-    @Column(name = "repeat", nullable = false)
-    private boolean repeat;
+    @Enumerated(EnumType.STRING)
+    private LinkExecutions linkExecution;
 
     @ManyToOne
     @JoinColumn(name = "profile_id", nullable = false)
@@ -37,14 +38,14 @@ public class LinkJpaEntity {
             final String title,
             final String url,
             final Instant executeDate,
-            final boolean repeat,
+            final LinkExecutions linkExecution,
             final ProfileJpaEntity profile
     ) {
         this.id = id;
         this.title = title;
         this.url = url;
         this.executeDate = executeDate;
-        this.repeat = repeat;
+        this.linkExecution = linkExecution;
         this.profile = profile;
     }
 }

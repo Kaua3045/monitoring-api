@@ -2,6 +2,8 @@ package com.kaua.monitoring.infrastructure.services;
 
 import com.kaua.monitoring.application.usecases.link.create.CreateLinkCommand;
 import com.kaua.monitoring.application.usecases.link.create.CreateLinkUseCase;
+import com.kaua.monitoring.application.usecases.link.delete.DeleteLinkCommand;
+import com.kaua.monitoring.application.usecases.link.delete.DeleteLinkUseCase;
 import com.kaua.monitoring.application.usecases.link.outputs.CreateLinkOutput;
 import com.kaua.monitoring.application.usecases.link.outputs.LinkOutput;
 import com.kaua.monitoring.application.usecases.link.retrieve.get.GetLinkByIdCommand;
@@ -16,10 +18,16 @@ public class LinkService {
 
     private final CreateLinkUseCase createLinkUseCase;
     private final GetLinkByIdUseCase getLinkByIdUseCase;
+    private final DeleteLinkUseCase deleteLinkUseCase;
 
-    public LinkService(final CreateLinkUseCase createLinkUseCase, final GetLinkByIdUseCase getLinkByIdUseCase) {
+    public LinkService(
+            final CreateLinkUseCase createLinkUseCase,
+            final GetLinkByIdUseCase getLinkByIdUseCase,
+            final DeleteLinkUseCase deleteLinkUseCase
+    ) {
         this.createLinkUseCase = createLinkUseCase;
         this.getLinkByIdUseCase = getLinkByIdUseCase;
+        this.deleteLinkUseCase = deleteLinkUseCase;
     }
 
     public CreateLinkOutput createLink(CreateLinkBody body) {
@@ -45,5 +53,10 @@ public class LinkService {
     public LinkOutput getLinkById(String id) {
         final var aCommand = new GetLinkByIdCommand(id);
         return this.getLinkByIdUseCase.execute(aCommand);
+    }
+
+    public void deleteLinkById(String id) {
+        final var aCommand = new DeleteLinkCommand(id);
+        this.deleteLinkUseCase.execute(aCommand);
     }
 }

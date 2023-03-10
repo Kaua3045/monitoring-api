@@ -2,11 +2,14 @@ package com.kaua.monitoring.infrastructure.link;
 
 import com.kaua.monitoring.application.gateways.LinkGateway;
 import com.kaua.monitoring.domain.links.Link;
+import com.kaua.monitoring.domain.pagination.Pagination;
+import com.kaua.monitoring.domain.pagination.SearchQuery;
 import com.kaua.monitoring.infrastructure.link.persistence.LinkJpaFactory;
 import com.kaua.monitoring.infrastructure.link.persistence.LinkRepository;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -31,10 +34,23 @@ public class LinkPostgreSqlGateway implements LinkGateway {
     }
 
     @Override
-    public List<Link> findAllByProfileId(String profileId) {
-        return this.linkRepository.findAllByProfileId(profileId)
-                .stream().map(LinkJpaFactory::toDomain)
-                .toList();
+    public Pagination<Link> findAllByProfileId(String profileId, SearchQuery aQuery) {
+        final var page = PageRequest.of(
+                aQuery.page(),
+                aQuery.perPage(),
+                Sort.by(Sort.Direction.fromString(aQuery.direction()), aQuery.sort())
+        );
+
+        final var pageResult = this.linkRepository.findAllByProfileId(
+                profileId,
+                page);
+
+        return new Pagination<>(
+                pageResult.getNumber(),
+                pageResult.getSize(),
+                pageResult.getTotalElements(),
+                pageResult.map(LinkJpaFactory::toDomain).toList()
+        );
     }
 
     @Override

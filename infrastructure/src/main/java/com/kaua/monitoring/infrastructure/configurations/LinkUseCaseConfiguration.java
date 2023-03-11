@@ -10,6 +10,8 @@ import com.kaua.monitoring.application.usecases.link.retrieve.get.DefaultGetLink
 import com.kaua.monitoring.application.usecases.link.retrieve.get.GetLinkByIdUseCase;
 import com.kaua.monitoring.application.usecases.link.retrieve.list.profileId.DefaultListLinkByProfileIdUseCase;
 import com.kaua.monitoring.application.usecases.link.retrieve.list.profileId.ListLinkByProfileIdUseCase;
+import com.kaua.monitoring.application.usecases.link.update.DefaultUpdateLinkUseCase;
+import com.kaua.monitoring.application.usecases.link.update.UpdateLinkUseCase;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -37,6 +39,11 @@ public class LinkUseCaseConfiguration {
     @Bean
     public ListLinkByProfileIdUseCase listLinkByProfileIdUseCase() {
         return new DefaultListLinkByProfileIdUseCase(linkGateway, profileGateway);
+    }
+
+    @Bean
+    public UpdateLinkUseCase updateLinkUseCase() {
+        return new DefaultUpdateLinkUseCase(linkGateway);
     }
 
     @Bean

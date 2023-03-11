@@ -1,10 +1,12 @@
 package com.kaua.monitoring.infrastructure.link.inputs;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public record CreateLinkBody(
-        String title,
-        String url,
-        String executeDate,
-        String linkExecution,
-        String profileId
+        @JsonProperty("title") String title,
+        @JsonProperty("url") String url,
+        @JsonProperty("execute_date") String executeDate,
+        @JsonProperty("link_execution") String linkExecution,
+        @JsonProperty("profile_id") String profileId
 ) {
 }

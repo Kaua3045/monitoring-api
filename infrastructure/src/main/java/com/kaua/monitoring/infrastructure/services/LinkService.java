@@ -87,13 +87,13 @@ public class LinkService {
         return this.listLinkByProfileIdUseCase.execute(aCommand);
     }
 
-    public UpdateLinkOutput updateLink(UpdateLinkBody body) {
+    public UpdateLinkOutput updateLink(String id, UpdateLinkBody body) {
         final var aLocalDateTime = LocalDateTime.parse(body.executeDate());
         final var aZonedDateTime = aLocalDateTime.atZone(ZoneId.systemDefault())
                 .withZoneSameInstant(ZoneId.of("UTC"));
 
         final var aCommand = new UpdateLinkCommand(
-                body.id(),
+                id,
                 body.title(),
                 body.url(),
                 aZonedDateTime.toInstant(),

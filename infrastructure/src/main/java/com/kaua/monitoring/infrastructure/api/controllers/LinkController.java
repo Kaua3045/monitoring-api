@@ -4,6 +4,7 @@ import com.kaua.monitoring.application.usecases.link.outputs.LinkOutput;
 import com.kaua.monitoring.domain.pagination.Pagination;
 import com.kaua.monitoring.infrastructure.api.LinkAPI;
 import com.kaua.monitoring.infrastructure.link.inputs.CreateLinkBody;
+import com.kaua.monitoring.infrastructure.link.inputs.UpdateLinkBody;
 import com.kaua.monitoring.infrastructure.services.LinkService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -49,6 +50,13 @@ public class LinkController implements LinkAPI {
                 sort,
                 direction
         );
+    }
+
+    @Override
+    public ResponseEntity<?> updateLinkById(String id, UpdateLinkBody body) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(this.linkService.updateLink(id, body));
     }
 
     @Override

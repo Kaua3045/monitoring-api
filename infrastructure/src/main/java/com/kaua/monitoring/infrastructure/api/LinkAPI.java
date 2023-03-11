@@ -3,6 +3,7 @@ package com.kaua.monitoring.infrastructure.api;
 import com.kaua.monitoring.application.usecases.link.outputs.LinkOutput;
 import com.kaua.monitoring.domain.pagination.Pagination;
 import com.kaua.monitoring.infrastructure.link.inputs.CreateLinkBody;
+import com.kaua.monitoring.infrastructure.link.inputs.UpdateLinkBody;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -34,6 +35,13 @@ public interface LinkAPI {
             @RequestParam(name = "sort", required = false, defaultValue = "title") final String sort,
             @RequestParam(name = "dir", required = false, defaultValue = "asc") final String direction
             );
+
+    @PutMapping(
+            value = "{id}",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    ResponseEntity<?> updateLinkById(@PathVariable String id, @RequestBody UpdateLinkBody body);
 
     @DeleteMapping(value = "{id}")
     ResponseEntity<?> deleteLinkById(@PathVariable String id);

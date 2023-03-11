@@ -1,5 +1,6 @@
 package com.kaua.monitoring.infrastructure.services;
 
+import com.kaua.monitoring.application.exceptions.DomainException;
 import com.kaua.monitoring.application.usecases.link.create.CreateLinkCommand;
 import com.kaua.monitoring.application.usecases.link.create.CreateLinkUseCase;
 import com.kaua.monitoring.application.usecases.link.delete.DeleteLinkCommand;
@@ -13,6 +14,7 @@ import com.kaua.monitoring.application.usecases.link.retrieve.list.profileId.Lis
 import com.kaua.monitoring.application.usecases.link.retrieve.list.profileId.ListLinkByProfileIdUseCase;
 import com.kaua.monitoring.application.usecases.link.update.UpdateLinkCommand;
 import com.kaua.monitoring.application.usecases.link.update.UpdateLinkUseCase;
+import com.kaua.monitoring.domain.exceptions.Error;
 import com.kaua.monitoring.domain.pagination.Pagination;
 import com.kaua.monitoring.domain.pagination.SearchQuery;
 import com.kaua.monitoring.infrastructure.link.inputs.CreateLinkBody;
@@ -21,6 +23,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.List;
 
 @Component
 public class LinkService {
@@ -46,6 +49,10 @@ public class LinkService {
     }
 
     public CreateLinkOutput createLink(CreateLinkBody body) {
+        if (body.executeDate().isBlank()) {
+            throw new DomainException(List.of(new Error("'executeDate' should not be empty")));
+        }
+
         final var aLocalDateTime = LocalDateTime.parse(body.executeDate());
         final var aZonedDateTime = aLocalDateTime.atZone(ZoneId.systemDefault())
                 .withZoneSameInstant(ZoneId.of("UTC"));
@@ -88,6 +95,10 @@ public class LinkService {
     }
 
     public UpdateLinkOutput updateLink(String id, UpdateLinkBody body) {
+        if (body.executeDate().isBlank()) {
+            throw new DomainException(List.of(new Error("'executeDate' should not be empty")));
+        }
+
         final var aLocalDateTime = LocalDateTime.parse(body.executeDate());
         final var aZonedDateTime = aLocalDateTime.atZone(ZoneId.systemDefault())
                 .withZoneSameInstant(ZoneId.of("UTC"));

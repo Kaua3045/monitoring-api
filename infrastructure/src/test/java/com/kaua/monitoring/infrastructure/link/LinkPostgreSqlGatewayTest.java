@@ -233,6 +233,65 @@ public class LinkPostgreSqlGatewayTest {
         Assertions.assertEquals(expectedTitle, actualPage.items().get(0).getTitle());
     }
 
+    @Test
+    public void givenAnValidValues_whenCallsUpdate_shouldReturnLinkId() {
+        final var expectedProfile = Profile
+                .newProfile(
+                        "123",
+                        "kaua",
+                        "kaua@teste.com",
+                        null
+                );
+        profileRepository.save(ProfileJpaFactory.toEntity(expectedProfile));
+
+        final var expectedTitle = "teste";
+        final var expectedUrl = "https://localhost.com";
+        final var expectedExecuteDate = Instant.now().plus(5, ChronoUnit.DAYS);
+
+        final var expectedRepeat = LinkExecutions.TWO_TIMES_A_MONTH;
+
+        final var aLink = Link.newLink(
+                "pequeno",
+                "https://pequeno.com",
+                Instant.now().plus(1, ChronoUnit.DAYS),
+                LinkExecutions.NO_REPEAT,
+                expectedProfile
+        );
+
+        Assertions.assertEquals(0, linkRepository.count());
+
+        linkRepository.save(LinkJpaFactory.toEntity(aLink));
+
+        Assertions.assertEquals(1, linkRepository.count());
+
+        final var aLinkUpdated = aLink.update(
+                expectedTitle,
+                expectedUrl,
+                expectedExecuteDate,
+                expectedRepeat
+        );
+
+        Assertions.assertDoesNotThrow(aLinkUpdated::validate);
+
+        final var actualLink = linkGateway.update(aLinkUpdated);
+
+        Assertions.assertEquals(aLink.getId().getValue(), actualLink.getId().getValue());
+        Assertions.assertEquals(aLink.getTitle(), actualLink.getTitle());
+        Assertions.assertEquals(aLink.getUrl(), actualLink.getUrl());
+        Assertions.assertEquals(aLink.getExecuteDate(), actualLink.getExecuteDate());
+        Assertions.assertEquals(aLink.getLinkExecution(), actualLink.getLinkExecution());
+        Assertions.assertEquals(aLink.getProfile().getId().getValue(), actualLink.getProfile().getId().getValue());
+
+        final var actualEntity = linkRepository.findById(aLink.getId().getValue()).get();
+
+        Assertions.assertEquals(aLink.getId().getValue(), actualEntity.getId());
+        Assertions.assertEquals(aLink.getTitle(), actualEntity.getTitle());
+        Assertions.assertEquals(aLink.getUrl(), actualEntity.getUrl());
+        Assertions.assertEquals(aLink.getExecuteDate(), actualEntity.getExecuteDate());
+        Assertions.assertEquals(aLink.getLinkExecution(), actualEntity.getLinkExecution());
+        Assertions.assertEquals(aLink.getProfile().getId().getValue(), actualEntity.getProfile().getId());
+    }
+
     private void makeLinks(final Profile aProfile) {
         linkRepository.saveAll(List.of(
                 LinkJpaFactory.toEntity(Link.newLink(

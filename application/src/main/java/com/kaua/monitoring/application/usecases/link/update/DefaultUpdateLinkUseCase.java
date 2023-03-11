@@ -25,7 +25,7 @@ public class DefaultUpdateLinkUseCase extends UpdateLinkUseCase {
                 aCommand.title(),
                 aCommand.url(),
                 aCommand.executeDate(),
-                LinkExecutions.valueOf(aCommand.repeat())
+                LinkExecutions.valueOf(aCommand.linkExecution())
         );
 
         final var aLinkValidated = aLinkUpdated.validate();

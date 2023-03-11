@@ -7,6 +7,6 @@ public record UpdateLinkCommand(
         String title,
         String url,
         Instant executeDate,
-        String repeat
+        String linkExecution
 ) {
 }

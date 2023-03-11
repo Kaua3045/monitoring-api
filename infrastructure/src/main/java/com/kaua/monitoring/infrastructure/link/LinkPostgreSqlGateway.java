@@ -4,10 +4,11 @@ import com.kaua.monitoring.application.gateways.LinkGateway;
 import com.kaua.monitoring.domain.links.Link;
 import com.kaua.monitoring.domain.pagination.Pagination;
 import com.kaua.monitoring.domain.pagination.SearchQuery;
+import com.kaua.monitoring.infrastructure.link.persistence.LinkJpaEntity;
 import com.kaua.monitoring.infrastructure.link.persistence.LinkJpaFactory;
 import com.kaua.monitoring.infrastructure.link.persistence.LinkRepository;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
+import com.kaua.monitoring.infrastructure.profile.persistence.ProfileJpaEntity;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
@@ -35,15 +36,7 @@ public class LinkPostgreSqlGateway implements LinkGateway {
 
     @Override
     public Pagination<Link> findAllByProfileId(String profileId, SearchQuery aQuery) {
-        final var page = PageRequest.of(
-                aQuery.page(),
-                aQuery.perPage(),
-                Sort.by(Sort.Direction.fromString(aQuery.direction()), aQuery.sort())
-        );
-
-        final var pageResult = this.linkRepository.findAllByProfileId(
-                profileId,
-                page);
+        final var pageResult = this.linksWhereProfileId(profileId, aQuery);
 
         return new Pagination<>(
                 pageResult.getNumber(),
@@ -64,5 +57,31 @@ public class LinkPostgreSqlGateway implements LinkGateway {
         if (this.linkRepository.existsById(id)) {
             this.linkRepository.deleteById(id);
         }
+    }
+
+    private Page<LinkJpaEntity> linksWhereProfileId(String profileId, SearchQuery aQuery) {
+        final var page = PageRequest.of(
+                aQuery.page(),
+                aQuery.perPage(),
+                Sort.by(Sort.Direction.fromString(aQuery.direction()), aQuery.sort())
+        );
+
+        ExampleMatcher matcher = ExampleMatcher.matchingAll()
+                .withMatcher(
+                        "title",
+                        ExampleMatcher.GenericPropertyMatchers.contains().ignoreCase());
+
+        final var aLink = new LinkJpaEntity();
+        final var aProfile = new ProfileJpaEntity();
+
+        aProfile.setId(profileId);
+        aLink.setProfile(aProfile);
+        aLink.setTitle(aQuery.terms());
+
+        final var exampleWithValuesAndMatcher = Example.of(aLink, matcher);
+
+        final var pageResult = this.linkRepository.findAll(exampleWithValuesAndMatcher, page);
+
+        return pageResult;
     }
 }

@@ -20,7 +20,7 @@ public class LinkResponseJpaEntity {
 
     @ManyToOne
     @JoinColumn(name = "url_id", nullable = false)
-    private LinkJpaEntity link;
+    private LinkJpaEntity urlId;
 
     public LinkResponseJpaEntity() {}
 
@@ -28,11 +28,11 @@ public class LinkResponseJpaEntity {
             String id,
             String responseMessage,
             int statusCode,
-            LinkJpaEntity link
+            LinkJpaEntity urlId
     ) {
         this.id = id;
         this.responseMessage = responseMessage;
         this.statusCode = statusCode;
-        this.link = link;
+        this.urlId = urlId;
     }
 }

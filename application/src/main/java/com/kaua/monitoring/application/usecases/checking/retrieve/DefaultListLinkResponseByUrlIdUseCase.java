@@ -5,7 +5,8 @@ import com.kaua.monitoring.application.gateways.LinkGateway;
 import com.kaua.monitoring.application.gateways.LinkResponseGateway;
 import com.kaua.monitoring.application.usecases.checking.outputs.LinkResponseOutput;
 import com.kaua.monitoring.domain.links.Link;
-import com.kaua.monitoring.domain.pagination.Pagination;
+
+import java.util.List;
 
 public class DefaultListLinkResponseByUrlIdUseCase extends ListLinkResponseByUrlIdUseCase {
 
@@ -21,13 +22,12 @@ public class DefaultListLinkResponseByUrlIdUseCase extends ListLinkResponseByUrl
     }
 
     @Override
-    public Pagination<LinkResponseOutput> execute(ListLinkResponseByUrlIdCommand aCommand) {
+    public List<LinkResponseOutput> execute(ListLinkResponseByUrlIdCommand aCommand) {
         final var linkExists = this.linkGateway.findById(aCommand.urlId())
                 .orElseThrow(() -> new NotFoundException(Link.class, aCommand.urlId()));
 
-        return this.linkResponseGateway.findAllByUrlId(
-                linkExists.getId().getValue(),
-                aCommand.aQuery()
-        ).map(LinkResponseOutput::from);
+        return this.linkResponseGateway.findAllFirst90(
+                linkExists.getId().getValue()
+        ).stream().map(LinkResponseOutput::from).toList();
     }
 }

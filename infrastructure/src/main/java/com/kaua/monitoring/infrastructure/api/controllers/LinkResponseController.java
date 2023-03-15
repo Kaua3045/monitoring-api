@@ -1,10 +1,11 @@
 package com.kaua.monitoring.infrastructure.api.controllers;
 
 import com.kaua.monitoring.application.usecases.checking.outputs.LinkResponseOutput;
-import com.kaua.monitoring.domain.pagination.Pagination;
 import com.kaua.monitoring.infrastructure.api.LinkResponseAPI;
 import com.kaua.monitoring.infrastructure.services.LinkResponseService;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 public class LinkResponseController implements LinkResponseAPI {
@@ -16,21 +17,7 @@ public class LinkResponseController implements LinkResponseAPI {
     }
 
     @Override
-    public Pagination<LinkResponseOutput> getAllLinkResponseByUrlId(
-            String urlId,
-            String search,
-            int page,
-            int perPage,
-            String sort,
-            String direction
-    ) {
-        return this.linkResponseService.getAllLinkResponseByUrlId(
-                urlId,
-                search,
-                page,
-                perPage,
-                sort,
-                direction
-        );
+    public List<LinkResponseOutput> getAllLinkResponseByUrlId(String urlId) {
+        return this.linkResponseService.getFirst90LinkResponseByUrlId(urlId);
     }
 }

@@ -22,7 +22,7 @@ public final class LinkResponseJpaFactory {
                 LinkResponseID.from(aLinkResponse.getId()),
                 aLinkResponse.getResponseMessage(),
                 aLinkResponse.getStatusCode(),
-                LinkJpaFactory.toDomain(aLinkResponse.getLink())
+                LinkJpaFactory.toDomain(aLinkResponse.getUrlId())
         );
     }
 }

@@ -31,4 +31,10 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(new ApiError(ex.getMessage(), Collections.emptyList()));
     }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<?> handleUnexpectedException(final Exception ex) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ApiError("Erro inesperado", Collections.emptyList()));
+    }
 }

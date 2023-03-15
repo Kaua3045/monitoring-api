@@ -20,7 +20,7 @@ public class TwoTimesAMonthJobReader {
             "date_part('day', current_timestamp - execute_date) >= 15 " +
             "THEN execute_date::time = current_timestamp::time AND " +
             "date_trunc('day', execute_date) = date_trunc('day', current_timestamp) " +
-            "ELSE execute_date BETWEEN current_timestamp AND current_timestamp + '2 minutes'::interval END);";
+            "ELSE execute_date BETWEEN current_timestamp AND current_timestamp + '1 minutes'::interval END);";
 
     @Autowired
     private DataSource dataSource;

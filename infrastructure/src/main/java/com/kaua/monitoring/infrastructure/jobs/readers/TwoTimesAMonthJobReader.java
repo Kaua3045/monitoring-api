@@ -15,7 +15,7 @@ public class TwoTimesAMonthJobReader {
 
     private static final String TWO_TIMES_A_MONTH_JOB_READER_NAME = "find-all-with-two-times-a-month";
 
-    private static final String SQL_FIND_ALL_WITH_TWO_TIMES_A_MONTH = "SELECT * FROM links " +
+    private static final String SQL_FIND_ALL_WITH_TWO_TIMES_A_MONTH = "SELECT id, url FROM links " +
             "WHERE (link_execution = 'TWO_TIMES_A_MONTH' AND CASE WHEN " +
             "date_part('day', current_timestamp - execute_date) >= 15 " +
             "THEN execute_date::time = current_timestamp::time AND " +

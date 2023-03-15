@@ -15,7 +15,7 @@ public class NoRepeatJobReader {
 
     private static final String NO_REPEAT_JOB_READER_NAME = "find-all-with-no-repeat";
 
-    private static final String SQL_FIND_ALL_WITH_NO_REPEAT = "SELECT * FROM links " +
+    private static final String SQL_FIND_ALL_WITH_NO_REPEAT = "SELECT id, url FROM links " +
             "WHERE (link_execution = 'NO_REPEAT' AND execute_date BETWEEN current_timestamp " +
             "AND current_timestamp + '2 minutes'::interval);";
 

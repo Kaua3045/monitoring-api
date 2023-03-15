@@ -15,7 +15,7 @@ public class OnSpecificDayJobReader {
 
     private static final String ON_SPECIFIC_DAY_JOB_READER_NAME = "find-all-with-on-specific-day";
 
-    private static final String SQL_FIND_ALL_WITH_ON_SPECIFIC_DAY = "SELECT * FROM links " +
+    private static final String SQL_FIND_ALL_WITH_ON_SPECIFIC_DAY = "SELECT id, url FROM links " +
             "WHERE (link_execution = 'ON_SPECIFIC_DAY' AND date_trunc('day', execute_date) = " +
             "date_trunc('day', current_timestamp) AND execute_date BETWEEN current_timestamp " +
             "AND current_timestamp + '2 minutes'::interval);";

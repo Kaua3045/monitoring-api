@@ -5,12 +5,13 @@ import com.kaua.monitoring.infrastructure.profile.persistence.ProfileJpaEntity;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.time.Instant;
 
 @Table(name = "links")
 @Entity
 @Data
-public class LinkJpaEntity {
+public class LinkJpaEntity implements Serializable {
 
     @Id
     private String id;

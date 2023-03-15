@@ -20,10 +20,6 @@ public class ProfileID extends Identifier {
         return new ProfileID(anId);
     }
 
-    public static ProfileID from(final UUID anId) {
-        return new ProfileID(anId.toString().toLowerCase());
-    }
-
     @Override
     public String getValue() {
         return value;

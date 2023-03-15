@@ -4,7 +4,7 @@ import com.kaua.monitoring.infrastructure.jobs.readers.EveryDayJobReader;
 import com.kaua.monitoring.infrastructure.jobs.readers.NoRepeatJobReader;
 import com.kaua.monitoring.infrastructure.jobs.readers.OnSpecificDayJobReader;
 import com.kaua.monitoring.infrastructure.jobs.readers.TwoTimesAMonthJobReader;
-import com.kaua.monitoring.infrastructure.link.persistence.LinkJpaEntity;
+import com.kaua.monitoring.infrastructure.jobs.readers.outputs.LinkResponseJob;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
@@ -52,8 +52,8 @@ public class JobLinks {
     }
 
     @Bean
-    public AmqpItemWriter<LinkJpaEntity> writer() {
-        return new AmqpItemWriterBuilder<LinkJpaEntity>()
+    public AmqpItemWriter<LinkResponseJob> writer() {
+        return new AmqpItemWriterBuilder<LinkResponseJob>()
                 .amqpTemplate(rabbitTemplate)
                 .build();
     }
@@ -64,7 +64,7 @@ public class JobLinks {
             NoRepeatJobReader noRepeatJobReader
     ) {
         return new StepBuilder("check-links-no-repeat-" + UUID.randomUUID(), jobRepository)
-                .<LinkJpaEntity, LinkJpaEntity>chunk(VALUE_PER_CHUNK, transactionManager)
+                .<LinkResponseJob, LinkResponseJob>chunk(VALUE_PER_CHUNK, transactionManager)
                 .reader(noRepeatJobReader.noRepeatReader())
                 .writer(writer())
                 .build();
@@ -76,7 +76,7 @@ public class JobLinks {
             OnSpecificDayJobReader specificDayJobReader
     ) {
         return new StepBuilder("check-links-specific-day-" + UUID.randomUUID(), jobRepository)
-                .<LinkJpaEntity, LinkJpaEntity>chunk(VALUE_PER_CHUNK, transactionManager)
+                .<LinkResponseJob, LinkResponseJob>chunk(VALUE_PER_CHUNK, transactionManager)
                 .reader(specificDayJobReader.specificDayReader())
                 .writer(writer())
                 .build();
@@ -88,7 +88,7 @@ public class JobLinks {
             TwoTimesAMonthJobReader twoTimesAMonthJobReader
     ) {
         return new StepBuilder("check-links-two-times-month-" + UUID.randomUUID(), jobRepository)
-                .<LinkJpaEntity, LinkJpaEntity>chunk(VALUE_PER_CHUNK, transactionManager)
+                .<LinkResponseJob, LinkResponseJob>chunk(VALUE_PER_CHUNK, transactionManager)
                 .reader(twoTimesAMonthJobReader.twoTimesMonthReader())
                 .writer(writer())
                 .build();
@@ -100,7 +100,7 @@ public class JobLinks {
             EveryDayJobReader everyDayJobReader
     ) {
         return new StepBuilder("check-links-every-day-" + UUID.randomUUID(), jobRepository)
-                .<LinkJpaEntity, LinkJpaEntity>chunk(VALUE_PER_CHUNK, transactionManager)
+                .<LinkResponseJob, LinkResponseJob>chunk(VALUE_PER_CHUNK, transactionManager)
                 .reader(everyDayJobReader.everyDayReader())
                 .writer(writer())
                 .build();

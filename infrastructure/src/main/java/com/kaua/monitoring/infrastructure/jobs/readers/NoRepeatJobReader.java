@@ -1,6 +1,6 @@
 package com.kaua.monitoring.infrastructure.jobs.readers;
 
-import com.kaua.monitoring.infrastructure.link.persistence.LinkJpaEntity;
+import com.kaua.monitoring.infrastructure.jobs.readers.outputs.LinkResponseJob;
 import org.springframework.batch.item.database.JdbcCursorItemReader;
 import org.springframework.batch.item.database.builder.JdbcCursorItemReaderBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,12 +23,12 @@ public class NoRepeatJobReader {
     private DataSource dataSource;
 
     @Bean
-    public JdbcCursorItemReader<LinkJpaEntity> noRepeatReader() {
-        return new JdbcCursorItemReaderBuilder<LinkJpaEntity>()
+    public JdbcCursorItemReader<LinkResponseJob> noRepeatReader() {
+        return new JdbcCursorItemReaderBuilder<LinkResponseJob>()
                 .name(NO_REPEAT_JOB_READER_NAME)
                 .dataSource(dataSource)
                 .sql(SQL_FIND_ALL_WITH_NO_REPEAT)
-                .rowMapper(new BeanPropertyRowMapper<>(LinkJpaEntity.class))
+                .rowMapper(new BeanPropertyRowMapper<>(LinkResponseJob.class))
                 .build();
     }
 }

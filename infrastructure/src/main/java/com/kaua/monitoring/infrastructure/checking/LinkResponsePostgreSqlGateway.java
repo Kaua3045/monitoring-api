@@ -9,7 +9,9 @@ import com.kaua.monitoring.infrastructure.checking.persistence.LinkResponseJpaFa
 import com.kaua.monitoring.infrastructure.checking.persistence.LinkResponseRepository;
 import com.kaua.monitoring.infrastructure.link.persistence.LinkJpaEntity;
 import org.springframework.data.domain.*;
+import org.springframework.stereotype.Component;
 
+@Component
 public class LinkResponsePostgreSqlGateway implements LinkResponseGateway {
 
     private final LinkResponseRepository linkResponseRepository;
@@ -49,12 +51,11 @@ public class LinkResponsePostgreSqlGateway implements LinkResponseGateway {
         aLink.setId(urlId);
         aLinkResponse.setLink(aLink);
         aLinkResponse.setResponseMessage(aQuery.terms());
-//        Hibernate: select l1_0.id,l1_0.execute_date,l1_0.link_execution,l1_0.profile_id,l1_0.title,l1_0.url from links l1_0 where lower(l1_0.title) like ? escape '\' and l1_0.profile_id=? order by l1_0.title asc offset ? rows fetch first ? rows only
-//        Hibernate: select l1_0.id,l1_0.url_id,l1_0.response_message,l1_0.status_code from links_responses l1_0 where l1_0.status_code=? and lower(l1_0.response_message) like ? escape '\' and l1_0.url_id=? order by l1_0.response_message asc offset ? rows fetch first ? rows only
+
         final var exampleWithValuesAndMatcher = Example.of(aLinkResponse, matcher);
 
         final var pageResult = this.linkResponseRepository.findAll(exampleWithValuesAndMatcher, page);
-        System.out.println(pageResult);
+
         return pageResult;
     }
 }

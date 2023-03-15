@@ -26,7 +26,7 @@ public class LinkResponsePostgreSqlGateway implements LinkResponseGateway {
     }
 
     @Override
-    public List<LinkResponse> findAllFirst90(String urlId) {
+    public List<LinkResponse> findAllTop90(String urlId) {
         final var aLinkEntity = this.linkRepository.findById(urlId)
                 .orElseThrow(() -> new NotFoundException(Link.class, urlId));
 

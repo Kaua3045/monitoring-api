@@ -3,7 +3,6 @@ package com.kaua.monitoring.infrastructure.checking;
 import com.kaua.monitoring.domain.checking.LinkResponse;
 import com.kaua.monitoring.domain.links.Link;
 import com.kaua.monitoring.domain.links.LinkExecutions;
-import com.kaua.monitoring.domain.pagination.SearchQuery;
 import com.kaua.monitoring.domain.profile.Profile;
 import com.kaua.monitoring.infrastructure.PostgreSqlGatewayTest;
 import com.kaua.monitoring.infrastructure.checking.persistence.LinkResponseJpaFactory;
@@ -13,8 +12,7 @@ import com.kaua.monitoring.infrastructure.link.persistence.LinkRepository;
 import com.kaua.monitoring.infrastructure.profile.persistence.ProfileJpaFactory;
 import com.kaua.monitoring.infrastructure.profile.persistence.ProfileRepository;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.Instant;
@@ -37,20 +35,8 @@ public class LinkResponsePostgreSqlGatewayTest {
     private ProfileRepository profileRepository;
 
 
-    @ParameterizedTest
-    @CsvSource({
-            "responseMessage,asc,0,10,2,2,NOT-FOUND",
-            "responseMessage,desc,0,10,2,2,OK"
-    })
-    public void givenAnValidSortAndDirection_whenCallsFindAllByUrlId_shouldReturnFiltered(
-            final String expectedSort,
-            final String expectedDirection,
-            final int expectedPage,
-            final int expectedPerPage,
-            final int expectedItemsCount,
-            final long expectedTotal,
-            final String expectedresponseMessage
-    ) {
+    @Test
+    public void givenAnValidUrlIdAndPrePersistedResponses_whenCallsFindAllTop90_shouldReturnLinkResponseList() {
         final var expectedProfile = Profile
                 .newProfile(
                         "123",
@@ -83,23 +69,10 @@ public class LinkResponsePostgreSqlGatewayTest {
         );
         linkResponseRepository.saveAllAndFlush(expectedLinkResponses);
 
-        final var expectedTerms = "";
+        final var actualOutput = linkResponseGateway
+                .findAllTop90(expectedLink.getId().getValue());
 
-        final var aQuery = new SearchQuery(
-                expectedPage,
-                expectedPerPage,
-                expectedTerms,
-                expectedSort,
-                expectedDirection
-        );
-
-        final var actualPage = linkResponseGateway
-                .findAllByUrlId(expectedLink.getId().getValue(), aQuery);
-
-        Assertions.assertEquals(expectedPage, actualPage.currentPage());
-        Assertions.assertEquals(expectedPerPage, actualPage.perPage());
-        Assertions.assertEquals(expectedTotal, actualPage.total());
-        Assertions.assertEquals(expectedItemsCount, actualPage.items().size());
-        Assertions.assertEquals(expectedresponseMessage, actualPage.items().get(0).getResponseMessage());
+        Assertions.assertEquals(expectedLinkResponses.size(), actualOutput.size());
+        Assertions.assertEquals(expectedLinkResponses.get(0).getId(), actualOutput.get(0).getId().getValue());
     }
 }

@@ -3,12 +3,9 @@ package com.kaua.monitoring.application.usecases.checking.retrieve;
 import com.kaua.monitoring.application.exceptions.NotFoundException;
 import com.kaua.monitoring.application.gateways.LinkGateway;
 import com.kaua.monitoring.application.gateways.LinkResponseGateway;
-import com.kaua.monitoring.application.usecases.checking.outputs.LinkResponseOutput;
 import com.kaua.monitoring.domain.checking.LinkResponse;
 import com.kaua.monitoring.domain.links.Link;
 import com.kaua.monitoring.domain.links.LinkExecutions;
-import com.kaua.monitoring.domain.pagination.Pagination;
-import com.kaua.monitoring.domain.pagination.SearchQuery;
 import com.kaua.monitoring.domain.profile.Profile;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -40,7 +37,7 @@ public class ListLinkResponseByUrlIdUseCaseTest {
     private LinkGateway linkGateway;
 
     @Test
-    public void givenAnValidUrlIdAndPrePersistedLinkResponses_whenCallsFindAllByUrlId_shouldReturnLinkResponses() {
+    public void givenAnValidUrlIdAndPrePersistedLinkResponses_whenCallsFindAllTop90_shouldReturnLinkResponses() {
         final var expectedProfile = Profile.newProfile(
                 "123",
                 "kaua",
@@ -68,56 +65,24 @@ public class ListLinkResponseByUrlIdUseCaseTest {
                 )
         );
 
-        final var expectedPage = 0;
-        final var expectedPerPage = 10;
-        final var expectedTerms = "T";
-        final var expectedSort = "executeDate";
-        final var expectedDirection = "asc";
-        final var expectedTotal = 2;
-
-        final var expectedItems = expectedLinkResponses
-                .stream().map(LinkResponseOutput::from).toList();
-
-        final var expectedPagination = new Pagination<>(
-                expectedPage,
-                expectedPerPage,
-                expectedTotal,
-                expectedLinkResponses
-        );
-
         when(linkGateway.findById(any()))
                 .thenReturn(Optional.of(expectedLink));
 
-        when(linkResponseGateway.findAllByUrlId(any(), any()))
-                .thenReturn(expectedPagination);
+        when(linkResponseGateway.findAllTop90(any()))
+                .thenReturn(expectedLinkResponses);
 
-        final var aQuery = new SearchQuery(
-                expectedPage,
-                expectedPerPage,
-                expectedTerms,
-                expectedSort,
-                expectedDirection
-        );
-
-        final var aCommand = new ListLinkResponseByUrlIdCommand(
-                expectedLink.getId().getValue(),
-                aQuery
-        );
+        final var aCommand = new ListLinkResponseByUrlIdCommand(expectedLink.getId().getValue());
 
         final var actualOutput = useCase.execute(aCommand);
 
-        Assertions.assertEquals(expectedPage, actualOutput.currentPage());
-        Assertions.assertEquals(expectedPerPage, actualOutput.perPage());
-        Assertions.assertEquals(expectedTotal, actualOutput.total());
-        Assertions.assertEquals(expectedItems, actualOutput.items());
+        Assertions.assertEquals(expectedLinkResponses.size(), actualOutput.size());
 
         Mockito.verify(linkGateway, times(1)).findById(aCommand.urlId());
-        Mockito.verify(linkResponseGateway, times(1))
-                .findAllByUrlId(aCommand.urlId(), aQuery);
+        Mockito.verify(linkResponseGateway, times(1)).findAllTop90(aCommand.urlId());
     }
 
     @Test
-    public void givenAnValidUrlId_whenCallsFindAllByUrlId_shouldReturnEmptyList() {
+    public void givenAnValidUrlId_whenCallsFindAllTop90_shouldReturnEmptyList() {
         final var expectedProfile = Profile.newProfile(
                 "123",
                 "kaua",
@@ -134,46 +99,20 @@ public class ListLinkResponseByUrlIdUseCaseTest {
 
         final var expectedLinkResponses = List.<LinkResponse>of();
 
-        final var expectedPage = 0;
-        final var expectedPerPage = 10;
-        final var expectedTerms = "T";
-        final var expectedSort = "executeDate";
-        final var expectedDirection = "asc";
-        final var expectedTotal = 2;
-
-        final var expectedPagination = new Pagination<>(
-                expectedPage,
-                expectedPerPage,
-                expectedTotal,
-                expectedLinkResponses
-        );
-
         when(linkGateway.findById(any()))
                 .thenReturn(Optional.of(expectedLink));
 
-        when(linkResponseGateway.findAllByUrlId(any(), any()))
-                .thenReturn(expectedPagination);
+        when(linkResponseGateway.findAllTop90(any()))
+                .thenReturn(expectedLinkResponses);
 
-        final var aQuery = new SearchQuery(
-                expectedPage,
-                expectedPerPage,
-                expectedTerms,
-                expectedSort,
-                expectedDirection
-        );
-
-        final var aCommand = new ListLinkResponseByUrlIdCommand(
-                expectedProfile.getId().getValue(),
-                aQuery
-        );
+        final var aCommand = new ListLinkResponseByUrlIdCommand(expectedProfile.getId().getValue());
 
         final var actualLinks = useCase.execute(aCommand);
 
-        Assertions.assertEquals(expectedLinkResponses.size(), actualLinks.items().size());
+        Assertions.assertEquals(expectedLinkResponses.size(), actualLinks.size());
 
         Mockito.verify(linkGateway, times(1)).findById(aCommand.urlId());
-        Mockito.verify(linkResponseGateway, times(1))
-                .findAllByUrlId(any(), any());
+        Mockito.verify(linkResponseGateway, times(1)).findAllTop90(any());
     }
 
     @Test
@@ -184,15 +123,7 @@ public class ListLinkResponseByUrlIdUseCaseTest {
         when(linkGateway.findById(any()))
                 .thenReturn(Optional.empty());
 
-        final var aCommand = new ListLinkResponseByUrlIdCommand(
-                expectedUrlId,
-                new SearchQuery(
-                        0,
-                        10,
-                        "T",
-                        "statusCode",
-                        "asc"
-                ));
+        final var aCommand = new ListLinkResponseByUrlIdCommand(expectedUrlId);
 
         final var actualException = Assertions.assertThrows(
                 NotFoundException.class,

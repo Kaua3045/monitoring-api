@@ -3,6 +3,7 @@ package com.kaua.monitoring.application.usecases.checking.retrieve;
 import com.kaua.monitoring.application.exceptions.NotFoundException;
 import com.kaua.monitoring.application.gateways.LinkGateway;
 import com.kaua.monitoring.application.gateways.LinkResponseGateway;
+import com.kaua.monitoring.application.usecases.checking.outputs.LinkResponseOutput;
 import com.kaua.monitoring.domain.checking.LinkResponse;
 import com.kaua.monitoring.domain.links.Link;
 import com.kaua.monitoring.domain.links.LinkExecutions;
@@ -74,6 +75,9 @@ public class ListLinkResponseByUrlIdUseCaseTest {
         final var expectedDirection = "asc";
         final var expectedTotal = 2;
 
+        final var expectedItems = expectedLinkResponses
+                .stream().map(LinkResponseOutput::from).toList();
+
         final var expectedPagination = new Pagination<>(
                 expectedPage,
                 expectedPerPage,
@@ -105,7 +109,7 @@ public class ListLinkResponseByUrlIdUseCaseTest {
         Assertions.assertEquals(expectedPage, actualOutput.currentPage());
         Assertions.assertEquals(expectedPerPage, actualOutput.perPage());
         Assertions.assertEquals(expectedTotal, actualOutput.total());
-        Assertions.assertEquals(expectedLinkResponses, actualOutput.items());
+        Assertions.assertEquals(expectedItems, actualOutput.items());
 
         Mockito.verify(linkGateway, times(1)).findById(aCommand.urlId());
         Mockito.verify(linkResponseGateway, times(1))

@@ -5,15 +5,15 @@ import com.kaua.monitoring.infrastructure.jobs.readers.NoRepeatJobReader;
 import com.kaua.monitoring.infrastructure.jobs.readers.OnSpecificDayJobReader;
 import com.kaua.monitoring.infrastructure.jobs.readers.TwoTimesAMonthJobReader;
 import com.kaua.monitoring.infrastructure.link.persistence.LinkJpaEntity;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.job.builder.JobBuilder;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.builder.StepBuilder;
-import org.springframework.batch.item.ItemWriter;
+import org.springframework.batch.item.amqp.AmqpItemWriter;
+import org.springframework.batch.item.amqp.builder.AmqpItemWriterBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -25,8 +25,6 @@ import java.util.UUID;
 @Configuration
 public class JobLinks {
 
-    private final static Logger log = LoggerFactory.getLogger(JobLinks.class);
-
     private final static int VALUE_PER_CHUNK = 20;
 
     @Autowired
@@ -34,6 +32,9 @@ public class JobLinks {
 
     @Autowired
     private PlatformTransactionManager transactionManager;
+
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
 
     public Job fetchUrlsJob(
             NoRepeatJobReader noRepeatJobReader,
@@ -51,8 +52,10 @@ public class JobLinks {
     }
 
     @Bean
-    public ItemWriter<LinkJpaEntity> writer() {
-        return chunk -> log.info("{} on thread -> {}", chunk.getItems(), Thread.currentThread().getName());
+    public AmqpItemWriter<LinkJpaEntity> writer() {
+        return new AmqpItemWriterBuilder<LinkJpaEntity>()
+                .amqpTemplate(rabbitTemplate)
+                .build();
     }
 
     @Bean

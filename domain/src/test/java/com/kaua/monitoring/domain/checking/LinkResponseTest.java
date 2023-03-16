@@ -15,6 +15,7 @@ public class LinkResponseTest {
     public void givenAnValidValues_whenCallsNewLinkResponse_shouldReturnLinkResponseCreated() {
         final var expectedResponseMessage = "OK";
         final var expectedStatusCode = 200;
+        final var expectedVerifiedDate = Instant.now();
         final var expectedLink = Link.newLink(
                 "teste",
                 "https://teste.com",
@@ -31,6 +32,7 @@ public class LinkResponseTest {
         final var aLinkResponse = LinkResponse.newLinkResponse(
                 expectedResponseMessage,
                 expectedStatusCode,
+                expectedVerifiedDate,
                 expectedLink
         );
 

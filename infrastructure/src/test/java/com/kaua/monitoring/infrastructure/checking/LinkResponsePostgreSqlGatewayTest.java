@@ -59,18 +59,24 @@ public class LinkResponsePostgreSqlGatewayTest {
                 LinkResponseJpaFactory.toEntity(LinkResponse.newLinkResponse(
                         "OK",
                         200,
+                        Instant.now(),
                         expectedLink
                 )),
                 LinkResponseJpaFactory.toEntity(LinkResponse.newLinkResponse(
                         "NOT-FOUND",
                         404,
+                        Instant.now(),
                         expectedLink
                 ))
         );
         linkResponseRepository.saveAllAndFlush(expectedLinkResponses);
 
         final var actualOutput = linkResponseGateway
-                .findAllTop90(expectedLink.getId().getValue());
+                .findAllByUrlIdAndFilterByVerifiedDate(
+                        expectedLink.getId().getValue(),
+                        Instant.now().minus(5, ChronoUnit.MINUTES),
+                        Instant.now().plus(5, ChronoUnit.MINUTES)
+                );
 
         Assertions.assertEquals(expectedLinkResponses.size(), actualOutput.size());
         Assertions.assertEquals(expectedLinkResponses.get(0).getId(), actualOutput.get(0).getId().getValue());

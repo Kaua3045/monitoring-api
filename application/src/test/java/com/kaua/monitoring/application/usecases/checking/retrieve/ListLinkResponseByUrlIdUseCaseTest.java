@@ -56,11 +56,13 @@ public class ListLinkResponseByUrlIdUseCaseTest {
                 LinkResponse.newLinkResponse(
                         "OK",
                         200,
+                        Instant.now(),
                         expectedLink
                 ),
                 LinkResponse.newLinkResponse(
                         "OK",
                         200,
+                        Instant.now(),
                         expectedLink
                 )
         );
@@ -68,17 +70,23 @@ public class ListLinkResponseByUrlIdUseCaseTest {
         when(linkGateway.findById(any()))
                 .thenReturn(Optional.of(expectedLink));
 
-        when(linkResponseGateway.findAllTop90(any()))
+        when(linkResponseGateway.findAllByUrlIdAndFilterByVerifiedDate(any(), any(), any()))
                 .thenReturn(expectedLinkResponses);
 
-        final var aCommand = new ListLinkResponseByUrlIdCommand(expectedLink.getId().getValue());
+        final var aCommand = new ListLinkResponseByUrlIdCommand(
+                expectedLink.getId().getValue(),
+                Instant.now(),
+                Instant.now().plus(5, ChronoUnit.MINUTES)
+        );
 
         final var actualOutput = useCase.execute(aCommand);
 
         Assertions.assertEquals(expectedLinkResponses.size(), actualOutput.size());
 
         Mockito.verify(linkGateway, times(1)).findById(aCommand.urlId());
-        Mockito.verify(linkResponseGateway, times(1)).findAllTop90(aCommand.urlId());
+        Mockito.verify(linkResponseGateway, times(1))
+                .findAllByUrlIdAndFilterByVerifiedDate(
+                        aCommand.urlId(), aCommand.startTimestamp(), aCommand.endTimestamp());
     }
 
     @Test
@@ -102,17 +110,22 @@ public class ListLinkResponseByUrlIdUseCaseTest {
         when(linkGateway.findById(any()))
                 .thenReturn(Optional.of(expectedLink));
 
-        when(linkResponseGateway.findAllTop90(any()))
+        when(linkResponseGateway.findAllByUrlIdAndFilterByVerifiedDate(any(), any(), any()))
                 .thenReturn(expectedLinkResponses);
 
-        final var aCommand = new ListLinkResponseByUrlIdCommand(expectedProfile.getId().getValue());
+        final var aCommand = new ListLinkResponseByUrlIdCommand(
+                expectedProfile.getId().getValue(),
+                Instant.now(),
+                Instant.now().plus(5, ChronoUnit.MINUTES)
+        );
 
         final var actualLinks = useCase.execute(aCommand);
 
         Assertions.assertEquals(expectedLinkResponses.size(), actualLinks.size());
 
         Mockito.verify(linkGateway, times(1)).findById(aCommand.urlId());
-        Mockito.verify(linkResponseGateway, times(1)).findAllTop90(any());
+        Mockito.verify(linkResponseGateway, times(1))
+                .findAllByUrlIdAndFilterByVerifiedDate(any(), any(), any());
     }
 
     @Test
@@ -123,7 +136,11 @@ public class ListLinkResponseByUrlIdUseCaseTest {
         when(linkGateway.findById(any()))
                 .thenReturn(Optional.empty());
 
-        final var aCommand = new ListLinkResponseByUrlIdCommand(expectedUrlId);
+        final var aCommand = new ListLinkResponseByUrlIdCommand(
+                expectedUrlId,
+                Instant.now(),
+                Instant.now().plus(5, ChronoUnit.MINUTES)
+        );
 
         final var actualException = Assertions.assertThrows(
                 NotFoundException.class,

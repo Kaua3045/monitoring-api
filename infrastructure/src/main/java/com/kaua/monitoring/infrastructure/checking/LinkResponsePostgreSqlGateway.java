@@ -9,6 +9,7 @@ import com.kaua.monitoring.infrastructure.checking.persistence.LinkResponseRepos
 import com.kaua.monitoring.infrastructure.link.persistence.LinkRepository;
 import org.springframework.stereotype.Component;
 
+import java.time.Instant;
 import java.util.List;
 
 @Component
@@ -26,11 +27,18 @@ public class LinkResponsePostgreSqlGateway implements LinkResponseGateway {
     }
 
     @Override
-    public List<LinkResponse> findAllTop90(String urlId) {
+    public List<LinkResponse> findAllByUrlIdAndFilterByVerifiedDate(
+            final String urlId,
+            final Instant startTimestamp,
+            final Instant endTimestamp
+    ) {
         final var aLinkEntity = this.linkRepository.findById(urlId)
                 .orElseThrow(() -> new NotFoundException(Link.class, urlId));
 
-        return this.linkResponseRepository.findTop90ByUrlId(aLinkEntity)
-                .stream().map(LinkResponseJpaFactory::toDomain).toList();
+        return this.linkResponseRepository.findByUrlIdAndVerifiedDateBetween(
+                aLinkEntity,
+                startTimestamp,
+                endTimestamp
+        ).stream().map(LinkResponseJpaFactory::toDomain).toList();
     }
 }

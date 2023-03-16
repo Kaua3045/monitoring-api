@@ -17,7 +17,15 @@ public class LinkResponseController implements LinkResponseAPI {
     }
 
     @Override
-    public List<LinkResponseOutput> getAllLinkResponseByUrlId(String urlId) {
-        return this.linkResponseService.getFirst90LinkResponseByUrlId(urlId);
+    public List<LinkResponseOutput> getAllLinkResponseByUrlId(
+            final String urlId,
+            final String startTimestamp,
+            final String endTimestamp
+    ) {
+        return this.linkResponseService.getFirst90LinkResponseByUrlId(
+                urlId,
+                startTimestamp,
+                endTimestamp
+        );
     }
 }

@@ -13,6 +13,7 @@ public final class LinkResponseJpaFactory {
                 aLinkResponse.getId().getValue(),
                 aLinkResponse.getResponseMessage(),
                 aLinkResponse.getStatusCode(),
+                aLinkResponse.getVerifiedDate(),
                 LinkJpaFactory.toEntity(aLinkResponse.getLink())
         );
     }
@@ -22,6 +23,7 @@ public final class LinkResponseJpaFactory {
                 LinkResponseID.from(aLinkResponse.getId()),
                 aLinkResponse.getResponseMessage(),
                 aLinkResponse.getStatusCode(),
+                aLinkResponse.getVerifiedDate(),
                 LinkJpaFactory.toDomain(aLinkResponse.getUrlId())
         );
     }

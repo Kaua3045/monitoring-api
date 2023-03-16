@@ -26,8 +26,10 @@ public class DefaultListLinkResponseByUrlIdUseCase extends ListLinkResponseByUrl
         final var linkExists = this.linkGateway.findById(aCommand.urlId())
                 .orElseThrow(() -> new NotFoundException(Link.class, aCommand.urlId()));
 
-        return this.linkResponseGateway.findAllTop90(
-                linkExists.getId().getValue()
+        return this.linkResponseGateway.findAllByUrlIdAndFilterByVerifiedDate(
+                linkExists.getId().getValue(),
+                aCommand.startTimestamp(),
+                aCommand.endTimestamp()
         ).stream().map(LinkResponseOutput::from).toList();
     }
 }

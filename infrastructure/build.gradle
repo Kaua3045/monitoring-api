@@ -21,9 +21,11 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
     implementation 'org.springframework.boot:spring-boot-starter-batch'
-    implementation 'org.springframework.boot:spring-boot-starter-amqp'
 
     implementation 'org.flywaydb:flyway-core'
+
+    implementation platform('software.amazon.awssdk:bom:2.20.25')
+    implementation 'software.amazon.awssdk:sqs'
 
     runtimeOnly 'org.postgresql:postgresql'
 

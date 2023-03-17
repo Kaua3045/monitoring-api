@@ -53,6 +53,10 @@ public class LinkService {
             throw new DomainException(List.of(new Error("'executeDate' should not be empty")));
         }
 
+        if (body.linkExecution().isBlank()) {
+            throw new DomainException(List.of(new Error("'linkExecution' should not be null")));
+        }
+
         final var aLocalDateTime = LocalDateTime.parse(body.executeDate());
         final var aZonedDateTime = aLocalDateTime.atZone(ZoneId.systemDefault())
                 .withZoneSameInstant(ZoneId.of("UTC"));

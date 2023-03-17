@@ -9,12 +9,3 @@ services:
       - POSTGRES_PASSWORD=123456
     ports:
       - "5432:5432"
-  rabbitmq:
-    container_name: monitoring_rabbitmq
-    image: rabbitmq:3.9-management-alpine
-    ports:
-      - "25676:25676"
-      - "5672:5672"
-      - "3333:15672"
-    volumes:
-      - ./rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf

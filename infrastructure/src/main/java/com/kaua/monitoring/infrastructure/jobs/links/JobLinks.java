@@ -5,15 +5,15 @@ import com.kaua.monitoring.infrastructure.jobs.readers.NoRepeatJobReader;
 import com.kaua.monitoring.infrastructure.jobs.readers.OnSpecificDayJobReader;
 import com.kaua.monitoring.infrastructure.jobs.readers.TwoTimesAMonthJobReader;
 import com.kaua.monitoring.infrastructure.jobs.readers.outputs.LinkResponseJob;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import com.kaua.monitoring.infrastructure.services.gateways.MessengerGateway;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.job.builder.JobBuilder;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.builder.StepBuilder;
-import org.springframework.batch.item.amqp.AmqpItemWriter;
-import org.springframework.batch.item.amqp.builder.AmqpItemWriterBuilder;
+import org.springframework.batch.item.ItemWriter;
+import org.springframework.batch.item.adapter.ItemWriterAdapter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -34,7 +34,7 @@ public class JobLinks {
     private PlatformTransactionManager transactionManager;
 
     @Autowired
-    private RabbitTemplate rabbitTemplate;
+    private MessengerGateway messengerGateway;
 
     public Job fetchUrlsJob(
             NoRepeatJobReader noRepeatJobReader,
@@ -52,10 +52,11 @@ public class JobLinks {
     }
 
     @Bean
-    public AmqpItemWriter<LinkResponseJob> writer() {
-        return new AmqpItemWriterBuilder<LinkResponseJob>()
-                .amqpTemplate(rabbitTemplate)
-                .build();
+    public ItemWriter<LinkResponseJob> writer() {
+        final var itemWriterAdapter = new ItemWriterAdapter<LinkResponseJob>();
+        itemWriterAdapter.setTargetObject(messengerGateway);
+        itemWriterAdapter.setTargetMethod("sendMessage");
+        return itemWriterAdapter;
     }
 
     @Bean

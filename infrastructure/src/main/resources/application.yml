@@ -12,11 +12,6 @@ spring:
       resourceserver:
         jwt:
           issuer-uri: http://localhost:8081/auth/realms/teste
-  rabbitmq:
-    host: ${rabbitmq.host}
-    port: ${rabbitmq.port}
-    username: ${rabbitmq.username}
-    password: ${rabbitmq.password}
   datasource:
     url: jdbc:postgresql://${postgres.url}/${postgres.schema}
     username: ${postgres.username}

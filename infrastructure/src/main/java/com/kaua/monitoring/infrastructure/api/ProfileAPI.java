@@ -21,7 +21,7 @@ public interface ProfileAPI {
     @Operation(summary = "Create a new profile")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Created successfully"),
-            @ApiResponse(responseCode = "400", description = "Domain exception thrown"),
+            @ApiResponse(responseCode = "400", description = "Domain exception validation thrown"),
             @ApiResponse(responseCode = "500", description = "An internal server error was thrown")
     })
     ResponseEntity<?> create(@RequestHeader String authorization, @RequestBody CreateProfileBody body);

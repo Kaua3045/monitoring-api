@@ -4,7 +4,7 @@ import com.kaua.monitoring.infrastructure.services.gateways.JwtGateway;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.oauth2.jwt.JwtDecoders;
 
-public class JwtTokenGateway implements JwtGateway {
+public class JwtTokenService implements JwtGateway {
 
     @Value("${spring.security.oauth2.resourceserver.jwt.issuer-uri}")
     private String issuerUri;

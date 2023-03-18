@@ -2,6 +2,8 @@ package com.kaua.monitoring.infrastructure.api.controllers;
 
 import com.kaua.monitoring.application.exceptions.DomainException;
 import com.kaua.monitoring.application.exceptions.NotFoundException;
+import com.kaua.monitoring.infrastructure.exceptions.ImageSizeNotValidException;
+import com.kaua.monitoring.infrastructure.exceptions.ImageTypeNotValidException;
 import com.kaua.monitoring.infrastructure.exceptions.UserIdDoesNotMatchException;
 import com.kaua.monitoring.infrastructure.utils.ApiError;
 import org.slf4j.Logger;
@@ -33,6 +35,18 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<?> handleNotFoundException(final NotFoundException ex) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(new ApiError(ex.getMessage(), Collections.emptyList()));
+    }
+
+    @ExceptionHandler(ImageTypeNotValidException.class)
+    public ResponseEntity<?> handleImageTypeNotValidException(final ImageTypeNotValidException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(new ApiError(ex.getMessage(), Collections.emptyList()));
+    }
+
+    @ExceptionHandler(ImageSizeNotValidException.class)
+    public ResponseEntity<?> handleImageSizeNotValidException(final ImageSizeNotValidException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(new ApiError(ex.getMessage(), Collections.emptyList()));
     }
 

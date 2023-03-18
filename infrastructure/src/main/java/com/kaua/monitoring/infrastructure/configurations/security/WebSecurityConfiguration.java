@@ -13,6 +13,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class WebSecurityConfiguration implements WebMvcConfigurer {
 
+    private static final String ADMIN_ROLE = "admin";
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
@@ -20,7 +22,10 @@ public class WebSecurityConfiguration implements WebMvcConfigurer {
                 .disable()
                 .cors()
                 .and()
-                .authorizeHttpRequests().anyRequest().authenticated()
+                .authorizeHttpRequests()
+                .requestMatchers("/swagger-ui/**", "/v3/api-docs/**")
+                .hasRole(ADMIN_ROLE)
+                .anyRequest().authenticated()
                 .and()
                 .oauth2ResourceServer()
                 .jwt()

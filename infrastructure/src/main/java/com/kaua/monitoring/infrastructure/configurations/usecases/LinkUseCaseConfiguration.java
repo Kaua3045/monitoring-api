@@ -1,4 +1,4 @@
-package com.kaua.monitoring.infrastructure.configurations;
+package com.kaua.monitoring.infrastructure.configurations.usecases;
 
 import com.kaua.monitoring.application.gateways.LinkGateway;
 import com.kaua.monitoring.application.gateways.ProfileGateway;

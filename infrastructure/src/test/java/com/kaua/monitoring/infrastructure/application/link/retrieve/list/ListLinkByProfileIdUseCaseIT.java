@@ -1,5 +1,6 @@
 package com.kaua.monitoring.infrastructure.application.link.retrieve.list;
 
+import com.kaua.monitoring.application.exceptions.NotFoundException;
 import com.kaua.monitoring.application.gateways.LinkGateway;
 import com.kaua.monitoring.application.usecases.link.retrieve.list.profileId.ListLinkByProfileIdCommand;
 import com.kaua.monitoring.application.usecases.link.retrieve.list.profileId.ListLinkByProfileIdUseCase;
@@ -133,6 +134,43 @@ public class ListLinkByProfileIdUseCaseIT {
         Assertions.assertEquals(expectedTotal, actualOutput.total());
 
         Mockito.verify(linkGateway, Mockito.times(1))
+                .findAllByProfileId(Mockito.any(), Mockito.any());
+    }
+
+    @Test
+    public void givenAnInvalidProfileId_whenCallsListLinkByProfileId_shouldReturnEmptyList() {
+        final var expectedProfileId = "123";
+        final var expectedPage = 0;
+        final var expectedPerPage = 10;
+        final var expectedTerms = "t";
+        final var expectedSort = "title";
+        final var expectedDirection = "asc";
+
+        final var expectedErrorMessage = "Profile with ID 123 was not found";
+
+        Assertions.assertEquals(0, linkRepository.count());
+
+        final var aQuery = new SearchQuery(
+                expectedPage,
+                expectedPerPage,
+                expectedTerms,
+                expectedSort,
+                expectedDirection
+        );
+
+        final var aCommand = new ListLinkByProfileIdCommand(
+                expectedProfileId,
+                aQuery
+        );
+
+        final var actualException = Assertions.assertThrows(
+                NotFoundException.class,
+                () -> listLinkByProfileIdUseCase.execute(aCommand)
+        );
+
+        Assertions.assertEquals(expectedErrorMessage, actualException.getMessage());
+
+        Mockito.verify(linkGateway, Mockito.times(0))
                 .findAllByProfileId(Mockito.any(), Mockito.any());
     }
 }

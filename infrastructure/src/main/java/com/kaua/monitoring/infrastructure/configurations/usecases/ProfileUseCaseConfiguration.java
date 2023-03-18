@@ -1,5 +1,6 @@
 package com.kaua.monitoring.infrastructure.configurations.usecases;
 
+import com.kaua.monitoring.application.gateways.AvatarGateway;
 import com.kaua.monitoring.application.gateways.ProfileGateway;
 import com.kaua.monitoring.application.usecases.profile.create.CreateProfileUseCase;
 import com.kaua.monitoring.application.usecases.profile.create.DefaultCreateProfileUseCase;
@@ -16,9 +17,11 @@ import org.springframework.context.annotation.Configuration;
 public class ProfileUseCaseConfiguration {
 
     private final ProfileGateway profileGateway;
+    private final AvatarGateway avatarGateway;
 
-    public ProfileUseCaseConfiguration(ProfileGateway profileGateway) {
+    public ProfileUseCaseConfiguration(ProfileGateway profileGateway, AvatarGateway avatarGateway) {
         this.profileGateway = profileGateway;
+        this.avatarGateway = avatarGateway;
     }
 
     @Bean
@@ -33,7 +36,7 @@ public class ProfileUseCaseConfiguration {
 
     @Bean
     public UpdateProfileUseCase updateProfileUseCase() {
-        return new DefaultUpdateProfileUseCase(profileGateway);
+        return new DefaultUpdateProfileUseCase(profileGateway, avatarGateway);
     }
 
     @Bean

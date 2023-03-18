@@ -10,9 +10,9 @@ import com.kaua.monitoring.application.usecases.profile.retrieve.get.GetProfileB
 import com.kaua.monitoring.application.usecases.profile.retrieve.get.GetProfileCommand;
 import com.kaua.monitoring.application.usecases.profile.update.UpdateProfileCommand;
 import com.kaua.monitoring.application.usecases.profile.update.UpdateProfileUseCase;
+import com.kaua.monitoring.domain.profile.Resource;
 import com.kaua.monitoring.infrastructure.exceptions.UserIdDoesNotMatchException;
 import com.kaua.monitoring.infrastructure.profile.inputs.CreateProfileBody;
-import com.kaua.monitoring.infrastructure.profile.inputs.UpdateProfileBody;
 import com.kaua.monitoring.infrastructure.services.gateways.JwtGateway;
 import org.springframework.stereotype.Component;
 
@@ -65,12 +65,17 @@ public class ProfileService {
         return aResult;
     }
 
-    public ProfileOutput updateProfile(String profileId, UpdateProfileBody body) {
+    public ProfileOutput updateProfile(
+            String profileId,
+            String username,
+            Resource avatarUrl,
+            String type
+    ) {
         final var aCommand = new UpdateProfileCommand(
                 profileId,
-                body.username(),
-                body.avatarUrl(),
-                body.type()
+                username,
+                avatarUrl,
+                type
         );
         final var aResult = this.updateProfileUseCase.execute(aCommand);
 

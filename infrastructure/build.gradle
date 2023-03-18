@@ -6,7 +6,7 @@ plugins {
 }
 
 group 'com.kaua.monitoring.infrastructure'
-version '0.3.0'
+version '0.5.0'
 
 repositories {
     mavenCentral()
@@ -26,6 +26,7 @@ dependencies {
 
     implementation platform('software.amazon.awssdk:bom:2.20.25')
     implementation 'software.amazon.awssdk:sqs'
+    implementation 'software.amazon.awssdk:s3'
 
     runtimeOnly 'org.postgresql:postgresql'
 

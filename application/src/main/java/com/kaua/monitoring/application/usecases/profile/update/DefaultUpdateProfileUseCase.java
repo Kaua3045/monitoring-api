@@ -3,6 +3,7 @@ package com.kaua.monitoring.application.usecases.profile.update;
 import com.kaua.monitoring.application.exceptions.DomainException;
 import com.kaua.monitoring.application.exceptions.NotFoundException;
 import com.kaua.monitoring.application.exceptions.either.Either;
+import com.kaua.monitoring.application.gateways.AvatarGateway;
 import com.kaua.monitoring.application.gateways.ProfileGateway;
 import com.kaua.monitoring.application.usecases.profile.outputs.ProfileOutput;
 import com.kaua.monitoring.domain.profile.Profile;
@@ -11,9 +12,14 @@ import com.kaua.monitoring.domain.profile.VersionAccountType;
 public class DefaultUpdateProfileUseCase extends UpdateProfileUseCase {
 
     private final ProfileGateway profileGateway;
+    private final AvatarGateway avatarGateway;
 
-    public DefaultUpdateProfileUseCase(final ProfileGateway profileGateway) {
+    public DefaultUpdateProfileUseCase(
+            final ProfileGateway profileGateway,
+            final AvatarGateway avatarGateway
+    ) {
         this.profileGateway = profileGateway;
+        this.avatarGateway = avatarGateway;
     }
 
     @Override
@@ -25,9 +31,16 @@ public class DefaultUpdateProfileUseCase extends UpdateProfileUseCase {
                 ? aProfileExists.getType()
                 : VersionAccountType.valueOf(aCommand.type());
 
+        final var avatarUrlStored = aCommand.avatarUrl() == null
+                ? aProfileExists.getAvatarUrl()
+                : this.avatarGateway.create(
+                aProfileExists.getId().getValue(),
+                aCommand.avatarUrl()
+        );
+
         final var aProfileUpdated = aProfileExists.update(
                 aCommand.username(),
-                aCommand.avatarUrl(),
+                avatarUrlStored,
                 aType
         );
 

@@ -102,7 +102,7 @@ public class UpdateProfileUseCaseTest {
         final String expectedUsername = null;
         final var expectedEmail = "kaua@teste.com";
         final var expectedAvatarUrl = "imaginaria";
-        final var expectedVersionType = VersionAccountType.PREMIUM;
+        final String expectedVersionType = null;
 
         final var expectedErrorMessage = "'username' should not be null or empty";
 
@@ -122,7 +122,7 @@ public class UpdateProfileUseCaseTest {
                 expectedProfileId,
                 expectedUsername,
                 expectedAvatarUrl,
-                expectedVersionType.name()
+                expectedVersionType
         );
 
         final var actualExceptions = useCase.execute(aCommand).getLeft();

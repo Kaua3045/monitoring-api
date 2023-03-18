@@ -1,4 +1,4 @@
-package com.kaua.monitoring.infrastructure.configurations;
+package com.kaua.monitoring.infrastructure.configurations.security;
 
 import com.kaua.monitoring.infrastructure.utils.KeycloakConverter;
 import org.springframework.context.annotation.Bean;

@@ -13,8 +13,7 @@ import com.kaua.monitoring.application.usecases.profile.update.UpdateProfileUseC
 import com.kaua.monitoring.infrastructure.exceptions.UserIdDoesNotMatchException;
 import com.kaua.monitoring.infrastructure.profile.inputs.CreateProfileBody;
 import com.kaua.monitoring.infrastructure.profile.inputs.UpdateProfileBody;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.oauth2.jwt.JwtDecoders;
+import com.kaua.monitoring.infrastructure.services.gateways.JwtGateway;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -24,27 +23,24 @@ public class ProfileService {
     private final GetProfileByUserIdUseCase getProfileByUserIdUseCase;
     private final UpdateProfileUseCase updateProfileUseCase;
     private final DeleteProfileUseCase deleteProfileUseCase;
-
-    @Value("${spring.security.oauth2.resourceserver.jwt.issuer-uri}")
-    private String issuerUri;
+    private final JwtGateway jwtGateway;
 
     public ProfileService(
             final CreateProfileUseCase createProfileUseCase,
             final GetProfileByUserIdUseCase getProfileByUserIdUseCase,
             final UpdateProfileUseCase updateProfileUseCase,
-            final DeleteProfileUseCase deleteProfileUseCase
+            final DeleteProfileUseCase deleteProfileUseCase,
+            final JwtGateway jwtGateway
     ) {
         this.createProfileUseCase = createProfileUseCase;
         this.getProfileByUserIdUseCase = getProfileByUserIdUseCase;
         this.updateProfileUseCase = updateProfileUseCase;
         this.deleteProfileUseCase = deleteProfileUseCase;
+        this.jwtGateway = jwtGateway;
     }
 
     public CreateProfileOutput createProfile(String token, CreateProfileBody body) {
-        final var decoderInstance = JwtDecoders.fromIssuerLocation(issuerUri);
-        final var tokenDecoded = decoderInstance.decode(token.substring(7));
-
-        if (!tokenDecoded.getSubject().equalsIgnoreCase(body.userId())) {
+        if (!jwtGateway.extractTokenSubject(token).equalsIgnoreCase(body.userId())) {
             throw new UserIdDoesNotMatchException();
         }
 

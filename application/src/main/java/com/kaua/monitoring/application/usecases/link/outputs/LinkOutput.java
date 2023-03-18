@@ -11,7 +11,7 @@ public record LinkOutput(
         String title,
         String url,
         String executeDateFormatted,
-        String linkExecutions,
+        String linkExecution,
         String profileId
 ) {
 

@@ -2,6 +2,7 @@ package com.kaua.monitoring.application.usecases.profile.create;
 
 import com.kaua.monitoring.application.gateways.ProfileGateway;
 import com.kaua.monitoring.domain.exceptions.Error;
+import com.kaua.monitoring.domain.profile.Profile;
 import com.kaua.monitoring.domain.profile.VersionAccountType;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -11,6 +12,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.mockito.AdditionalAnswers.returnsFirstArg;
 import static org.mockito.Mockito.any;
@@ -75,5 +77,33 @@ public class CreateProfileUseCaseTest {
         final var actualExceptions = useCase.execute(aCommand).getLeft();
 
         Assertions.assertEquals(expectedErrorsMessages, actualExceptions.getErrors());
+    }
+
+    @Test
+    public void givenAnValidValuesAndExistsUserId_whenCallsCreate_shouldReturnDomainException() {
+        final var expectedUserId = "123";
+        final var expectedUsername = "kaua";
+        final var expectedEmail = "kaua@teste.com";
+        final var expectedAvatarUrl = "url/imaginaria";
+
+        final var expectedErrorMessage = "UserId already exists";
+
+        when(profileGateway.findByUserId(expectedUserId))
+                .thenReturn(Optional.of(Profile.newProfile(
+                        "123",
+                        "a",
+                        "kaua@teste.com",
+                        null
+                )));
+
+        final var aCommand = new CreateProfileCommand(
+                expectedUserId,
+                expectedUsername,
+                expectedEmail,
+                expectedAvatarUrl);
+
+        final var actualException = useCase.execute(aCommand).getLeft();
+
+        Assertions.assertEquals(expectedErrorMessage, actualException.getErrors().get(0).message());
     }
 }

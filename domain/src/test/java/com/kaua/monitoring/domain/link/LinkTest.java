@@ -108,4 +108,32 @@ public class LinkTest {
 
         Assertions.assertEquals(expectedErrorsList, actualExceptions);
     }
+
+    @Test
+    public void givenAnNullExecuteDate_whenCallsNewLink_shouldReturnError() {
+        final var expectedTitle = "a";
+        final var expectedUrl = "https://www.google.com";
+        final Instant expectedExecuteDate = null;
+        final var expectedRepeat = LinkExecutions.EVERY_DAYS;
+        final var expectedProfile = Profile.
+                newProfile(
+                        "123",
+                        "kaua",
+                        "kaua@teste.com",
+                        null);
+
+        final var expectedErrorMessage = "'executeDate' should not be null";
+
+        final var aLink = Link.newLink(
+                expectedTitle,
+                expectedUrl,
+                expectedExecuteDate,
+                expectedRepeat,
+                expectedProfile
+        );
+
+        final var actualException = aLink.validate();
+
+        Assertions.assertEquals(expectedErrorMessage, actualException.get(0).message());
+    }
 }

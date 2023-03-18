@@ -5,7 +5,7 @@ spring:
     driver-class-name: org.h2.Driver
     username: root
     password: 123456
-    url: jdbc:h2:mem:monitoring_test;MODE=POSTGRES;DATABASE_TO_LOWER=TRUE
+    url: jdbc:h2:mem:monitoring_test;MODE=MYSQL;DATABASE_TO_LOWER=TRUE
     jpa:
       console:
         enabled: true

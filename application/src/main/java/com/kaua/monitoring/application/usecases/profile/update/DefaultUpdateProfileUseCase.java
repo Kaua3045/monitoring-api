@@ -38,12 +38,8 @@ public class DefaultUpdateProfileUseCase extends UpdateProfileUseCase {
                 aCommand.avatarUrl()
         );
 
-        final var aUsername = aCommand.username() == null
-                ? aProfileExists.getUsername()
-                : aCommand.username();
-
         final var aProfileUpdated = aProfileExists.update(
-                aUsername,
+                aCommand.username(),
                 avatarUrlStored,
                 aType
         );

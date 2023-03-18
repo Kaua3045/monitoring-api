@@ -5,6 +5,7 @@ import com.kaua.monitoring.application.gateways.ProfileGateway;
 import com.kaua.monitoring.application.usecases.profile.update.UpdateProfileCommand;
 import com.kaua.monitoring.application.usecases.profile.update.UpdateProfileUseCase;
 import com.kaua.monitoring.domain.profile.Profile;
+import com.kaua.monitoring.domain.profile.Resource;
 import com.kaua.monitoring.domain.profile.VersionAccountType;
 import com.kaua.monitoring.infrastructure.IntegrationTest;
 import com.kaua.monitoring.infrastructure.profile.persistence.ProfileJpaFactory;
@@ -39,7 +40,7 @@ public class UpdateProfileUseCaseIT {
 
         final var expectedId = aProfile.getId().getValue();
         final var expectedUsername = "kaua";
-        final var expectedAvatarUrl = "url";
+        final Resource expectedAvatarUrl = null;
         final var expectedType = VersionAccountType.PREMIUM;
 
         Assertions.assertEquals(1, profileRepository.count());
@@ -77,7 +78,7 @@ public class UpdateProfileUseCaseIT {
 
         final var expectedId = aProfile.getId().getValue();
         final String expectedUsername = null;
-        final var expectedAvatarUrl = "url";
+        final Resource expectedAvatarUrl = null;
         final var expectedType = VersionAccountType.PREMIUM;
 
         final var expectedErrorMessage = "'username' should not be null or empty";
@@ -103,7 +104,7 @@ public class UpdateProfileUseCaseIT {
     public void givenAnValidCommandAndInvalidId_whenCallsUpdateProfile_shouldReturnNotFoundException() {
         final var expectedId = "123";
         final var expectedUsername = "kaua";
-        final var expectedAvatarUrl = "url";
+        final Resource expectedAvatarUrl = null;
         final var expectedType = VersionAccountType.PREMIUM;
 
         final var expectedErrorMessage = "Profile with ID 123 was not found";

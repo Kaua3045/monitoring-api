@@ -18,7 +18,6 @@ import com.kaua.monitoring.domain.profile.ProfileID;
 import com.kaua.monitoring.domain.profile.VersionAccountType;
 import com.kaua.monitoring.infrastructure.ControllerTest;
 import com.kaua.monitoring.infrastructure.profile.inputs.CreateProfileBody;
-import com.kaua.monitoring.infrastructure.profile.inputs.UpdateProfileBody;
 import com.kaua.monitoring.infrastructure.services.ProfileService;
 import com.kaua.monitoring.infrastructure.services.gateways.JwtGateway;
 import org.junit.jupiter.api.Test;
@@ -300,7 +299,6 @@ public class ProfileAPITest {
         final var expectedUserId = "123";
         final var expectedUsername = "kaua";
         final var expectedEmail = "kaua@teste.com";
-        final var expectedAvatarUrl = "url";
         final var expectedType = VersionAccountType.PREMIUM.name();
         final var expectedId = "123456";
 
@@ -312,19 +310,14 @@ public class ProfileAPITest {
                                         expectedUserId,
                                         expectedUsername,
                                         expectedEmail,
-                                        expectedAvatarUrl,
+                                        null,
                                         VersionAccountType.valueOf(expectedType)
                                 ))));
 
-        final var aBody = new UpdateProfileBody(
-                expectedUsername,
-                expectedAvatarUrl,
-                expectedType
-        );
-
         final var request = MockMvcRequestBuilders.put("/profile/{id}", expectedId)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(this.mapper.writeValueAsString(aBody));
+                .contentType(MediaType.MULTIPART_FORM_DATA)
+                .param("username", expectedUsername)
+                .param("type", expectedType);
 
         this.mvc.perform(request)
                 .andDo(MockMvcResultHandlers.print())
@@ -333,7 +326,6 @@ public class ProfileAPITest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.userId", equalTo(expectedUserId)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.username", equalTo(expectedUsername)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.email", equalTo(expectedEmail)))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.avatarUrl", equalTo(expectedAvatarUrl)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.type", equalTo(expectedType)));
     }
 
@@ -341,7 +333,6 @@ public class ProfileAPITest {
     public void givenAnInvalidValuesAndProfileId_whenCallsUpdateProfile_shouldReturnDomainException() throws Exception {
         final var expectedProfileId = "123";
         final String expectedUsername = null;
-        final var expectedAvatarUrl = "url";
         final var expectedType = VersionAccountType.FREE.name();
 
         final var expectedErrorMessage = new Error("'username' should not be null or empty");
@@ -349,15 +340,10 @@ public class ProfileAPITest {
         when(updateProfileUseCase.execute(any()))
                 .thenThrow(DomainException.with(expectedErrorMessage));
 
-        final var aBody = new UpdateProfileBody(
-                expectedUsername,
-                expectedAvatarUrl,
-                expectedType
-        );
-
         final var request = MockMvcRequestBuilders.put("/profile/{id}", expectedProfileId)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(this.mapper.writeValueAsString(aBody));
+                .contentType(MediaType.MULTIPART_FORM_DATA)
+                .param("username", expectedUsername)
+                .param("type", expectedType);
 
         this.mvc.perform(request)
                 .andDo(MockMvcResultHandlers.print())

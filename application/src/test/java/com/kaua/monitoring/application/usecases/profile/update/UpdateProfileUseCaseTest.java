@@ -3,6 +3,7 @@ package com.kaua.monitoring.application.usecases.profile.update;
 import com.kaua.monitoring.application.exceptions.NotFoundException;
 import com.kaua.monitoring.application.gateways.ProfileGateway;
 import com.kaua.monitoring.domain.profile.Profile;
+import com.kaua.monitoring.domain.profile.Resource;
 import com.kaua.monitoring.domain.profile.VersionAccountType;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -31,7 +32,7 @@ public class UpdateProfileUseCaseTest {
         final var expectedUserId = "123";
         final var expectedUsername = "kaua";
         final var expectedEmail = "kaua@teste.com";
-        final var expectedAvatarUrl = "imaginaria";
+        final Resource expectedAvatarUrl = null;
         final var expectedVersionType = VersionAccountType.PREMIUM;
 
         final var aProfile = Profile.newProfile(
@@ -101,7 +102,7 @@ public class UpdateProfileUseCaseTest {
         final var expectedUserId = "123";
         final String expectedUsername = null;
         final var expectedEmail = "kaua@teste.com";
-        final var expectedAvatarUrl = "imaginaria";
+        final Resource expectedAvatarUrl = null;
         final String expectedVersionType = null;
 
         final var expectedErrorMessage = "'username' should not be null or empty";

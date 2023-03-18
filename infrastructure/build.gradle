@@ -26,6 +26,7 @@ dependencies {
 
     implementation platform('software.amazon.awssdk:bom:2.20.25')
     implementation 'software.amazon.awssdk:sqs'
+    implementation 'software.amazon.awssdk:s3'
 
     runtimeOnly 'org.postgresql:postgresql'
 

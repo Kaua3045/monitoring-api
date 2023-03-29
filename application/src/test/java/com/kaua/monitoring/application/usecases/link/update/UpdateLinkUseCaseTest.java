@@ -79,19 +79,19 @@ public class UpdateLinkUseCaseTest {
 
         Mockito.verify(linkGateway, times(1)).update(argThat(link ->
                 Objects.equals(expectedId, link.getId().getValue())
-                && Objects.equals(expectedTitle, link.getTitle())
-                && Objects.equals(expectedUrl, link.getUrl())
-                && Objects.equals(expectedExecuteDate, link.getExecuteDate())
-                && Objects.equals(expectedRepeat, link.getLinkExecution().name())
-                && Objects.equals(expectedProfile, link.getProfile())
+                        && Objects.equals(expectedTitle, link.getTitle())
+                        && Objects.equals(expectedUrl, link.getUrl())
+                        && Objects.equals(expectedExecuteDate, link.getExecuteDate())
+                        && Objects.equals(expectedRepeat, link.getLinkExecution().name())
+                        && Objects.equals(expectedProfile, link.getProfile())
         ));
     }
 
     @Test
-    public void givenAnInvalidValues_whenCallsUpdate_shouldReturnDomainErrors() {
-        final String expectedTitle = null;
-        final var expectedUrl = "";
-        final Instant expectedExecuteDate = null;
+    public void givenAnInvalidValues_whenCallsUpdate_shouldReturnDomainError() {
+        final var expectedTitle = "aa";
+        final var expectedUrl = "https://google.com";
+        final Instant expectedExecuteDate = Instant.now().minus(10, ChronoUnit.DAYS);
         final var expectedRepeat = LinkExecutions.EVERY_DAYS.name();
         final var expectedProfile = Profile
                 .newProfile(
@@ -111,9 +111,7 @@ public class UpdateLinkUseCaseTest {
 
         final var expectedId = aLink.getId().getValue();
         final var expectedErrorsMessages = List.of(
-                new Error("'title' should not be null or empty"),
-                new Error("'url' you must provide a valid url"),
-                new Error("'executeDate' should not be null")
+                new Error("'executeDate' cannot be a date that has already passed")
         );
 
         when(linkGateway.findById(any()))

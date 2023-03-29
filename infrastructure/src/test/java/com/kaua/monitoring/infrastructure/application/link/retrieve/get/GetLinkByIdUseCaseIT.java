@@ -68,7 +68,7 @@ public class GetLinkByIdUseCaseIT {
         Assertions.assertEquals(aLink.getTitle(), actualOutput.title());
         Assertions.assertEquals(aLink.getUrl(), actualOutput.url());
         Assertions.assertNotNull(actualOutput.executeDateFormatted());
-        Assertions.assertEquals(aLink.getLinkExecution().name(), actualOutput.linkExecution());
+        Assertions.assertEquals(aLink.getLinkExecution().getName(), actualOutput.linkExecution());
         Assertions.assertEquals(aLink.getProfile().getId().getValue(), actualOutput.profileId());
 
         Mockito.verify(linkGateway, Mockito.times(1)).findById(Mockito.any());

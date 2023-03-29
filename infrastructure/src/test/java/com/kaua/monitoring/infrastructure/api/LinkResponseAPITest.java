@@ -57,6 +57,7 @@ public class LinkResponseAPITest {
                 "OK",
                 200,
                 Instant.now(),
+                0,
                 aLink
         );
 

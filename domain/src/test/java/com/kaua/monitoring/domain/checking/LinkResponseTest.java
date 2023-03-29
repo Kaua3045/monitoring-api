@@ -33,6 +33,7 @@ public class LinkResponseTest {
                 expectedResponseMessage,
                 expectedStatusCode,
                 expectedVerifiedDate,
+                0,
                 expectedLink
         );
 

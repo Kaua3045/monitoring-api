@@ -81,8 +81,6 @@ public class UpdateProfileUseCaseIT {
         final Resource expectedAvatarUrl = null;
         final var expectedType = VersionAccountType.PREMIUM;
 
-        final var expectedErrorMessage = "'username' should not be null or empty";
-
         Assertions.assertEquals(1, profileRepository.count());
 
         final var aCommand = new UpdateProfileCommand(
@@ -92,12 +90,17 @@ public class UpdateProfileUseCaseIT {
                 expectedType.name()
         );
 
-        final var actualException = updateProfileUseCase.execute(aCommand).getLeft();
+        final var actualOutput = updateProfileUseCase.execute(aCommand).getRight();
 
-        Assertions.assertEquals(expectedErrorMessage, actualException.getErrors().get(0).message());
+        Assertions.assertEquals(aProfile.getId().getValue(), actualOutput.profileId());
+        Assertions.assertEquals(aProfile.getUserId(), actualOutput.userId());
+        Assertions.assertEquals(aProfile.getUsername(), actualOutput.username());
+        Assertions.assertEquals(aProfile.getEmail(), actualOutput.email());
+        Assertions.assertEquals(expectedType.name(), actualOutput.type());
+        Assertions.assertEquals(aProfile.getAvatarUrl(), actualOutput.avatarUrl());
 
         Mockito.verify(profileGateway, Mockito.times(1)).findById(Mockito.any());
-        Mockito.verify(profileGateway, Mockito.times(0)).update(Mockito.any());
+        Mockito.verify(profileGateway, Mockito.times(1)).update(Mockito.any());
     }
 
     @Test

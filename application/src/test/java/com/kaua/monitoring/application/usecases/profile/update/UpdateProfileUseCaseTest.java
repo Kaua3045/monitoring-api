@@ -98,14 +98,12 @@ public class UpdateProfileUseCaseTest {
     }
 
     @Test
-    public void givenAnInvalidValues_whenCallsUpdate_shouldReturnDomainException() {
+    public void givenAnInvalidValues_whenCallsUpdate_shouldReturnOldProfileInfos() {
         final var expectedUserId = "123";
         final String expectedUsername = null;
         final var expectedEmail = "kaua@teste.com";
         final Resource expectedAvatarUrl = null;
         final String expectedVersionType = null;
-
-        final var expectedErrorMessage = "'username' should not be null or empty";
 
         final var aProfile = Profile.newProfile(
                 expectedUserId,
@@ -116,8 +114,11 @@ public class UpdateProfileUseCaseTest {
 
         final var expectedProfileId = aProfile.getId().getValue();
 
-        when(profileGateway.findById(expectedProfileId))
+        when(profileGateway.findById(any()))
                 .thenReturn(Optional.of(aProfile));
+
+        when(profileGateway.update(aProfile))
+                .thenAnswer(returnsFirstArg());
 
         final var aCommand = new UpdateProfileCommand(
                 expectedProfileId,
@@ -126,11 +127,16 @@ public class UpdateProfileUseCaseTest {
                 expectedVersionType
         );
 
-        final var actualExceptions = useCase.execute(aCommand).getLeft();
+        final var actualOutput = useCase.execute(aCommand).getRight();
 
-        Assertions.assertEquals(expectedErrorMessage, actualExceptions.getErrors().get(0).message());
+        Assertions.assertEquals(aProfile.getId().getValue(), actualOutput.profileId());
+        Assertions.assertEquals(aProfile.getUserId(), actualOutput.userId());
+        Assertions.assertEquals(aProfile.getUsername(), actualOutput.username());
+        Assertions.assertEquals(aProfile.getEmail(), actualOutput.email());
+        Assertions.assertEquals(aProfile.getType().name(), actualOutput.type());
+        Assertions.assertEquals(aProfile.getAvatarUrl(), actualOutput.avatarUrl());
 
         Mockito.verify(profileGateway, times(1)).findById(expectedProfileId);
-        Mockito.verify(profileGateway, times(0)).update(any());
+        Mockito.verify(profileGateway, times(1)).update(aProfile);
     }
 }

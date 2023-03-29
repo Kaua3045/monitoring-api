@@ -52,7 +52,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<?> handleUnexpectedException(final Exception ex) {
-        log.error("Internal server error -> {}", ex.getMessage());
+        log.error("Internal server error -> {}", ex);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(new ApiError("Erro inesperado", Collections.emptyList()));
     }

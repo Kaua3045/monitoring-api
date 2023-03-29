@@ -14,6 +14,7 @@ public class LinkResponse extends Aggregate<LinkResponseID> {
     private String responseMessage;
     private int statusCode;
     private Instant verifiedDate;
+    private Integer requestTime;
     private Link link;
 
     public LinkResponse(
@@ -21,12 +22,14 @@ public class LinkResponse extends Aggregate<LinkResponseID> {
             final String aResponseMessage,
             final int aStatusCode,
             final Instant aVerifiedDate,
+            final Integer aRequestTime,
             final Link aLink
     ) {
         super(aLinkResponseID);
         this.responseMessage = aResponseMessage;
         this.statusCode = aStatusCode;
         this.verifiedDate = aVerifiedDate;
+        this.requestTime = aRequestTime;
         this.link = aLink;
     }
 
@@ -34,6 +37,7 @@ public class LinkResponse extends Aggregate<LinkResponseID> {
             final String aResponseMessage,
             final int aStatusCode,
             final Instant aVerifiedDate,
+            final Integer aRequestTime,
             final Link aLink
     ) {
         return new LinkResponse(
@@ -41,6 +45,7 @@ public class LinkResponse extends Aggregate<LinkResponseID> {
                 aResponseMessage,
                 aStatusCode,
                 aVerifiedDate,
+                aRequestTime,
                 aLink
         );
     }

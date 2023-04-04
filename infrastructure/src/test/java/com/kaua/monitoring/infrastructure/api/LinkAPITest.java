@@ -191,7 +191,7 @@ public class LinkAPITest {
                 .andExpect(MockMvcResultMatchers.jsonPath(
                         "$.executeDateFormatted", equalTo(expectedFormattedExecuteDate)))
                 .andExpect(MockMvcResultMatchers.jsonPath(
-                        "$.linkExecution", equalTo(expectedLinkExecution.name())))
+                        "$.linkExecution", equalTo(expectedLinkExecution.getName())))
                 .andExpect(MockMvcResultMatchers.jsonPath(
                         "$.profileId", equalTo(expectedProfileId.getId().getValue())));
 
@@ -282,7 +282,7 @@ public class LinkAPITest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.items[0].title", equalTo(aLink.getTitle())))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.items[0].url", equalTo(aLink.getUrl())))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.items[0].executeDateFormatted", equalTo(expectedFormattedExecuteDate)))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.items[0].linkExecution", equalTo(aLink.getLinkExecution().name())))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.items[0].linkExecution", equalTo(aLink.getLinkExecution().getName())))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.items[0].profileId", equalTo(expectedProfileId)));
 
         verify(listLinkByProfileIdUseCase, times(1)).execute(argThat(query ->

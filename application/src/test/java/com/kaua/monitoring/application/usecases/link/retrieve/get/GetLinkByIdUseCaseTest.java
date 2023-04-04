@@ -63,7 +63,7 @@ public class GetLinkByIdUseCaseTest {
         Assertions.assertEquals(expectedTitle, actualLink.title());
         Assertions.assertEquals(expectedUrl, actualLink.url());
         Assertions.assertNotNull(actualLink.executeDateFormatted());
-        Assertions.assertEquals(expectedRepeat.name(), actualLink.linkExecution());
+        Assertions.assertEquals(expectedRepeat.getName(), actualLink.linkExecution());
         Assertions.assertEquals(expectedProfile.getId().getValue(), actualLink.profileId());
     }
 

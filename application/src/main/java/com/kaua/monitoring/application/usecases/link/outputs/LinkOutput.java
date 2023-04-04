@@ -30,7 +30,7 @@ public record LinkOutput(
                 aLink.getTitle(),
                 aLink.getUrl(),
                 aExecuteDateFormatted,
-                aLink.getLinkExecution().name(),
+                aLink.getLinkExecution().getName(),
                 aLink.getProfile().getId().getValue()
         );
     }

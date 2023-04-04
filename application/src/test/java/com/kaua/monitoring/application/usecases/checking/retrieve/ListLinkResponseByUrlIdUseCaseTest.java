@@ -57,12 +57,14 @@ public class ListLinkResponseByUrlIdUseCaseTest {
                         "OK",
                         200,
                         Instant.now(),
+                        0,
                         expectedLink
                 ),
                 LinkResponse.newLinkResponse(
                         "OK",
                         200,
                         Instant.now(),
+                        0,
                         expectedLink
                 )
         );

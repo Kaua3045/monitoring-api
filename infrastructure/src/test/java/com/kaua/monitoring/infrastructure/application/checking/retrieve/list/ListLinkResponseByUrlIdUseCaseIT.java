@@ -67,6 +67,7 @@ public class ListLinkResponseByUrlIdUseCaseIT {
                 "OK",
                 200,
                 Instant.now(),
+                150,
                 aLink
         );
 

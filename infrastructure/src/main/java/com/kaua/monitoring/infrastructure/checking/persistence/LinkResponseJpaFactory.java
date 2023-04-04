@@ -14,6 +14,7 @@ public final class LinkResponseJpaFactory {
                 aLinkResponse.getResponseMessage(),
                 aLinkResponse.getStatusCode(),
                 aLinkResponse.getVerifiedDate(),
+                aLinkResponse.getRequestTime(),
                 LinkJpaFactory.toEntity(aLinkResponse.getLink())
         );
     }
@@ -24,6 +25,7 @@ public final class LinkResponseJpaFactory {
                 aLinkResponse.getResponseMessage(),
                 aLinkResponse.getStatusCode(),
                 aLinkResponse.getVerifiedDate(),
+                aLinkResponse.getRequestTime(),
                 LinkJpaFactory.toDomain(aLinkResponse.getUrlId())
         );
     }

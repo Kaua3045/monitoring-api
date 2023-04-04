@@ -21,11 +21,27 @@ public class DefaultUpdateLinkUseCase extends UpdateLinkUseCase {
         final var linkExists = this.linkGateway.findById(aCommand.id())
                 .orElseThrow(() -> new NotFoundException(Link.class, aCommand.id()));
 
+        final var aExecuteDate = aCommand.executeDate() == null
+                ? linkExists.getExecuteDate()
+                : aCommand.executeDate();
+
+        final var aTitle = aCommand.title() == null
+                ? linkExists.getTitle()
+                : aCommand.title();
+
+        final var aUrl = aCommand.url() == null
+                ? linkExists.getUrl()
+                : aCommand.url();
+
+        final var aLinkExecution = aCommand.linkExecution() == null
+                ? linkExists.getLinkExecution()
+                : LinkExecutions.valueOf(aCommand.linkExecution());
+
         final var aLinkUpdated = linkExists.update(
-                aCommand.title(),
-                aCommand.url(),
-                aCommand.executeDate(),
-                LinkExecutions.valueOf(aCommand.linkExecution())
+                aTitle,
+                aUrl,
+                aExecuteDate,
+                aLinkExecution
         );
 
         final var aLinkValidated = aLinkUpdated.validate();

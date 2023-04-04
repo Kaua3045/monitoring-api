@@ -60,12 +60,14 @@ public class LinkResponsePostgreSqlGatewayTest {
                         "OK",
                         200,
                         Instant.now(),
+                        0,
                         expectedLink
                 )),
                 LinkResponseJpaFactory.toEntity(LinkResponse.newLinkResponse(
                         "NOT-FOUND",
                         404,
                         Instant.now(),
+                        300,
                         expectedLink
                 ))
         );

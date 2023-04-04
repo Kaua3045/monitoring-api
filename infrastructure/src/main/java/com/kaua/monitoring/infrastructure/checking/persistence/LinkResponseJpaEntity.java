@@ -23,6 +23,9 @@ public class LinkResponseJpaEntity {
     @Column(name = "verified_date", nullable = false)
     private Instant verifiedDate;
 
+    @Column(name = "request_time", nullable = false)
+    private Integer requestTime;
+
     @ManyToOne
     @JoinColumn(name = "url_id", nullable = false)
     private LinkJpaEntity urlId;
@@ -34,12 +37,14 @@ public class LinkResponseJpaEntity {
             String responseMessage,
             int statusCode,
             Instant verifiedDate,
+            Integer requestTime,
             LinkJpaEntity urlId
     ) {
         this.id = id;
         this.responseMessage = responseMessage;
         this.statusCode = statusCode;
         this.verifiedDate = verifiedDate;
+        this.requestTime = requestTime;
         this.urlId = urlId;
     }
 }

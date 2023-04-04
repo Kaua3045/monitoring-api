@@ -26,7 +26,7 @@ public class LinkResponseService {
     ) {
 
         final var startTimeVerified = startTimestamp.isBlank()
-                ? Instant.now().minus(90, ChronoUnit.DAYS).truncatedTo(ChronoUnit.SECONDS)
+                ? Instant.now().minus(30, ChronoUnit.DAYS).truncatedTo(ChronoUnit.SECONDS)
                 : InstantUtils.parseToLocalTimeWithZonedInstant(startTimestamp);
 
         final var endTimeVerified = endTimestamp.isBlank()

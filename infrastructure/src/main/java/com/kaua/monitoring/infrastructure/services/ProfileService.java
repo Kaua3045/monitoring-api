@@ -8,12 +8,12 @@ import com.kaua.monitoring.application.usecases.profile.outputs.CreateProfileOut
 import com.kaua.monitoring.application.usecases.profile.outputs.ProfileOutput;
 import com.kaua.monitoring.application.usecases.profile.retrieve.get.GetProfileByUserIdUseCase;
 import com.kaua.monitoring.application.usecases.profile.retrieve.get.GetProfileCommand;
+import com.kaua.monitoring.application.usecases.profile.retrieve.get.me.MeProfileCommand;
+import com.kaua.monitoring.application.usecases.profile.retrieve.get.me.MeProfileUseCase;
 import com.kaua.monitoring.application.usecases.profile.update.UpdateProfileCommand;
 import com.kaua.monitoring.application.usecases.profile.update.UpdateProfileUseCase;
 import com.kaua.monitoring.domain.profile.Resource;
-import com.kaua.monitoring.infrastructure.exceptions.UserIdDoesNotMatchException;
 import com.kaua.monitoring.infrastructure.profile.inputs.CreateProfileBody;
-import com.kaua.monitoring.infrastructure.services.gateways.JwtGateway;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -21,34 +21,32 @@ public class ProfileService {
 
     private final CreateProfileUseCase createProfileUseCase;
     private final GetProfileByUserIdUseCase getProfileByUserIdUseCase;
+    private final MeProfileUseCase meProfileUseCase;
     private final UpdateProfileUseCase updateProfileUseCase;
     private final DeleteProfileUseCase deleteProfileUseCase;
-    private final JwtGateway jwtGateway;
+
 
     public ProfileService(
             final CreateProfileUseCase createProfileUseCase,
             final GetProfileByUserIdUseCase getProfileByUserIdUseCase,
+            final MeProfileUseCase meProfileUseCase,
             final UpdateProfileUseCase updateProfileUseCase,
-            final DeleteProfileUseCase deleteProfileUseCase,
-            final JwtGateway jwtGateway
+            final DeleteProfileUseCase deleteProfileUseCase
     ) {
         this.createProfileUseCase = createProfileUseCase;
         this.getProfileByUserIdUseCase = getProfileByUserIdUseCase;
+        this.meProfileUseCase = meProfileUseCase;
         this.updateProfileUseCase = updateProfileUseCase;
         this.deleteProfileUseCase = deleteProfileUseCase;
-        this.jwtGateway = jwtGateway;
     }
 
-    public CreateProfileOutput createProfile(String token, CreateProfileBody body) {
-        if (!jwtGateway.extractTokenSubject(token).equalsIgnoreCase(body.userId())) {
-            throw new UserIdDoesNotMatchException();
-        }
-
+    public CreateProfileOutput createProfile(CreateProfileBody body) {
         final var aCommand = new CreateProfileCommand(
-                body.userId(),
                 body.username(),
                 body.email(),
+                body.password(),
                 body.avatarUrl());
+
         final var aResult = this.createProfileUseCase.execute(aCommand);
 
         if (aResult.isLeft()) {
@@ -58,22 +56,28 @@ public class ProfileService {
         return aResult.getRight();
     }
 
-    public ProfileOutput getByUserIdProfile(String userId) {
-        final var aCommand = new GetProfileCommand(userId);
-        final var aResult = this.getProfileByUserIdUseCase.execute(aCommand);
+    public ProfileOutput getByProfileId(String profileId) {
+        final var aCommand = new GetProfileCommand(profileId);
 
-        return aResult;
+        return this.getProfileByUserIdUseCase.execute(aCommand);
+    }
+
+    public ProfileOutput getProfileByToken(String token) {
+        final var aCommand = new MeProfileCommand(token);
+        return this.meProfileUseCase.execute(aCommand);
     }
 
     public ProfileOutput updateProfile(
             String profileId,
             String username,
+            String password,
             Resource avatarUrl,
             String type
     ) {
         final var aCommand = new UpdateProfileCommand(
                 profileId,
                 username,
+                password,
                 avatarUrl,
                 type
         );

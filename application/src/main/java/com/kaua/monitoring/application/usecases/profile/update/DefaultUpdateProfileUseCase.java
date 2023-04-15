@@ -4,6 +4,7 @@ import com.kaua.monitoring.application.exceptions.DomainException;
 import com.kaua.monitoring.application.exceptions.NotFoundException;
 import com.kaua.monitoring.application.exceptions.either.Either;
 import com.kaua.monitoring.application.gateways.AvatarGateway;
+import com.kaua.monitoring.application.gateways.EncrypterGateway;
 import com.kaua.monitoring.application.gateways.ProfileGateway;
 import com.kaua.monitoring.application.usecases.profile.outputs.ProfileOutput;
 import com.kaua.monitoring.domain.profile.Profile;
@@ -13,13 +14,16 @@ public class DefaultUpdateProfileUseCase extends UpdateProfileUseCase {
 
     private final ProfileGateway profileGateway;
     private final AvatarGateway avatarGateway;
+    private final EncrypterGateway encrypterGateway;
 
     public DefaultUpdateProfileUseCase(
             final ProfileGateway profileGateway,
-            final AvatarGateway avatarGateway
+            final AvatarGateway avatarGateway,
+            final EncrypterGateway encrypterGateway
     ) {
         this.profileGateway = profileGateway;
         this.avatarGateway = avatarGateway;
+        this.encrypterGateway = encrypterGateway;
     }
 
     @Override
@@ -30,6 +34,10 @@ public class DefaultUpdateProfileUseCase extends UpdateProfileUseCase {
         final var aUsername = aCommand.username() == null || aCommand.username().isBlank()
                 ? aProfileExists.getUsername()
                 : aCommand.username();
+
+        final var aPassword = aCommand.password() == null || aCommand.password().isBlank()
+                ? aProfileExists.getPassword()
+                : this.encrypterGateway.encrypt(aCommand.password());
 
         final var aType = aCommand.type() == null
                 ? aProfileExists.getType()
@@ -44,6 +52,7 @@ public class DefaultUpdateProfileUseCase extends UpdateProfileUseCase {
 
         final var aProfileUpdated = aProfileExists.update(
                 aUsername,
+                aPassword,
                 avatarUrlStored,
                 aType
         );

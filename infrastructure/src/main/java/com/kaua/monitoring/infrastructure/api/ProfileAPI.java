@@ -24,19 +24,31 @@ public interface ProfileAPI {
             @ApiResponse(responseCode = "400", description = "Domain exception validation thrown"),
             @ApiResponse(responseCode = "500", description = "An internal server error was thrown")
     })
-    ResponseEntity<?> create(@RequestHeader String authorization, @RequestBody CreateProfileBody body);
+    ResponseEntity<?> create(@RequestBody CreateProfileBody body);
 
     @GetMapping(
-            value = "{userId}",
+            value = "{profileId}",
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    @Operation(summary = "Get a profile by user id")
+    @Operation(summary = "Get a profile by profile id")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Profile find successfully"),
             @ApiResponse(responseCode = "404", description = "Profile was not found"),
             @ApiResponse(responseCode = "500", description = "An internal server error was thrown")
     })
-    ResponseEntity<?> getByUserId(@PathVariable String userId);
+    ResponseEntity<?> getByProfileId(@PathVariable String profileId);
+
+    @GetMapping(
+            path = "me",
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    @Operation(summary = "Get a profile by token")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Profile find sucessfully"),
+            @ApiResponse(responseCode = "404", description = "Profile was not found"),
+            @ApiResponse(responseCode = "500", description = "An internal server error was thrown")
+    })
+    ResponseEntity<?> getProfileByToken(@RequestHeader String authorization);
 
     @PutMapping(
             value = "{profileId}",
@@ -53,6 +65,7 @@ public interface ProfileAPI {
     ResponseEntity<?> updateProfile(
             @PathVariable String profileId,
             @RequestParam(name = "username", required = false) String username,
+            @RequestParam(name = "password", required = false) String password,
             @RequestParam(name = "avatar_url", required = false) MultipartFile avatarFile,
             @RequestParam(name = "type", required = false) String type
     );

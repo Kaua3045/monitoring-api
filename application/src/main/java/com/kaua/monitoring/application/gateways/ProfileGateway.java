@@ -10,7 +10,7 @@ public interface ProfileGateway {
 
     Optional<Profile> findById(final String profileId);
 
-    Optional<Profile> findByUserId(final String userId);
+    Optional<Profile> findByEmail(final String email);
 
     Profile update(final Profile aProfile);
 

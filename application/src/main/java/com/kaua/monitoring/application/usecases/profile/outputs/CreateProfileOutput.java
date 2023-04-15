@@ -4,21 +4,21 @@ import com.kaua.monitoring.domain.profile.Profile;
 
 public record CreateProfileOutput(
         String profileId,
-        String userId,
         String username,
         String email,
         String avatarUrl,
-        String type
+        String type,
+        String token
 ) {
 
-    public static CreateProfileOutput from(final Profile aProfile) {
+    public static CreateProfileOutput from(final Profile aProfile, final String token) {
         return new CreateProfileOutput(
                 aProfile.getId().getValue(),
-                aProfile.getUserId(),
                 aProfile.getUsername(),
                 aProfile.getEmail(),
                 aProfile.getAvatarUrl(),
-                aProfile.getType().name()
+                aProfile.getType().name(),
+                token
         );
     }
 }

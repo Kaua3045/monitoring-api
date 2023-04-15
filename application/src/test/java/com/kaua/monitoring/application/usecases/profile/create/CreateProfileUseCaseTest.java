@@ -29,9 +29,9 @@ public class CreateProfileUseCaseTest {
 
     @Test
     public void givenAnValidValues_whenCallsCreate_shouldReturnProfile() {
-        final var expectedUserId = "123";
         final var expectedUsername = "kaua";
         final var expectedEmail = "kaua@teste.com";
+        final var expectedPassword = "12345678";
         final var expectedAvatarUrl = "url/imaginaria";
         final var expectedType = VersionAccountType.FREE;
 
@@ -39,16 +39,15 @@ public class CreateProfileUseCaseTest {
                 .thenAnswer(returnsFirstArg());
 
         final var aCommand = new CreateProfileCommand(
-                expectedUserId,
                 expectedUsername,
                 expectedEmail,
+                expectedPassword,
                 expectedAvatarUrl);
 
         final var actualProfile = useCase.execute(aCommand).getRight();
 
         Assertions.assertNotNull(actualProfile);
         Assertions.assertNotNull(actualProfile.profileId());
-        Assertions.assertEquals(expectedUserId, actualProfile.userId());
         Assertions.assertEquals(expectedUsername, actualProfile.username());
         Assertions.assertEquals(expectedEmail, actualProfile.email());
         Assertions.assertEquals(expectedAvatarUrl, actualProfile.avatarUrl());
@@ -57,21 +56,21 @@ public class CreateProfileUseCaseTest {
 
     @Test
     public void givenAnInvalidValues_whenCallsCreate_shouldReturnDomainException() {
-        final String expectedUserId = null;
         final var expectedUsername = " ";
         final String expectedEmail = null;
+        final String expectedPassword = null;
         final var expectedAvatarUrl = "url/imaginaria";
 
         final var expectedErrorsMessages = List.of(
-                new Error("'userId' should not be null or empty"),
                 new Error("'username' should not be null or empty"),
-                new Error("'email' should not be null or empty")
+                new Error("'email' should not be null or empty"),
+                new Error("'password' should not be null or empty")
         );
 
         final var aCommand = new CreateProfileCommand(
-                expectedUserId,
                 expectedUsername,
                 expectedEmail,
+                expectedPassword,
                 expectedAvatarUrl);
 
         final var actualExceptions = useCase.execute(aCommand).getLeft();
@@ -80,15 +79,15 @@ public class CreateProfileUseCaseTest {
     }
 
     @Test
-    public void givenAnValidValuesAndExistsUserId_whenCallsCreate_shouldReturnDomainException() {
-        final var expectedUserId = "123";
+    public void givenAnValidValuesAndExistsEmail_whenCallsCreate_shouldReturnDomainException() {
         final var expectedUsername = "kaua";
         final var expectedEmail = "kaua@teste.com";
+        final var expectedPassword = "12345678";
         final var expectedAvatarUrl = "url/imaginaria";
 
-        final var expectedErrorMessage = "UserId already exists";
+        final var expectedErrorMessage = "Email already exists";
 
-        when(profileGateway.findByUserId(expectedUserId))
+        when(profileGateway.findByEmail(expectedEmail))
                 .thenReturn(Optional.of(Profile.newProfile(
                         "123",
                         "a",
@@ -97,9 +96,9 @@ public class CreateProfileUseCaseTest {
                 )));
 
         final var aCommand = new CreateProfileCommand(
-                expectedUserId,
                 expectedUsername,
                 expectedEmail,
+                expectedPassword,
                 expectedAvatarUrl);
 
         final var actualException = useCase.execute(aCommand).getLeft();

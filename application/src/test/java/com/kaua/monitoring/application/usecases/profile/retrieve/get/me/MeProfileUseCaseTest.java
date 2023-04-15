@@ -1,6 +1,7 @@
-package com.kaua.monitoring.application.usecases.profile.retrieve.get;
+package com.kaua.monitoring.application.usecases.profile.retrieve.get.me;
 
 import com.kaua.monitoring.application.exceptions.NotFoundException;
+import com.kaua.monitoring.application.gateways.JwtGateway;
 import com.kaua.monitoring.application.gateways.ProfileGateway;
 import com.kaua.monitoring.domain.profile.Profile;
 import com.kaua.monitoring.domain.profile.VersionAccountType;
@@ -17,17 +18,21 @@ import java.util.Optional;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class GetProfileByUserIdUseCaseTest {
+public class MeProfileUseCaseTest {
 
     @InjectMocks
-    private DefaultGetProfileByUserIdUseCase useCase;
+    private DefaultMeProfileUseCase useCase;
 
     @Mock
     private ProfileGateway profileGateway;
 
+    @Mock
+    private JwtGateway jwtGateway;
+
     @Test
-    public void givenAnValidProfileId_whenCallsGetById_shouldReturnProfile() {
-        final var expectedProfileId = "123";
+    public void givenAnValidTokenAndSubIsProfileIdValid_whenCallsMeProfile_shouldReturnProfile() {
+        final var expectedToken = "a1ab23";
+        final var expectedTokenResult = "123";
         final var expectedUsername = "kaua";
         final var expectedEmail = "kaua@teste.com";
         final var expectedPassword = "12345678";
@@ -41,10 +46,13 @@ public class GetProfileByUserIdUseCaseTest {
                 expectedAvatarUrl
         );
 
+        when(jwtGateway.extractTokenSubject(any()))
+                .thenReturn(expectedTokenResult);
+
         when(profileGateway.findById(any()))
                 .thenReturn(Optional.of(aProfile));
 
-        final var aCommand = new GetProfileCommand(expectedProfileId);
+        final var aCommand = new MeProfileCommand(expectedToken);
 
         final var actualProfile = useCase.execute(aCommand);
 
@@ -55,15 +63,16 @@ public class GetProfileByUserIdUseCaseTest {
         Assertions.assertEquals(expectedAvatarUrl, actualProfile.avatarUrl());
         Assertions.assertEquals(expectedVersionType.name(), actualProfile.type());
 
-        Mockito.verify(profileGateway, times(1)).findById(aCommand.profileId());
+        Mockito.verify(jwtGateway, times(1)).extractTokenSubject(expectedToken);
+        Mockito.verify(profileGateway, times(1)).findById(expectedTokenResult);
     }
 
     @Test
-    public void givenAnInvalidProfileId_whenCallsGetById_shouldThrowNotFoundException() {
-        final var expectedUserId = "123";
-        final var expectedErrorMessage = "Profile with ID 123 was not found";
+    public void givenAnInvalidToken_whenCallsMeProfile_shouldThrowNotFoundException() {
+        final var expectedToken = "a123bsa";
+        final var expectedErrorMessage = "Profile with ID null was not found";
 
-        final var aCommand = new GetProfileCommand(expectedUserId);
+        final var aCommand = new MeProfileCommand(expectedToken);
 
         final var actualException = Assertions.assertThrows(
                 NotFoundException.class,
@@ -72,6 +81,7 @@ public class GetProfileByUserIdUseCaseTest {
 
         Assertions.assertEquals(expectedErrorMessage, actualException.getMessage());
 
-        Mockito.verify(profileGateway, times(1)).findById(aCommand.profileId());
+        Mockito.verify(jwtGateway, times(1)).extractTokenSubject(any());
+        Mockito.verify(profileGateway, times(1)).findById(any());
     }
 }

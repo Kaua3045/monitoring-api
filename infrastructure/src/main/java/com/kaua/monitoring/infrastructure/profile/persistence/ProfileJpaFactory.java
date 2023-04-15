@@ -10,9 +10,9 @@ public final class ProfileJpaFactory {
     public static ProfileJpaEntity toEntity(Profile aDomain) {
         return new ProfileJpaEntity(
                 aDomain.getId().getValue(),
-                aDomain.getUserId(),
                 aDomain.getUsername(),
                 aDomain.getEmail(),
+                aDomain.getPassword(),
                 aDomain.getAvatarUrl(),
                 aDomain.getType()
         );
@@ -21,9 +21,9 @@ public final class ProfileJpaFactory {
     public static Profile toDomain(ProfileJpaEntity aEntity) {
         return new Profile(
                 ProfileID.from(aEntity.getId()),
-                aEntity.getUserId(),
                 aEntity.getUsername(),
                 aEntity.getEmail(),
+                aEntity.getPassword(),
                 aEntity.getAvatarUrl(),
                 aEntity.getType()
         );

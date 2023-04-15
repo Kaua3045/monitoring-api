@@ -99,20 +99,12 @@ public class LinkService {
     }
 
     public UpdateLinkOutput updateLink(String id, UpdateLinkBody body) {
-//        if (body.executeDate().isBlank()) {
-//            throw new DomainException(List.of(new Error("'executeDate' should not be empty")));
-//        }
-
-        final var aExecuteDate = body.executeDate() == null
+        final var aExecuteDate = body.executeDate() == null || body.executeDate().isBlank()
                 ? null
                 : LocalDateTime.parse(body.executeDate())
                 .atZone(ZoneId.systemDefault())
                 .withZoneSameInstant(ZoneId.of("UTC"))
                 .toInstant();
-
-//        final var aLocalDateTime = LocalDateTime.parse(body.executeDate());
-//        final var aZonedDateTime = aLocalDateTime.atZone(ZoneId.systemDefault())
-//                .withZoneSameInstant(ZoneId.of("UTC"));
 
         final var aCommand = new UpdateLinkCommand(
                 id,

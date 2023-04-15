@@ -1,1 +1,0 @@
-CREATE INDEX index_user_id ON profiles (user_id);

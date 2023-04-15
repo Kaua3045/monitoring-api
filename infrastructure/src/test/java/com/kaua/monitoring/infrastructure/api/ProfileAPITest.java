@@ -2,8 +2,8 @@ package com.kaua.monitoring.infrastructure.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kaua.monitoring.application.exceptions.DomainException;
+import com.kaua.monitoring.application.exceptions.EmailAlreadyExistsException;
 import com.kaua.monitoring.application.exceptions.NotFoundException;
-import com.kaua.monitoring.application.exceptions.UserIdAlreadyExistsException;
 import com.kaua.monitoring.application.exceptions.either.Either;
 import com.kaua.monitoring.application.usecases.profile.create.CreateProfileUseCase;
 import com.kaua.monitoring.application.usecases.profile.delete.DeleteProfileCommand;
@@ -19,7 +19,7 @@ import com.kaua.monitoring.domain.profile.VersionAccountType;
 import com.kaua.monitoring.infrastructure.ControllerTest;
 import com.kaua.monitoring.infrastructure.profile.inputs.CreateProfileBody;
 import com.kaua.monitoring.infrastructure.services.ProfileService;
-import com.kaua.monitoring.infrastructure.services.gateways.JwtGateway;
+import com.kaua.monitoring.application.gateways.JwtGateway;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -60,34 +60,30 @@ public class ProfileAPITest {
 
     @Test
     public void givenAnValidValues_whenCallsCreateProfile_shouldReturnProfile() throws Exception {
-        final var expectedUserId = "123";
         final var expectedUsername = "kaua";
         final var expectedEmail = "kaua@teste.com";
+        final var expectedPassword = "12345678";
         final var expectedAvatarUrl = "url";
         final var expectedType = VersionAccountType.FREE.name();
 
         final var aProfile = Profile.newProfile(
-                expectedUserId,
                 expectedUsername,
                 expectedEmail,
+                expectedPassword,
                 expectedAvatarUrl
         );
 
         final var aBody = new CreateProfileBody(
-                expectedUserId,
                 expectedUsername,
                 expectedEmail,
+                expectedPassword,
                 expectedAvatarUrl
         );
-
-        when(jwtGateway.extractTokenSubject(any()))
-                .thenReturn(expectedUserId);
 
         when(createProfileUseCase.execute(any()))
                 .thenReturn(Either.right(CreateProfileOutput.from(aProfile)));
 
         final var request = MockMvcRequestBuilders.post("/profile")
-                .header("authorization", "any-token")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(this.mapper.writeValueAsString(aBody));
 
@@ -95,7 +91,6 @@ public class ProfileAPITest {
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isCreated())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.profileId", equalTo(aProfile.getId().getValue())))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.userId", equalTo(expectedUserId)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.username", equalTo(expectedUsername)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.email", equalTo(expectedEmail)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.avatarUrl", equalTo(expectedAvatarUrl)))
@@ -103,72 +98,29 @@ public class ProfileAPITest {
     }
 
     @Test
-    public void givenAnValidValuesAndInvalidUserId_whenCallsCreateProfile_shouldReturnUserIdDoesNotMatchException() throws Exception {
-        final var expectedUserId = "456";
-        final var expectedUsername = "kaua";
-        final var expectedEmail = "kaua@teste.com";
-        final var expectedAvatarUrl = "url";
-
-        final var expectedErrorMessage = "UserId does not match";
-
-        final var aProfile = Profile.newProfile(
-                expectedUserId,
-                expectedUsername,
-                expectedEmail,
-                expectedAvatarUrl
-        );
-
-        final var aBody = new CreateProfileBody(
-                expectedUserId,
-                expectedUsername,
-                expectedEmail,
-                expectedAvatarUrl
-        );
-
-        when(jwtGateway.extractTokenSubject(any()))
-                .thenReturn("123");
-
-        when(createProfileUseCase.execute(any()))
-                .thenReturn(Either.right(CreateProfileOutput.from(aProfile)));
-
-        final var request = MockMvcRequestBuilders.post("/profile")
-                .header("authorization", "any-token")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(this.mapper.writeValueAsString(aBody));
-
-        this.mvc.perform(request)
-                .andDo(MockMvcResultHandlers.print())
-                .andExpect(MockMvcResultMatchers.status().isBadRequest())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.message", equalTo(expectedErrorMessage)));
-    }
-
-    @Test
     public void givenAnInvalidValues_whenCallsCreateProfile_shouldReturnDomainException() throws Exception {
-        final var expectedUserId = "123";
         final var expectedUsername = " ";
         final String expectedEmail = null;
+        final var expectedPassword = " ";
         final var expectedAvatarUrl = "url";
 
         final var expectedErrorsMessage = List.of(
                 new Error("'username' should not be null or empty"),
-                new Error("'email' should not be null or empty")
+                new Error("'email' should not be null or empty"),
+                new Error("'password' should not be null or empty")
         );
 
         final var aBody = new CreateProfileBody(
-                expectedUserId,
                 expectedUsername,
                 expectedEmail,
+                expectedPassword,
                 expectedAvatarUrl
         );
-
-        when(jwtGateway.extractTokenSubject(any()))
-                .thenReturn(expectedUserId);
 
         when(createProfileUseCase.execute(any()))
                 .thenReturn(Either.left(DomainException.with(expectedErrorsMessage)));
 
         final var request = MockMvcRequestBuilders.post("/profile")
-                .header("authorization", "any-token")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(this.mapper.writeValueAsString(aBody));
 
@@ -180,29 +132,25 @@ public class ProfileAPITest {
     }
 
     @Test
-    public void givenAnValidValuesAndUserIdExists_whenCallsCreateProfile_shouldReturnUserIdAlreadyExistsException() throws Exception {
-        final var expectedUserId = "123";
+    public void givenAnValidValuesAndEmailExists_whenCallsCreateProfile_shouldReturnUserIdAlreadyExistsException() throws Exception {
         final var expectedUsername = "kaua";
         final String expectedEmail = "kaua@teste.com";
+        final var expectedPassword = "12345678";
         final var expectedAvatarUrl = "url";
 
-        final var expectedErrorMessage = "UserId already exists";
+        final var expectedErrorMessage = "Email already exists";
 
         final var aBody = new CreateProfileBody(
-                expectedUserId,
                 expectedUsername,
                 expectedEmail,
+                expectedPassword,
                 expectedAvatarUrl
         );
 
-        when(jwtGateway.extractTokenSubject(any()))
-                .thenReturn(expectedUserId);
-
         when(createProfileUseCase.execute(any()))
-                .thenReturn(Either.left(DomainException.with(UserIdAlreadyExistsException.with())));
+                .thenReturn(Either.left(DomainException.with(EmailAlreadyExistsException.with())));
 
         final var request = MockMvcRequestBuilders.post("/profile")
-                .header("authorization", "any-token")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(this.mapper.writeValueAsString(aBody));
 
@@ -211,48 +159,18 @@ public class ProfileAPITest {
                 .andExpect(MockMvcResultMatchers.status().isBadRequest())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.errors[0].message", equalTo(expectedErrorMessage)));
     }
-
-    @Test
-    public void givenAnValidValuesAndInvalidAuthorizationHeader_whenCallsCreateProfile_shouldReturnInterlErrorException() throws Exception {
-        final var expectedUserId = "123";
-        final var expectedUsername = "kaua";
-        final String expectedEmail = "kaua@teste.com";
-        final var expectedAvatarUrl = "url";
-
-        final var expectedErrorMessage = "Erro inesperado";
-
-        final var aBody = new CreateProfileBody(
-                expectedUserId,
-                expectedUsername,
-                expectedEmail,
-                expectedAvatarUrl
-        );
-
-        when(createProfileUseCase.execute(any()))
-                .thenReturn(Either.left(DomainException.with(UserIdAlreadyExistsException.with())));
-
-        final var request = MockMvcRequestBuilders.post("/profile")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(this.mapper.writeValueAsString(aBody));
-
-        this.mvc.perform(request)
-                .andDo(MockMvcResultHandlers.print())
-                .andExpect(MockMvcResultMatchers.status().isInternalServerError())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.message", equalTo(expectedErrorMessage)));
-    }
-
     @Test
     public void givenAnValidUserId_whenCallsGetByUserId_shouldReturnProfile() throws Exception {
-        final var expectedUserId = "123";
         final var expectedUsername = "kaua";
         final var expectedEmail = "kaua@teste.com";
+        final var expectedPassword = "12345678";
         final var expectedAvatarUrl = "url";
         final var expectedType = VersionAccountType.FREE.name();
 
         final var aProfile = Profile.newProfile(
-                expectedUserId,
                 expectedUsername,
                 expectedEmail,
+                expectedPassword,
                 expectedAvatarUrl
         );
 
@@ -261,7 +179,7 @@ public class ProfileAPITest {
         when(getProfileByUserIdUseCase.execute(any()))
                 .thenReturn(ProfileOutput.from(aProfile));
 
-        final var request = MockMvcRequestBuilders.get("/profile/{id}", expectedUserId)
+        final var request = MockMvcRequestBuilders.get("/profile/{id}", aProfile.getId().getValue())
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON);
 
@@ -269,7 +187,6 @@ public class ProfileAPITest {
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.profileId", equalTo(expectedId)))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.userId", equalTo(expectedUserId)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.username", equalTo(expectedUsername)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.email", equalTo(expectedEmail)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.avatarUrl", equalTo(expectedAvatarUrl)))
@@ -296,9 +213,9 @@ public class ProfileAPITest {
 
     @Test
     public void givenAnValidValuesAndProfileId_whenCallsUpdateProfile_shouldReturnProfile() throws Exception {
-        final var expectedUserId = "123";
         final var expectedUsername = "kaua";
         final var expectedEmail = "kaua@teste.com";
+        final var expectedPassword = "12345678";
         final var expectedType = VersionAccountType.PREMIUM.name();
         final var expectedId = "123456";
 
@@ -307,9 +224,9 @@ public class ProfileAPITest {
                         ProfileOutput.from(
                                 Profile.with(
                                         ProfileID.from(expectedId),
-                                        expectedUserId,
                                         expectedUsername,
                                         expectedEmail,
+                                        expectedPassword,
                                         null,
                                         VersionAccountType.valueOf(expectedType)
                                 ))));
@@ -323,7 +240,6 @@ public class ProfileAPITest {
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.profileId", equalTo(expectedId)))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.userId", equalTo(expectedUserId)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.username", equalTo(expectedUsername)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.email", equalTo(expectedEmail)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.type", equalTo(expectedType)));

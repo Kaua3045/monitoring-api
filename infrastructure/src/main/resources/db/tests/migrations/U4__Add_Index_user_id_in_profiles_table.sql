@@ -1,1 +1,0 @@
-DROP INDEX index_user_id ON profiles;

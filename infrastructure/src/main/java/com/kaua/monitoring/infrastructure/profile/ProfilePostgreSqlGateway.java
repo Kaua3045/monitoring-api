@@ -30,8 +30,8 @@ public class ProfilePostgreSqlGateway implements ProfileGateway {
     }
 
     @Override
-    public Optional<Profile> findByUserId(String userId) {
-        return this.profileRepository.findByUserId(userId)
+    public Optional<Profile> findByEmail(String email) {
+        return this.profileRepository.findByEmail(email)
                 .map(ProfileJpaFactory::toDomain);
     }
 

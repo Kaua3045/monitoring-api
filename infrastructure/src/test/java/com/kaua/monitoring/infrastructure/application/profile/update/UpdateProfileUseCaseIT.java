@@ -40,6 +40,7 @@ public class UpdateProfileUseCaseIT {
 
         final var expectedId = aProfile.getId().getValue();
         final var expectedUsername = "kaua";
+        final var expectedPassword = "12345678";
         final Resource expectedAvatarUrl = null;
         final var expectedType = VersionAccountType.PREMIUM;
 
@@ -48,6 +49,7 @@ public class UpdateProfileUseCaseIT {
         final var aCommand = new UpdateProfileCommand(
                 expectedId,
                 expectedUsername,
+                expectedPassword,
                 expectedAvatarUrl,
                 expectedType.name()
         );
@@ -56,7 +58,6 @@ public class UpdateProfileUseCaseIT {
 
         Assertions.assertNotNull(actualOutput);
         Assertions.assertEquals(expectedId, actualOutput.profileId());
-        Assertions.assertEquals(aProfile.getUserId(), actualOutput.userId());
         Assertions.assertEquals(expectedUsername, actualOutput.username());
         Assertions.assertEquals(aProfile.getEmail(), actualOutput.email());
         Assertions.assertEquals(expectedAvatarUrl, actualOutput.avatarUrl());
@@ -78,6 +79,7 @@ public class UpdateProfileUseCaseIT {
 
         final var expectedId = aProfile.getId().getValue();
         final String expectedUsername = null;
+        final String expectedPassword = " ";
         final Resource expectedAvatarUrl = null;
         final var expectedType = VersionAccountType.PREMIUM;
 
@@ -86,6 +88,7 @@ public class UpdateProfileUseCaseIT {
         final var aCommand = new UpdateProfileCommand(
                 expectedId,
                 expectedUsername,
+                expectedPassword,
                 expectedAvatarUrl,
                 expectedType.name()
         );
@@ -93,7 +96,6 @@ public class UpdateProfileUseCaseIT {
         final var actualOutput = updateProfileUseCase.execute(aCommand).getRight();
 
         Assertions.assertEquals(aProfile.getId().getValue(), actualOutput.profileId());
-        Assertions.assertEquals(aProfile.getUserId(), actualOutput.userId());
         Assertions.assertEquals(aProfile.getUsername(), actualOutput.username());
         Assertions.assertEquals(aProfile.getEmail(), actualOutput.email());
         Assertions.assertEquals(expectedType.name(), actualOutput.type());
@@ -107,6 +109,7 @@ public class UpdateProfileUseCaseIT {
     public void givenAnValidCommandAndInvalidId_whenCallsUpdateProfile_shouldReturnNotFoundException() {
         final var expectedId = "123";
         final var expectedUsername = "kaua";
+        final var expectedPassword = "12345678";
         final Resource expectedAvatarUrl = null;
         final var expectedType = VersionAccountType.PREMIUM;
 
@@ -117,6 +120,7 @@ public class UpdateProfileUseCaseIT {
         final var aCommand = new UpdateProfileCommand(
                 expectedId,
                 expectedUsername,
+                expectedPassword,
                 expectedAvatarUrl,
                 expectedType.name()
         );

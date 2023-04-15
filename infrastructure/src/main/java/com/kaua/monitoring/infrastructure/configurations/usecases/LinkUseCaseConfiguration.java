@@ -15,6 +15,8 @@ import com.kaua.monitoring.application.usecases.link.update.UpdateLinkUseCase;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.Objects;
+
 @Configuration
 public class LinkUseCaseConfiguration {
 
@@ -22,8 +24,8 @@ public class LinkUseCaseConfiguration {
     private final ProfileGateway profileGateway;
 
     public LinkUseCaseConfiguration(final LinkGateway linkGateway, final ProfileGateway profileGateway) {
-        this.linkGateway = linkGateway;
-        this.profileGateway = profileGateway;
+        this.linkGateway = Objects.requireNonNull(linkGateway);
+        this.profileGateway = Objects.requireNonNull(profileGateway);
     }
 
     @Bean

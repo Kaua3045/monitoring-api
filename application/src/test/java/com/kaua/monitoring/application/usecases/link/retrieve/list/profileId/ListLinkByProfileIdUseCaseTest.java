@@ -67,6 +67,7 @@ public class ListLinkByProfileIdUseCaseTest {
         final var expectedSort = "executeDate";
         final var expectedDirection = "asc";
         final var expectedTotal = 2;
+        final var expectedTotalPage = 1;
 
         final var expectedItems = expectedLinks.stream()
                         .map(LinkOutput::from)
@@ -76,6 +77,7 @@ public class ListLinkByProfileIdUseCaseTest {
                 expectedPage,
                 expectedPerPage,
                 expectedTotal,
+                expectedTotalPage,
                 expectedLinks
         );
 
@@ -126,6 +128,7 @@ public class ListLinkByProfileIdUseCaseTest {
         final var expectedSort = "executeDate";
         final var expectedDirection = "asc";
         final var expectedTotal = 2;
+        final var expectedTotalPage = 1;
 
         final var expectedItems = expectedLinks.stream()
                 .map(LinkOutput::from)
@@ -135,6 +138,7 @@ public class ListLinkByProfileIdUseCaseTest {
                 expectedPage,
                 expectedPerPage,
                 expectedTotal,
+                expectedTotalPage,
                 expectedLinks
         );
 

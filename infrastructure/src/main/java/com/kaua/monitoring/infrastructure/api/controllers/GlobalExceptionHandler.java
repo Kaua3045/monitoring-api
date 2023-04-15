@@ -6,10 +6,12 @@ import com.kaua.monitoring.infrastructure.exceptions.ImageSizeNotValidException;
 import com.kaua.monitoring.infrastructure.exceptions.ImageTypeNotValidException;
 import com.kaua.monitoring.infrastructure.exceptions.UserIdDoesNotMatchException;
 import com.kaua.monitoring.infrastructure.utils.ApiError;
+import io.jsonwebtoken.ExpiredJwtException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -19,6 +21,18 @@ import java.util.Collections;
 public class GlobalExceptionHandler {
 
     private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
+
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<?> handleBadCredentialsException(final BadCredentialsException ex) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                .body(new ApiError(ex.getMessage(), null));
+    }
+
+    @ExceptionHandler(ExpiredJwtException.class)
+    public ResponseEntity<?> handleExpiredJwtException(final ExpiredJwtException ex) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                .body(new ApiError(ex.getMessage(), null));
+    }
 
     @ExceptionHandler(DomainException.class)
     public ResponseEntity<?> handleDomainException(final DomainException ex) {

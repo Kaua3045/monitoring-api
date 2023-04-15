@@ -1,6 +1,8 @@
 package com.kaua.monitoring.application.usecases.profile.update;
 
 import com.kaua.monitoring.application.exceptions.NotFoundException;
+import com.kaua.monitoring.application.gateways.AvatarGateway;
+import com.kaua.monitoring.application.gateways.EncrypterGateway;
 import com.kaua.monitoring.application.gateways.ProfileGateway;
 import com.kaua.monitoring.domain.profile.Profile;
 import com.kaua.monitoring.domain.profile.Resource;
@@ -27,18 +29,24 @@ public class UpdateProfileUseCaseTest {
     @Mock
     private ProfileGateway profileGateway;
 
+    @Mock
+    private EncrypterGateway encrypterGateway;
+
+    @Mock
+    private AvatarGateway avatarGateway;
+
     @Test
     public void givenAnValidValues_whenCallsUpdate_shouldReturnProfileUpdated() {
-        final var expectedUserId = "123";
         final var expectedUsername = "kaua";
         final var expectedEmail = "kaua@teste.com";
+        final var expectedPassword = "12345678";
         final Resource expectedAvatarUrl = null;
         final var expectedVersionType = VersionAccountType.PREMIUM;
 
         final var aProfile = Profile.newProfile(
-                expectedUserId,
-                "ka",
+                "aa",
                 expectedEmail,
+                "01456789023q",
                 null
         );
 
@@ -47,12 +55,16 @@ public class UpdateProfileUseCaseTest {
         when(profileGateway.findById(expectedProfileId))
                 .thenReturn(Optional.of(aProfile));
 
+        when(encrypterGateway.encrypt(any()))
+                .thenAnswer(returnsFirstArg());
+
         when(profileGateway.update(any()))
                 .thenAnswer(returnsFirstArg());
 
         final var aCommand = new UpdateProfileCommand(
                 expectedProfileId,
                 expectedUsername,
+                expectedPassword,
                 expectedAvatarUrl,
                 expectedVersionType.name()
         );
@@ -62,7 +74,6 @@ public class UpdateProfileUseCaseTest {
 
         Assertions.assertNotNull(actualProfile);
         Assertions.assertEquals(expectedProfileId, actualProfile.profileId());
-        Assertions.assertEquals(expectedUserId, actualProfile.userId());
         Assertions.assertEquals(expectedUsername, actualProfile.username());
         Assertions.assertEquals(expectedEmail, actualProfile.email());
         Assertions.assertEquals(expectedAvatarUrl, actualProfile.avatarUrl());
@@ -84,6 +95,7 @@ public class UpdateProfileUseCaseTest {
                 expectedProfileId,
                 "a",
                 null,
+                null,
                 VersionAccountType.FREE.name()
         );
 
@@ -99,16 +111,16 @@ public class UpdateProfileUseCaseTest {
 
     @Test
     public void givenAnInvalidValues_whenCallsUpdate_shouldReturnOldProfileInfos() {
-        final var expectedUserId = "123";
         final String expectedUsername = null;
         final var expectedEmail = "kaua@teste.com";
+        final String expectedPassword = null;
         final Resource expectedAvatarUrl = null;
         final String expectedVersionType = null;
 
         final var aProfile = Profile.newProfile(
-                expectedUserId,
-                "ka",
+                "a",
                 expectedEmail,
+                "123456789",
                 null
         );
 
@@ -123,6 +135,7 @@ public class UpdateProfileUseCaseTest {
         final var aCommand = new UpdateProfileCommand(
                 expectedProfileId,
                 expectedUsername,
+                expectedPassword,
                 expectedAvatarUrl,
                 expectedVersionType
         );
@@ -130,7 +143,6 @@ public class UpdateProfileUseCaseTest {
         final var actualOutput = useCase.execute(aCommand).getRight();
 
         Assertions.assertEquals(aProfile.getId().getValue(), actualOutput.profileId());
-        Assertions.assertEquals(aProfile.getUserId(), actualOutput.userId());
         Assertions.assertEquals(aProfile.getUsername(), actualOutput.username());
         Assertions.assertEquals(aProfile.getEmail(), actualOutput.email());
         Assertions.assertEquals(aProfile.getType().name(), actualOutput.type());

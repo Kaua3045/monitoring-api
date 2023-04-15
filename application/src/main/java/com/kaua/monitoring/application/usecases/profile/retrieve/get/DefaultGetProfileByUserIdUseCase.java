@@ -15,8 +15,8 @@ public class DefaultGetProfileByUserIdUseCase extends GetProfileByUserIdUseCase 
 
     @Override
     public ProfileOutput execute(GetProfileCommand aCommand) {
-        return this.profileGateway.findByUserId(aCommand.userId())
+        return this.profileGateway.findById(aCommand.profileId())
                 .map(ProfileOutput::from)
-                .orElseThrow(() -> new NotFoundException(Profile.class, aCommand.userId()));
+                .orElseThrow(() -> new NotFoundException(Profile.class, aCommand.profileId()));
     }
 }

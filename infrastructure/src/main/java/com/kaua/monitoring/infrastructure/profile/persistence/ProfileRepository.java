@@ -6,5 +6,5 @@ import java.util.Optional;
 
 public interface ProfileRepository extends JpaRepository<ProfileJpaEntity, String> {
 
-    public Optional<ProfileJpaEntity> findByUserId(final String userId);
+    Optional<ProfileJpaEntity> findByEmail(final String email);
 }

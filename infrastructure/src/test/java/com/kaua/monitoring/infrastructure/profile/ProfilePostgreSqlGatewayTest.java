@@ -20,16 +20,16 @@ public class ProfilePostgreSqlGatewayTest {
 
     @Test
     public void givenAnValidValues_whenCallsCreate_shouldReturnProfile() {
-        final var expectedUserId = "123";
         final var expectedUsername = "kaua";
         final var expectedEmail = "kaua@teste.com";
+        final var expectedPassword = "123456789";
         final String expectedAvatarUrl = null;
         final var expectedVersionType = VersionAccountType.FREE;
 
         final var aProfile = Profile.newProfile(
-                expectedUserId,
                 expectedUsername,
                 expectedEmail,
+                expectedPassword,
                 expectedAvatarUrl);
 
         Assertions.assertEquals(0, profileRepository.count());
@@ -40,7 +40,6 @@ public class ProfilePostgreSqlGatewayTest {
 
         Assertions.assertNotNull(actualProfile);
         Assertions.assertEquals(aProfile.getId().getValue(), actualProfile.getId().getValue());
-        Assertions.assertEquals(expectedUserId, actualProfile.getUserId());
         Assertions.assertEquals(expectedAvatarUrl, actualProfile.getAvatarUrl());
         Assertions.assertEquals(expectedVersionType, actualProfile.getType());
 
@@ -48,23 +47,23 @@ public class ProfilePostgreSqlGatewayTest {
 
         Assertions.assertNotNull(actualProfileEntity);
         Assertions.assertEquals(aProfile.getId().getValue(), actualProfileEntity.getId());
-        Assertions.assertEquals(expectedUserId, actualProfileEntity.getUserId());
         Assertions.assertEquals(expectedAvatarUrl, actualProfileEntity.getAvatarUrl());
+        Assertions.assertEquals(expectedPassword, actualProfileEntity.getPassword());
         Assertions.assertEquals(expectedVersionType, actualProfileEntity.getType());
     }
 
     @Test
     public void givenAnValidUserId_whenCallsFindByUserId_shouldReturnProfile() {
-        final var expectedUserId = "123";
         final var expectedUsername = "kaua";
         final var expectedEmail = "kaua@teste.com";
+        final var expectedPassword = "12345678";
         final var expectedAvatarUrl = "url.com";
         final var expectedVersionType = VersionAccountType.FREE;
 
         final var aProfile = Profile.newProfile(
-                expectedUserId,
                 expectedUsername,
                 expectedEmail,
+                expectedPassword,
                 expectedAvatarUrl);
 
         Assertions.assertEquals(0, profileRepository.count());
@@ -73,11 +72,10 @@ public class ProfilePostgreSqlGatewayTest {
 
         Assertions.assertEquals(1, profileRepository.count());
 
-        final var actualProfile = profileGateway.findByUserId(aProfile.getUserId()).get();
+        final var actualProfile = profileGateway.findById(aProfile.getId().getValue()).get();
 
         Assertions.assertNotNull(actualProfile);
         Assertions.assertEquals(aProfile.getId().getValue(), actualProfile.getId().getValue());
-        Assertions.assertEquals(expectedUserId, actualProfile.getUserId());
         Assertions.assertEquals(expectedUsername, actualProfile.getUsername());
         Assertions.assertEquals(expectedEmail, actualProfile.getEmail());
         Assertions.assertEquals(expectedAvatarUrl, actualProfile.getAvatarUrl());
@@ -103,16 +101,16 @@ public class ProfilePostgreSqlGatewayTest {
 
     @Test
     public void givenAnValidValues_whenCallsUpdate_shouldReturnProfileUpdated() {
-        final var expectedUserId = "123";
         final var expectedUsername = "kaua";
         final var expectedEmail = "kaua@teste.com";
+        final var expectedPassword = "12345678";
         final String expectedAvatarUrl = "imaginaria";
         final var expectedVersionType = VersionAccountType.PREMIUM;
 
         final var aProfile = Profile.newProfile(
-                expectedUserId,
                 "ka",
                 expectedEmail,
+                expectedPassword,
                 null);
 
         Assertions.assertEquals(0, profileRepository.count());
@@ -123,16 +121,15 @@ public class ProfilePostgreSqlGatewayTest {
 
         final var actualProfile = profileGateway.update(Profile.with(
                 aProfile.getId(),
-                expectedUserId,
                 expectedUsername,
                 expectedEmail,
+                expectedPassword,
                 expectedAvatarUrl,
                 expectedVersionType
         ));
 
         Assertions.assertNotNull(actualProfile);
         Assertions.assertEquals(aProfile.getId().getValue(), actualProfile.getId().getValue());
-        Assertions.assertEquals(expectedUserId, actualProfile.getUserId());
         Assertions.assertEquals(expectedAvatarUrl, actualProfile.getAvatarUrl());
         Assertions.assertEquals(expectedVersionType, actualProfile.getType());
     }

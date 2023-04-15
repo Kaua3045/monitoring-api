@@ -9,4 +9,6 @@ public interface AvatarGateway {
     void deleteAvatar(String key);
 
     String findAvatarByKey(String key);
+
+    void deleteByProfileId(String profileId);
 }

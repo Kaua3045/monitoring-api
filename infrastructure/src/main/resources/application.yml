@@ -4,14 +4,12 @@ server:
     context-path: /api
 
 spring:
+  jwt:
+    secret: 50645367566B5970337336763979244226452948404D6251655468576D5A7134
+    expire: 1
   batch:
     jdbc:
       initialize-schema: always
-  security:
-    oauth2:
-      resourceserver:
-        jwt:
-          issuer-uri: http://localhost:8081/auth/realms/teste
   datasource:
     url: jdbc:postgresql://${postgres.url}/${postgres.schema}
     username: ${postgres.username}

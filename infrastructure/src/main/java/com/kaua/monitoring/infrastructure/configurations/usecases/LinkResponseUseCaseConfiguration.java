@@ -7,6 +7,8 @@ import com.kaua.monitoring.application.usecases.checking.retrieve.ListLinkRespon
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.Objects;
+
 @Configuration
 public class LinkResponseUseCaseConfiguration {
 
@@ -17,8 +19,8 @@ public class LinkResponseUseCaseConfiguration {
             final LinkResponseGateway linkResponseGateway,
             final LinkGateway linkGateway
     ) {
-        this.linkResponseGateway = linkResponseGateway;
-        this.linkGateway = linkGateway;
+        this.linkResponseGateway = Objects.requireNonNull(linkResponseGateway);
+        this.linkGateway = Objects.requireNonNull(linkGateway);
     }
 
     @Bean

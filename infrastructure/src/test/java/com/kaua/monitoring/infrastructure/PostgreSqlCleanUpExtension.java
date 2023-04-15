@@ -1,5 +1,6 @@
 package com.kaua.monitoring.infrastructure;
 
+import com.kaua.monitoring.infrastructure.link.persistence.LinkRepository;
 import com.kaua.monitoring.infrastructure.profile.persistence.ProfileRepository;
 import org.junit.jupiter.api.extension.BeforeEachCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
@@ -16,7 +17,8 @@ public class PostgreSqlCleanUpExtension implements BeforeEachCallback {
         final var appContext = SpringExtension.getApplicationContext(context);
 
         cleanUp(List.of(
-                appContext.getBean(ProfileRepository.class)
+                appContext.getBean(ProfileRepository.class),
+                appContext.getBean(LinkRepository.class)
         ));
     }
 

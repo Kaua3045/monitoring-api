@@ -29,18 +29,18 @@ public class CreateProfileUseCaseIT {
 
     @Test
     public void givenAValidCommand_whenCallsCreateProfile_shouldReturnProfile() {
-        final var expectedUserId = "123";
         final var expectedUsername = "kaua";
         final var expectedEmail = "kaua@teste.com";
+        final var expectedPassword = "12345678";
         final String expectedAvatarUrl = null;
         final var expectedType = VersionAccountType.FREE;
 
         Assertions.assertEquals(0, profileRepository.count());
 
         final var aCommand = new CreateProfileCommand(
-                expectedUserId,
                 expectedUsername,
                 expectedEmail,
+                expectedPassword,
                 expectedAvatarUrl
         );
 
@@ -53,7 +53,6 @@ public class CreateProfileUseCaseIT {
 
         final var actualProfile = profileRepository.findById(actualOutput.profileId()).get();
 
-        Assertions.assertEquals(expectedUserId, actualProfile.getUserId());
         Assertions.assertEquals(expectedUsername, actualProfile.getUsername());
         Assertions.assertEquals(expectedEmail, actualProfile.getEmail());
         Assertions.assertEquals(expectedAvatarUrl, actualProfile.getAvatarUrl());
@@ -64,23 +63,24 @@ public class CreateProfileUseCaseIT {
 
     @Test
     public void givenAInvalidCommand_whenCallsCreateProfile_shouldReturnDomainException() {
-        final var expectedUserId = " ";
         final String expectedUsername = null;
         final var expectedEmail = " ";
+        final var expectedPassword = " ";
         final var expectedAvatarUrl = "url";
 
         final var expectedErrorsMessages = List.of(
-                new Error("'userId' should not be null or empty"),
                 new Error("'username' should not be null or empty"),
-                new Error("'email' should not be null or empty")
+                new Error("'email' should not be null or empty"),
+                new Error("'password' should not be null or empty"),
+                new Error("'password' must be at least 8 characters")
         );
 
         Assertions.assertEquals(0, profileRepository.count());
 
         final var aCommand = new CreateProfileCommand(
-                expectedUserId,
                 expectedUsername,
                 expectedEmail,
+                expectedPassword,
                 expectedAvatarUrl
         );
 

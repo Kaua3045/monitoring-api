@@ -14,7 +14,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 
-import static org.mockito.AdditionalAnswers.returnsFirstArg;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -27,40 +26,40 @@ public class GetProfileByUserIdUseCaseTest {
     private ProfileGateway profileGateway;
 
     @Test
-    public void givenAnValidUserId_whenCallsGetById_shouldReturnProfile() {
-        final var expectedUserId = "123";
+    public void givenAnValidProfileId_whenCallsGetById_shouldReturnProfile() {
+        final var expectedProfileId = "123";
         final var expectedUsername = "kaua";
         final var expectedEmail = "kaua@teste.com";
+        final var expectedPassword = "12345678";
         final var expectedAvatarUrl = "imaginaria";
         final var expectedVersionType = VersionAccountType.FREE;
 
         final var aProfile = Profile.newProfile(
-                expectedUserId,
                 expectedUsername,
                 expectedEmail,
+                expectedPassword,
                 expectedAvatarUrl
         );
 
-        when(profileGateway.findByUserId(any()))
+        when(profileGateway.findById(any()))
                 .thenReturn(Optional.of(aProfile));
 
-        final var aCommand = new GetProfileCommand(expectedUserId);
+        final var aCommand = new GetProfileCommand(expectedProfileId);
 
         final var actualProfile = useCase.execute(aCommand);
 
         Assertions.assertNotNull(actualProfile);
         Assertions.assertNotNull(actualProfile.profileId());
-        Assertions.assertEquals(expectedUserId, actualProfile.userId());
         Assertions.assertEquals(expectedUsername, actualProfile.username());
         Assertions.assertEquals(expectedEmail, actualProfile.email());
         Assertions.assertEquals(expectedAvatarUrl, actualProfile.avatarUrl());
         Assertions.assertEquals(expectedVersionType.name(), actualProfile.type());
 
-        Mockito.verify(profileGateway, times(1)).findByUserId(aCommand.userId());
+        Mockito.verify(profileGateway, times(1)).findById(aCommand.profileId());
     }
 
     @Test
-    public void givenAnInvalidUserId_whenCallsGetById_shouldThrowNotFoundException() {
+    public void givenAnInvalidProfileId_whenCallsGetById_shouldThrowNotFoundException() {
         final var expectedUserId = "123";
         final var expectedErrorMessage = "Profile with ID 123 was not found";
 
@@ -73,6 +72,6 @@ public class GetProfileByUserIdUseCaseTest {
 
         Assertions.assertEquals(expectedErrorMessage, actualException.getMessage());
 
-        Mockito.verify(profileGateway, times(1)).findByUserId(aCommand.userId());
+        Mockito.verify(profileGateway, times(1)).findById(aCommand.profileId());
     }
 }

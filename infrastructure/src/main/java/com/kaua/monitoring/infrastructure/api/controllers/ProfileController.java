@@ -18,34 +18,44 @@ public class ProfileController implements ProfileAPI {
 
     private final ProfileService profileService;
 
-    public ProfileController(ProfileService profileService) {
+    public ProfileController(final ProfileService profileService) {
         this.profileService = profileService;
     }
 
     @Override
-    public ResponseEntity<?> create(String authorization, CreateProfileBody body) {
+    public ResponseEntity<?> create(CreateProfileBody body) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(this.profileService.createProfile(authorization, body));
+                .body(this.profileService.createProfile(body));
     }
 
     @Override
-    public ResponseEntity<?> getByUserId(String userId) {
+    public ResponseEntity<?> getByProfileId(String profileId) {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(this.profileService.getByUserIdProfile(userId));
+                .body(this.profileService.getByProfileId(profileId));
+    }
+
+    @Override
+    public ResponseEntity<?> getProfileByToken(String authorization) {
+        final var tokenWithoutType = authorization.substring(7);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(this.profileService.getProfileByToken(tokenWithoutType));
     }
 
     @Override
     public ResponseEntity<?> updateProfile(
             String profileId,
             String username,
+            String password,
             MultipartFile avatarFile,
             String type
     ) {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(this.profileService.updateProfile(profileId, username, resourceOf(avatarFile), type));
+                .body(this.profileService.updateProfile(profileId, username, password, resourceOf(avatarFile), type));
     }
 
     @Override

@@ -12,12 +12,14 @@ public class PaginationTest {
         final var expectedPage = 0;
         final var expectedPerPage = 10;
         final var expectedTotal = 0;
+        final var expectedTotalPage = 0;
         final var expectedItems = List.of();
 
         final var aPagination = new Pagination<>(
                 expectedPage,
                 expectedPerPage,
                 expectedTotal,
+                expectedTotalPage,
                 expectedItems
         );
 
@@ -33,12 +35,14 @@ public class PaginationTest {
         final var expectedPage = 0;
         final var expectedPerPage = 10;
         final var expectedTotal = 0;
+        final var expectedTotalPage = 0;
         final var expectedItems = List.of("a", "b", "c");
 
         final var aPagination = new Pagination<>(
                 expectedPage,
                 expectedPerPage,
                 expectedTotal,
+                expectedTotalPage,
                 expectedItems
         );
 

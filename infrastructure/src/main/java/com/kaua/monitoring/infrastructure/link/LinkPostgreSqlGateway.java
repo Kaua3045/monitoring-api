@@ -42,6 +42,7 @@ public class LinkPostgreSqlGateway implements LinkGateway {
                 pageResult.getNumber(),
                 pageResult.getSize(),
                 pageResult.getTotalElements(),
+                pageResult.getTotalPages(),
                 pageResult.map(LinkJpaFactory::toDomain).toList()
         );
     }

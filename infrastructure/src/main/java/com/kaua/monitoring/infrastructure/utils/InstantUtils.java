@@ -3,6 +3,7 @@ package com.kaua.monitoring.infrastructure.utils;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 
 public final class InstantUtils {
 
@@ -13,5 +14,9 @@ public final class InstantUtils {
                 .atZone(ZoneId.systemDefault())
                 .withZoneSameInstant(ZoneId.of("UTC"))
                 .toInstant();
+    }
+
+    public static Instant now() {
+        return Instant.now().truncatedTo(ChronoUnit.MICROS);
     }
 }

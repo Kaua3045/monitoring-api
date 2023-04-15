@@ -77,4 +77,20 @@ public class ProfileAvatarGateway implements AvatarGateway {
             throw new RuntimeException(t);
         }
     }
+
+    @Override
+    public void deleteByProfileId(String profileId) {
+        try(final var s3Client = S3Client.create()) {
+            final var avatarAlreadyExistsRequest = ListObjectsRequest.builder()
+                    .bucket(BUCKET_NAME)
+                    .prefix(profileId)
+                    .build();
+
+            final var avatarAlreadyExists = s3Client.listObjects(avatarAlreadyExistsRequest);
+
+            avatarAlreadyExists.contents().forEach(image -> deleteAvatar(image.key()));
+        } catch (Throwable t) {
+            throw new RuntimeException(t);
+        }
+    }
 }

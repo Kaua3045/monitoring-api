@@ -7,6 +7,7 @@ public record Pagination<T>(
         int currentPage,
         int perPage,
         long total,
+        int totalPage,
         List<T> items
 ) {
 
@@ -15,6 +16,6 @@ public record Pagination<T>(
                 .map(mapper)
                 .toList();
 
-        return new Pagination<>(currentPage(), perPage(), total(), aNewList);
+        return new Pagination<>(currentPage(), perPage(), total(), totalPage(), aNewList);
     }
 }

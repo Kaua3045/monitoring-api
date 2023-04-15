@@ -27,7 +27,7 @@ public class GetProfileByUserIdUseCaseIT {
     private ProfileGateway profileGateway;
 
     @Test
-    public void givenAValidCommand_whenCallsFindByUserId_shouldReturnProfile() {
+    public void givenAValidCommand_whenCallsFindByProfileId_shouldReturnProfile() {
         final var aProfile = Profile.newProfile(
                 "123",
                 "kaua",
@@ -36,7 +36,7 @@ public class GetProfileByUserIdUseCaseIT {
         );
         profileRepository.save(ProfileJpaFactory.toEntity(aProfile));
 
-        final var expectedUserId = aProfile.getUserId();
+        final var expectedUserId = aProfile.getId().getValue();
 
         Assertions.assertEquals(1, profileRepository.count());
 
@@ -46,13 +46,12 @@ public class GetProfileByUserIdUseCaseIT {
 
         Assertions.assertNotNull(actualOutput);
         Assertions.assertEquals(aProfile.getId().getValue(), actualOutput.profileId());
-        Assertions.assertEquals(expectedUserId, actualOutput.userId());
         Assertions.assertEquals(aProfile.getUsername(), actualOutput.username());
         Assertions.assertEquals(aProfile.getEmail(), actualOutput.email());
         Assertions.assertEquals(aProfile.getAvatarUrl(), actualOutput.avatarUrl());
         Assertions.assertEquals(aProfile.getType().name(), actualOutput.type());
 
-        Mockito.verify(profileGateway, Mockito.times(1)).findByUserId(Mockito.any());
+        Mockito.verify(profileGateway, Mockito.times(1)).findById(Mockito.any());
     }
 
     @Test
@@ -71,6 +70,6 @@ public class GetProfileByUserIdUseCaseIT {
 
         Assertions.assertEquals(expectedErrorMessage, actualException.getMessage());
 
-        Mockito.verify(profileGateway, Mockito.times(1)).findByUserId(Mockito.any());
+        Mockito.verify(profileGateway, Mockito.times(1)).findById(Mockito.any());
     }
 }

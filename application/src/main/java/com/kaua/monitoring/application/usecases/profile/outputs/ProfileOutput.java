@@ -4,7 +4,6 @@ import com.kaua.monitoring.domain.profile.Profile;
 
 public record ProfileOutput(
         String profileId,
-        String userId,
         String username,
         String email,
         String avatarUrl,
@@ -14,7 +13,6 @@ public record ProfileOutput(
     public static ProfileOutput from(final Profile aProfile) {
         return new ProfileOutput(
                 aProfile.getId().getValue(),
-                aProfile.getUserId(),
                 aProfile.getUsername(),
                 aProfile.getEmail(),
                 aProfile.getAvatarUrl(),

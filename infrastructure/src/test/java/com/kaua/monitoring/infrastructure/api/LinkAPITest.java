@@ -42,7 +42,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.Mockito.*;
 
-@ControllerTest(controllers = {LinkService.class, LinkAPI.class})
+@ControllerTest(controllers = {LinkAPI.class, LinkService.class})
 public class LinkAPITest {
 
     @Autowired
@@ -252,6 +252,7 @@ public class LinkAPITest {
         final var expectedDirection = "desc";
         final var expectedItemsCount = 1;
         final var expectedTotal = 1;
+        final var expectedTotalPage = 1;
         final var expectedItems = List.of(LinkOutput.from(aLink));
 
         when(listLinkByProfileIdUseCase.execute(any()))
@@ -259,6 +260,7 @@ public class LinkAPITest {
                         expectedPage,
                         expectedPerPage,
                         expectedTotal,
+                        expectedTotalPage,
                         expectedItems
                 ));
 

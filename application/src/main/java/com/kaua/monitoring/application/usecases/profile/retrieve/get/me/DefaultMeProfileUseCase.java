@@ -6,6 +6,8 @@ import com.kaua.monitoring.application.gateways.ProfileGateway;
 import com.kaua.monitoring.application.usecases.profile.outputs.ProfileOutput;
 import com.kaua.monitoring.domain.profile.Profile;
 
+import java.util.Objects;
+
 public class DefaultMeProfileUseCase extends MeProfileUseCase {
 
     private final ProfileGateway profileGateway;
@@ -15,8 +17,8 @@ public class DefaultMeProfileUseCase extends MeProfileUseCase {
             final ProfileGateway profileGateway,
             final JwtGateway jwtGateway
     ) {
-        this.profileGateway = profileGateway;
-        this.jwtGateway = jwtGateway;
+        this.profileGateway = Objects.requireNonNull(profileGateway);
+        this.jwtGateway = Objects.requireNonNull(jwtGateway);
     }
 
     @Override

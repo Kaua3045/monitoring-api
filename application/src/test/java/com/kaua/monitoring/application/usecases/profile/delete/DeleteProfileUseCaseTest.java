@@ -1,5 +1,6 @@
 package com.kaua.monitoring.application.usecases.profile.delete;
 
+import com.kaua.monitoring.application.gateways.AvatarGateway;
 import com.kaua.monitoring.application.gateways.ProfileGateway;
 import com.kaua.monitoring.domain.profile.Profile;
 import org.junit.jupiter.api.Assertions;
@@ -20,6 +21,9 @@ public class DeleteProfileUseCaseTest {
 
     @Mock
     private ProfileGateway profileGateway;
+
+    @Mock
+    private AvatarGateway avatarGateway;
 
     @Test
     public void givenAnValidProfileId_whenCallsDeleteById_shouldBeOk() {

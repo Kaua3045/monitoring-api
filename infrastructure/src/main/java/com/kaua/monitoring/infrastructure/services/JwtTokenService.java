@@ -15,16 +15,15 @@ import java.util.Date;
 
 public class JwtTokenService implements JwtGateway {
 
-
     private final String JWT_SECRET_KEY;
     private final String JWT_EXPIRATION_TIME;
 
     public JwtTokenService(
-            final String jwtSecretKey,
-            final String jwtExpirationTime
+            final String secret,
+            final String expire
     ) {
-        JWT_SECRET_KEY = jwtSecretKey;
-        JWT_EXPIRATION_TIME = jwtExpirationTime;
+        this.JWT_SECRET_KEY = secret;
+        this.JWT_EXPIRATION_TIME = expire;
     }
 
     @Override

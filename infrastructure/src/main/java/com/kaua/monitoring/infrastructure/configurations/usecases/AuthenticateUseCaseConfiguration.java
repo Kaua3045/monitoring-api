@@ -11,12 +11,22 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class AuthenticateUseCaseConfiguration {
 
-    @Bean
-    public CreateAuthenticateUseCase createAuthenticateUseCase(
-            ProfileGateway profileGateway,
-            JwtGateway jwtGateway,
-            EncrypterGateway encrypterGateway
+    private final ProfileGateway profileGateway;
+    private final JwtGateway jwtGateway;
+    private final EncrypterGateway encrypterGateway;
+
+    public AuthenticateUseCaseConfiguration(
+            final ProfileGateway profileGateway,
+            final JwtGateway jwtGateway,
+            final EncrypterGateway encrypterGateway
     ) {
+        this.profileGateway = profileGateway;
+        this.jwtGateway = jwtGateway;
+        this.encrypterGateway = encrypterGateway;
+    }
+
+    @Bean
+    public CreateAuthenticateUseCase createAuthenticateUseCase() {
         return new DefaultCreateAuthenticateUseCase(profileGateway, jwtGateway, encrypterGateway);
     }
 }

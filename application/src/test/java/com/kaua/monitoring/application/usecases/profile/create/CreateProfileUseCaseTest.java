@@ -1,5 +1,7 @@
 package com.kaua.monitoring.application.usecases.profile.create;
 
+import com.kaua.monitoring.application.gateways.EncrypterGateway;
+import com.kaua.monitoring.application.gateways.JwtGateway;
 import com.kaua.monitoring.application.gateways.ProfileGateway;
 import com.kaua.monitoring.domain.exceptions.Error;
 import com.kaua.monitoring.domain.profile.Profile;
@@ -27,6 +29,12 @@ public class CreateProfileUseCaseTest {
     @Mock
     private ProfileGateway profileGateway;
 
+    @Mock
+    private EncrypterGateway encrypterGateway;
+
+    @Mock
+    private JwtGateway jwtGateway;
+
     @Test
     public void givenAnValidValues_whenCallsCreate_shouldReturnProfile() {
         final var expectedUsername = "kaua";
@@ -35,8 +43,14 @@ public class CreateProfileUseCaseTest {
         final var expectedAvatarUrl = "url/imaginaria";
         final var expectedType = VersionAccountType.FREE;
 
+        when(encrypterGateway.encrypt(any()))
+                .thenAnswer(returnsFirstArg());
+
         when(profileGateway.create(any()))
                 .thenAnswer(returnsFirstArg());
+
+        when(jwtGateway.generateToken(any()))
+                .thenReturn("any-token");
 
         final var aCommand = new CreateProfileCommand(
                 expectedUsername,

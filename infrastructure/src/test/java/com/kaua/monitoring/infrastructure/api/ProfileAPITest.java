@@ -11,6 +11,7 @@ import com.kaua.monitoring.application.usecases.profile.delete.DeleteProfileUseC
 import com.kaua.monitoring.application.usecases.profile.outputs.CreateProfileOutput;
 import com.kaua.monitoring.application.usecases.profile.outputs.ProfileOutput;
 import com.kaua.monitoring.application.usecases.profile.retrieve.get.GetProfileByUserIdUseCase;
+import com.kaua.monitoring.application.usecases.profile.retrieve.get.me.MeProfileUseCase;
 import com.kaua.monitoring.application.usecases.profile.update.UpdateProfileUseCase;
 import com.kaua.monitoring.domain.exceptions.Error;
 import com.kaua.monitoring.domain.profile.Profile;
@@ -19,7 +20,6 @@ import com.kaua.monitoring.domain.profile.VersionAccountType;
 import com.kaua.monitoring.infrastructure.ControllerTest;
 import com.kaua.monitoring.infrastructure.profile.inputs.CreateProfileBody;
 import com.kaua.monitoring.infrastructure.services.ProfileService;
-import com.kaua.monitoring.application.gateways.JwtGateway;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -34,7 +34,7 @@ import java.util.List;
 import static org.hamcrest.Matchers.equalTo;
 import static org.mockito.Mockito.*;
 
-@ControllerTest(controllers = { ProfileService.class, ProfileAPI.class })
+@ControllerTest(controllers = { ProfileAPI.class, ProfileService.class })
 public class ProfileAPITest {
 
     @Autowired
@@ -44,13 +44,13 @@ public class ProfileAPITest {
     private ObjectMapper mapper;
 
     @MockBean
-    private JwtGateway jwtGateway;
-
-    @MockBean
     private CreateProfileUseCase createProfileUseCase;
 
     @MockBean
     private GetProfileByUserIdUseCase getProfileByUserIdUseCase;
+
+    @MockBean
+    private MeProfileUseCase meProfileUseCase;
 
     @MockBean
     private UpdateProfileUseCase updateProfileUseCase;
@@ -81,7 +81,7 @@ public class ProfileAPITest {
         );
 
         when(createProfileUseCase.execute(any()))
-                .thenReturn(Either.right(CreateProfileOutput.from(aProfile)));
+                .thenReturn(Either.right(CreateProfileOutput.from(aProfile, "any-token")));
 
         final var request = MockMvcRequestBuilders.post("/profile")
                 .contentType(MediaType.APPLICATION_JSON)

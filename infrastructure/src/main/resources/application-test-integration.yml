@@ -1,4 +1,7 @@
 spring:
+  jwt:
+    secret: 50645367566B5970337336763979244226452948404D6251655468576D5A7134
+    expire: 1
   flyway:
     locations: classpath:db/tests/migrations
   datasource:

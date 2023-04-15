@@ -12,7 +12,7 @@ public class AuthController implements AuthAPI {
 
     private final AuthenticateService authenticateService;
 
-    public AuthController(AuthenticateService authenticateService) {
+    public AuthController(final AuthenticateService authenticateService) {
         this.authenticateService = authenticateService;
     }
 

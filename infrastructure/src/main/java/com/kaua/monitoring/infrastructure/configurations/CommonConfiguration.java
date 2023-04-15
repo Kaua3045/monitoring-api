@@ -1,11 +1,11 @@
 package com.kaua.monitoring.infrastructure.configurations;
 
 import com.kaua.monitoring.application.gateways.EncrypterGateway;
+import com.kaua.monitoring.application.gateways.JwtGateway;
 import com.kaua.monitoring.application.gateways.ProfileGateway;
-import com.kaua.monitoring.infrastructure.configurations.security.JwtAuthenticationFilter;
+import com.kaua.monitoring.infrastructure.security.JwtAuthenticationFilter;
 import com.kaua.monitoring.infrastructure.services.BcryptService;
 import com.kaua.monitoring.infrastructure.services.JwtTokenService;
-import com.kaua.monitoring.application.gateways.JwtGateway;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,14 +20,20 @@ public class CommonConfiguration {
     @Value("${spring.jwt.expire}")
     private String EXPIRATION;
 
+    private final ProfileGateway profileGateway;
+
+    public CommonConfiguration(final ProfileGateway profileGateway) {
+        this.profileGateway = profileGateway;
+    }
+
     @Bean
-    public JwtGateway jwtGateway() {
+    public JwtGateway jwtGatewayImp() {
         return new JwtTokenService(SECRET, EXPIRATION);
     }
 
     @Bean
-    public JwtAuthenticationFilter jwtAuthenticationFilter(ProfileGateway profileGateway) {
-        return new JwtAuthenticationFilter(jwtGateway(), profileGateway);
+    public JwtAuthenticationFilter jwtAuthenticationFilter() {
+        return new JwtAuthenticationFilter(jwtGatewayImp(), profileGateway);
     }
 
     @Bean

@@ -1,6 +1,8 @@
 package com.kaua.monitoring.application.usecases.profile.update;
 
 import com.kaua.monitoring.application.exceptions.NotFoundException;
+import com.kaua.monitoring.application.gateways.AvatarGateway;
+import com.kaua.monitoring.application.gateways.EncrypterGateway;
 import com.kaua.monitoring.application.gateways.ProfileGateway;
 import com.kaua.monitoring.domain.profile.Profile;
 import com.kaua.monitoring.domain.profile.Resource;
@@ -27,6 +29,12 @@ public class UpdateProfileUseCaseTest {
     @Mock
     private ProfileGateway profileGateway;
 
+    @Mock
+    private EncrypterGateway encrypterGateway;
+
+    @Mock
+    private AvatarGateway avatarGateway;
+
     @Test
     public void givenAnValidValues_whenCallsUpdate_shouldReturnProfileUpdated() {
         final var expectedUsername = "kaua";
@@ -46,6 +54,9 @@ public class UpdateProfileUseCaseTest {
 
         when(profileGateway.findById(expectedProfileId))
                 .thenReturn(Optional.of(aProfile));
+
+        when(encrypterGateway.encrypt(any()))
+                .thenAnswer(returnsFirstArg());
 
         when(profileGateway.update(any()))
                 .thenAnswer(returnsFirstArg());

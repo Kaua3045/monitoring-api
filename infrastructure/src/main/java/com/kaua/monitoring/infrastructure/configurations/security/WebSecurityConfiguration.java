@@ -2,6 +2,7 @@ package com.kaua.monitoring.infrastructure.configurations.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kaua.monitoring.application.gateways.ProfileGateway;
+import com.kaua.monitoring.infrastructure.security.JwtAuthenticationFilter;
 import com.kaua.monitoring.infrastructure.utils.ApiError;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
@@ -26,16 +27,19 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import java.util.ArrayList;
 import java.util.Collections;
 
-@EnableWebSecurity
 @Configuration
-public class WebSecurityConfiguration implements WebMvcConfigurer {
+@EnableWebSecurity
+public class WebSecurityConfiguration {
 
-    private static final String ADMIN_ROLE = "admin";
+    private static String ADMIN_ROLE = "admin";
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final ProfileGateway profileGateway;
 
-    public WebSecurityConfiguration(JwtAuthenticationFilter jwtAuthenticationFilter, ProfileGateway profileGateway) {
+    public WebSecurityConfiguration(
+            final JwtAuthenticationFilter jwtAuthenticationFilter,
+            final ProfileGateway profileGateway
+    ) {
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
         this.profileGateway = profileGateway;
     }
@@ -65,12 +69,17 @@ public class WebSecurityConfiguration implements WebMvcConfigurer {
                 .build();
     }
 
-    @Override
-    public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**")
-                .allowedOrigins("*")
-                .allowedOriginPatterns("*")
-                .allowedMethods("*");
+    @Bean
+    public WebMvcConfigurer webMvcConfigurer() {
+        return new WebMvcConfigurer() {
+            @Override
+            public void addCorsMappings(CorsRegistry registry) {
+                registry.addMapping("/**")
+                        .allowedOrigins("*")
+                        .allowedOriginPatterns("*")
+                        .allowedMethods("*");
+            }
+        };
     }
 
     @Bean

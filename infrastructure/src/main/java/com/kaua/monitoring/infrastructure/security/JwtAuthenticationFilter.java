@@ -1,4 +1,4 @@
-package com.kaua.monitoring.infrastructure.configurations.security;
+package com.kaua.monitoring.infrastructure.security;
 
 import com.kaua.monitoring.application.gateways.JwtGateway;
 import com.kaua.monitoring.application.gateways.ProfileGateway;
@@ -23,7 +23,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtGateway jwtGateway;
     private final ProfileGateway profileGateway;
 
-    public JwtAuthenticationFilter(JwtGateway jwtGateway, ProfileGateway profileGateway) {
+    public JwtAuthenticationFilter(
+            final JwtGateway jwtGateway,
+            final ProfileGateway profileGateway
+    ) {
         this.jwtGateway = jwtGateway;
         this.profileGateway = profileGateway;
     }

@@ -18,7 +18,7 @@ public class ProfileController implements ProfileAPI {
 
     private final ProfileService profileService;
 
-    public ProfileController(ProfileService profileService) {
+    public ProfileController(final ProfileService profileService) {
         this.profileService = profileService;
     }
 

@@ -17,6 +17,8 @@ import com.kaua.monitoring.application.usecases.profile.update.UpdateProfileUseC
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.Objects;
+
 @Configuration
 public class ProfileUseCaseConfiguration {
 
@@ -31,10 +33,10 @@ public class ProfileUseCaseConfiguration {
             JwtGateway jwtGateway,
             EncrypterGateway encrypterGateway
     ) {
-        this.profileGateway = profileGateway;
-        this.avatarGateway = avatarGateway;
-        this.jwtGateway = jwtGateway;
-        this.encrypterGateway = encrypterGateway;
+        this.profileGateway = Objects.requireNonNull(profileGateway);
+        this.avatarGateway = Objects.requireNonNull(avatarGateway);
+        this.jwtGateway = Objects.requireNonNull(jwtGateway);
+        this.encrypterGateway = Objects.requireNonNull(encrypterGateway);
     }
 
     @Bean

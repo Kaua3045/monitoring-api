@@ -25,7 +25,6 @@ public class ProfileService {
     private final UpdateProfileUseCase updateProfileUseCase;
     private final DeleteProfileUseCase deleteProfileUseCase;
 
-
     public ProfileService(
             final CreateProfileUseCase createProfileUseCase,
             final GetProfileByUserIdUseCase getProfileByUserIdUseCase,

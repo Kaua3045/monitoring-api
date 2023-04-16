@@ -16,5 +16,3 @@ services:
       - JWT_TOKEN_EXPIRE=${JWT_TOKEN_EXPIRE}
     ports:
       - "8080:8080"
-    volumes:
-      - /home/ubuntu/dd-java-agent.jar:/opt/app

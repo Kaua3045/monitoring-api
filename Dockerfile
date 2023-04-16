@@ -2,7 +2,7 @@ FROM eclipse-temurin:19-jre-alpine
 
 WORKDIR /monitoring/api/
 
-COPY build/libs/*.jar ./
+COPY build/libs/*.jar /monitoring/api/
 
 EXPOSE 8080
 

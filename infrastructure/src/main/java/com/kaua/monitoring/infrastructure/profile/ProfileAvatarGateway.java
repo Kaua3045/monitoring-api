@@ -92,7 +92,7 @@ public class ProfileAvatarGateway implements AvatarGateway {
                 avatarAlreadyExists.contents().forEach(image -> deleteAvatar(image.key()));
             }
         } catch (Throwable t) {
-            throw new RuntimeException(t.getMessage());
+            throw new RuntimeException(t);
         }
     }
 }

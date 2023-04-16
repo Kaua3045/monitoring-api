@@ -1,11 +1,18 @@
 version: '3.7'
 
 services:
-  postgres:
-    container_name: monitoring_postgres
-    image: postgres:latest
+  monitoring_api:
+    container_name: monitoring-api
+    build: .
+    env_file:
+      - .env
     environment:
-      - POSTGRES_DB=monitoring
-      - POSTGRES_PASSWORD=123456
+      - SPRING_PROFILES_ACTIVE=${SPRING_PROFILE_ACTIVE}
+      - PG_URL=${PG_URL}
+      - PG_DATABASE=${PG_DATABASE}
+      - PG_USER=${PG_USER}
+      - PG_PASSWORD=${PG_PASSWORD}
+      - JWT_TOKEN_SECRET=${JWT_TOKEN_SECRET}
+      - JWT_TOKEN_EXPIRE=${JWT_TOKEN_EXPIRE}
     ports:
-      - "5432:5432"
+      - "8080:8080"

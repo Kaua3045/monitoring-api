@@ -12,6 +12,11 @@ repositories {
     mavenCentral()
 }
 
+bootJar {
+    archiveFileName = 'application.jar'
+    destinationDirectory.set(file("${rootProject.buildDir}/libs"))
+}
+
 dependencies {
     implementation(project(':domain'))
     implementation(project(':application'))

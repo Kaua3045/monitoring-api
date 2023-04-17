@@ -1,7 +1,7 @@
 name: Monitoring Api
 on:
   push:
-    branches: [feature/deploy]
+    branches: [main]
 
 jobs:
   build:

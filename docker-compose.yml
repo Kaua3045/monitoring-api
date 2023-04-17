@@ -1,7 +1,7 @@
 version: '3.7'
 
 services:
-  monitoring_api:
+  monitoring-api:
     container_name: monitoring-api
     build: .
     ports:

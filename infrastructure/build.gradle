@@ -55,10 +55,3 @@ dependencies {
 test {
     useJUnitPlatform()
 }
-
-flyway {
-    url = System.getenv('FLYWAY_DB') ?: 'jdbc:postgresql://localhost:5432/monitoring'
-    user = System.getenv('FLYWAY_USER') ?: 'postgres'
-    password = System.getenv('FLYWAY_PASS') ?: '123456'
-    cleanDisabled = false
-}

@@ -104,7 +104,7 @@ public class LinkService {
         final var aExecuteDate = body.executeDate() == null || body.executeDate().isBlank()
                 ? null
                 : LocalDateTime.parse(body.executeDate())
-                .atZone(ZoneId.systemDefault())
+                .atZone(ZoneId.of("America/Sao_Paulo"))
                 .withZoneSameInstant(ZoneId.of("UTC"))
                 .toInstant();
 

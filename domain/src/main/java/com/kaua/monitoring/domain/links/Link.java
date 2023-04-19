@@ -9,6 +9,7 @@ import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -83,10 +84,7 @@ public class Link extends Aggregate<LinkID> {
             errors.add(new Error("'executeDate' should not be null"));
         }
 
-        System.out.println(executeDate);
-        System.out.println(Instant.now());
-
-        if (executeDate != null && executeDate.isBefore(Instant.now())) {
+        if (executeDate != null && executeDate.isBefore(Instant.now().minus(3, ChronoUnit.HOURS).truncatedTo(ChronoUnit.MICROS))) {
             errors.add(new Error("'executeDate' cannot be a date that has already passed"));
         }
 

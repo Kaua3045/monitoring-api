@@ -61,7 +61,6 @@ public class LinkService {
         final var aZonedDateTime = aLocalDateTime.atZone(ZoneId.systemDefault())
                 .withZoneSameInstant(ZoneId.of("UTC"));
 
-        System.out.println(aZonedDateTime);
 
         final var aCommand = new CreateLinkCommand(
                 body.title(),

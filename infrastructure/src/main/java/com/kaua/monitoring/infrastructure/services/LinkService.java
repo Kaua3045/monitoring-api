@@ -58,7 +58,7 @@ public class LinkService {
         }
 
         final var aLocalDateTime = LocalDateTime.parse(body.executeDate());
-        final var aZonedDateTime = aLocalDateTime.atZone(ZoneId.systemDefault())
+        final var aZonedDateTime = aLocalDateTime.atZone(ZoneId.of("America/Sao_Paulo"))
                 .withZoneSameInstant(ZoneId.of("UTC"));
 
 

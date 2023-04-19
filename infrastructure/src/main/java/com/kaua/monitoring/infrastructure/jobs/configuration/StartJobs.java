@@ -38,7 +38,7 @@ public class StartJobs {
     @Autowired
     private EveryDayJobReader everyDayJobReader;
 
-    @PostConstruct
+//    @PostConstruct
     public void fetchUrlJobExecution() {
         taskScheduler.scheduleWithFixedDelay(
                 new RunnableJob(

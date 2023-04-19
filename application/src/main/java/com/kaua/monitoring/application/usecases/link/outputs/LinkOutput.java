@@ -20,7 +20,7 @@ public record LinkOutput(
         final var aConvertToZoneId = LocalDateTime
                 .ofInstant(
                         aLink.getExecuteDate(),
-                        ZoneId.of("America/Sao_Paulo")
+                        ZoneId.systemDefault()
                 );
 
         System.out.println(aConvertToZoneId);

@@ -16,14 +16,11 @@ public record LinkOutput(
 ) {
 
     public static LinkOutput from(final Link aLink) {
-        System.out.println(aLink.getExecuteDate());
         final var aConvertToZoneId = LocalDateTime
                 .ofInstant(
                         aLink.getExecuteDate(),
                         ZoneId.systemDefault()
                 );
-
-        System.out.println(aConvertToZoneId);
 
         final var aFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
         final var aExecuteDateFormatted = aFormatter.format(aConvertToZoneId);

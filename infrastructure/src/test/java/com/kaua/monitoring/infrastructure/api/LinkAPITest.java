@@ -171,7 +171,7 @@ public class LinkAPITest {
         final var expectedId = aLink.getId().getValue();
 
         final var convertToLocalDateTime = LocalDateTime
-                .ofInstant(expectedExecuteDate, ZoneId.systemDefault());
+                .ofInstant(expectedExecuteDate, ZoneId.of("America/Sao_Paulo"));
         final var expectedFormattedExecuteDate = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")
                 .format(convertToLocalDateTime);
 
@@ -241,7 +241,7 @@ public class LinkAPITest {
         final var expectedProfileId = aProfile.getId().getValue();
 
         final var convertToLocalDateTime = LocalDateTime
-                .ofInstant(aLink.getExecuteDate(), ZoneId.systemDefault());
+                .ofInstant(aLink.getExecuteDate(), ZoneId.of("America/Sao_Paulo"));
         final var expectedFormattedExecuteDate = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")
                 .format(convertToLocalDateTime);
 

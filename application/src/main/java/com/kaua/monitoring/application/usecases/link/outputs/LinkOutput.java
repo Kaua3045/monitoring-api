@@ -19,7 +19,7 @@ public record LinkOutput(
         final var aConvertToZoneId = LocalDateTime
                 .ofInstant(
                         aLink.getExecuteDate(),
-                        ZoneId.of("America/Sao_Paulo")
+                        ZoneId.systemDefault()
                 );
 
         final var aFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");

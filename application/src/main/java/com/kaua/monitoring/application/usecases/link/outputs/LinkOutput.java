@@ -16,14 +16,8 @@ public record LinkOutput(
 ) {
 
     public static LinkOutput from(final Link aLink) {
-        final var aConvertToZoneId = LocalDateTime
-                .ofInstant(
-                        aLink.getExecuteDate(),
-                        ZoneId.of("America/Sao_Paulo")
-                );
-
         final var aFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
-        final var aExecuteDateFormatted = aFormatter.format(aConvertToZoneId);
+        final var aExecuteDateFormatted = aFormatter.format(aLink.getExecuteDate());
 
         return new LinkOutput(
                 aLink.getId().getValue(),

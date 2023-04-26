@@ -44,6 +44,7 @@ public class LinkResponseAPITest {
                 "teste",
                 "https://teste.com",
                 Instant.now().plus(5, ChronoUnit.DAYS),
+                Instant.now().plus(5, ChronoUnit.DAYS),
                 LinkExecutions.EVERY_DAYS,
                 Profile.newProfile(
                         "123",

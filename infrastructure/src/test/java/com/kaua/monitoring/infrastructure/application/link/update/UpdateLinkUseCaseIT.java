@@ -52,6 +52,7 @@ public class UpdateLinkUseCaseIT {
                 "t",
                 "https://local.com",
                 Instant.now().plus(5, ChronoUnit.DAYS),
+                Instant.now().plus(5, ChronoUnit.DAYS),
                 LinkExecutions.NO_REPEAT,
                 aProfile
         );
@@ -107,6 +108,7 @@ public class UpdateLinkUseCaseIT {
         final var aLink = Link.newLink(
                 "t",
                 "https://local.com",
+                Instant.now().plus(5, ChronoUnit.DAYS),
                 Instant.now().plus(5, ChronoUnit.DAYS),
                 LinkExecutions.NO_REPEAT,
                 aProfile

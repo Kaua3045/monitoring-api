@@ -18,6 +18,7 @@ public class LinkTest {
         final var expectedTitle = "monitoring";
         final var expectedUrl = "https://teste.com";
         final var expectedExecuteDate = Instant.now().plus(5, ChronoUnit.DAYS);
+        final var expectedNextExecuteDate = Instant.now().plus(5, ChronoUnit.DAYS);
         final var expectedRepeat = LinkExecutions.NO_REPEAT;
         final var expectedProfile = Profile.
                 newProfile(
@@ -30,6 +31,7 @@ public class LinkTest {
                 expectedTitle,
                 expectedUrl,
                 expectedExecuteDate,
+                expectedNextExecuteDate,
                 expectedRepeat,
                 expectedProfile
         );
@@ -47,6 +49,7 @@ public class LinkTest {
         final var expectedTitle = "monitoring";
         final var expectedUrl = "https://teste.com";
         final var expectedExecuteDate = Instant.now().plus(5, ChronoUnit.DAYS);
+        final var expectedNextExecuteDate = Instant.now().plus(5, ChronoUnit.DAYS);
         final var expectedRepeat = LinkExecutions.TWO_TIMES_A_MONTH;
         final var expectedProfile = Profile.
                 newProfile(
@@ -58,7 +61,8 @@ public class LinkTest {
         final var aLink = Link.newLink(
                 "a",
                 "https://localhost.com",
-                Instant.now().plus(5, ChronoUnit.DAYS),
+                Instant.now().plus(4, ChronoUnit.DAYS),
+                Instant.now().plus(4, ChronoUnit.DAYS),
                 LinkExecutions.NO_REPEAT,
                 expectedProfile
         );
@@ -67,6 +71,7 @@ public class LinkTest {
                 expectedTitle,
                 expectedUrl,
                 expectedExecuteDate,
+                expectedNextExecuteDate,
                 expectedRepeat
         );
 
@@ -85,6 +90,7 @@ public class LinkTest {
         final String expectedTitle = null;
         final var expectedUrl = "a";
         final var expectedExecuteDate = Instant.parse("2007-12-03T10:15:30.00Z");
+        final var expectedNextExecuteDate = Instant.parse("2007-12-03T10:15:30.00Z");
         final LinkExecutions expectedRepeat = null;
         final Profile expectedProfile = null;
 
@@ -100,6 +106,7 @@ public class LinkTest {
                 expectedTitle,
                 expectedUrl,
                 expectedExecuteDate,
+                expectedNextExecuteDate,
                 expectedRepeat,
                 expectedProfile
         );
@@ -114,6 +121,7 @@ public class LinkTest {
         final var expectedTitle = "a";
         final var expectedUrl = "https://www.google.com";
         final Instant expectedExecuteDate = null;
+        final Instant expectedNextExecuteDate = null;
         final var expectedRepeat = LinkExecutions.EVERY_DAYS;
         final var expectedProfile = Profile.
                 newProfile(
@@ -128,6 +136,7 @@ public class LinkTest {
                 expectedTitle,
                 expectedUrl,
                 expectedExecuteDate,
+                expectedNextExecuteDate,
                 expectedRepeat,
                 expectedProfile
         );

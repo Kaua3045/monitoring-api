@@ -33,6 +33,7 @@ public class GetLinkByIdUseCaseTest {
         final var expectedTitle = "teste";
         final var expectedUrl = "https://localhost.com";
         final var expectedExecuteDate = Instant.now().plus(5, ChronoUnit.DAYS);
+        final var expectedNextExecuteDate = Instant.now().plus(5, ChronoUnit.DAYS);
         final var expectedRepeat = LinkExecutions.NO_REPEAT;
         final var expectedProfile = Profile
                 .newProfile(
@@ -46,6 +47,7 @@ public class GetLinkByIdUseCaseTest {
                 expectedTitle,
                 expectedUrl,
                 expectedExecuteDate,
+                expectedNextExecuteDate,
                 expectedRepeat,
                 expectedProfile
         );

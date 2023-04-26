@@ -14,6 +14,7 @@ public final class LinkJpaFactory {
                 aLink.getTitle(),
                 aLink.getUrl(),
                 aLink.getExecuteDate(),
+                aLink.getNextExecuteDate(),
                 aLink.getLinkExecution(),
                 ProfileJpaFactory.toEntity(aLink.getProfile())
         );
@@ -25,6 +26,7 @@ public final class LinkJpaFactory {
                 aLinkEntity.getTitle(),
                 aLinkEntity.getUrl(),
                 aLinkEntity.getExecuteDate(),
+                aLinkEntity.getNextExecuteDate(),
                 aLinkEntity.getLinkExecution(),
                 ProfileJpaFactory.toDomain(aLinkEntity.getProfile())
         );

@@ -38,6 +38,9 @@ dependencies {
     implementation platform('software.amazon.awssdk:bom:2.20.25')
     implementation 'software.amazon.awssdk:s3'
 
+    implementation 'com.bucket4j:bucket4j-core:8.3.0'
+
+
     runtimeOnly 'org.postgresql:postgresql'
 
     compileOnly 'org.projectlombok:lombok:1.18.24'

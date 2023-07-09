@@ -1,0 +1,1 @@
+- [ ] Adicionar testes para as partes que ainda não tem

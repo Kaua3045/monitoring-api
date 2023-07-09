@@ -1,0 +1,15 @@
+spring:
+  jwt:
+    secret: 50645367566B5970337336763979244226452948404D6251655468576D5A7134
+    expire: 1
+  flyway:
+    locations: classpath:db/tests/migrations
+  datasource:
+    driver-class-name: org.h2.Driver
+    username: root
+    password: 123456
+    url: jdbc:h2:mem:monitoring_test;MODE=MYSQL;DATABASE_TO_LOWER=TRUE
+    jpa:
+      console:
+        enabled: true
+        path: /h2

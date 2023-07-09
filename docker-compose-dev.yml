@@ -1,0 +1,11 @@
+version: '3.7'
+
+services:
+  postgres:
+    container_name: monitoring_postgres
+    image: postgres:latest
+    environment:
+      - POSTGRES_DB=monitoring
+      - POSTGRES_PASSWORD=123456
+    ports:
+      - "5432:5432"

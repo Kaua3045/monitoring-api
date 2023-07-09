@@ -3,15 +3,20 @@ plugins {
 }
 
 group 'com.kaua.monitoring.application'
-version '0.0.1-SNAPSHOT'
+version '0.6.0'
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
+    implementation(project(":domain"))
+    compileOnly 'org.projectlombok:lombok:1.18.24'
+    annotationProcessor 'org.projectlombok:lombok:1.18.24'
+
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+    testImplementation 'org.mockito:mockito-junit-jupiter:4.8.1'
 }
 
 test {

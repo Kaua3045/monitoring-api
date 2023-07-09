@@ -1,0 +1,9 @@
+postgres:
+  url: localhost:5432
+  schema: monitoring
+  username: postgres
+  password: 123456
+
+jwt:
+  token: 50645367566B5970337336763979244226452948404D6251655468576D5A7134
+  expire: 1

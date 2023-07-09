@@ -1,0 +1,14 @@
+version: '3.7'
+
+services:
+  monitoring-api:
+    container_name: monitoring-api
+    build: .
+    ports:
+      - "8080:8080"
+    logging:
+      driver: "awslogs"
+      options:
+        awslogs-region: "sa-east-1"
+        awslogs-group: "monitoring-api"
+        awslogs-stream-prefix: "api-java"

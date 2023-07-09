@@ -1,0 +1,1 @@
+ALTER TABLE links_responses DROP COLUMN request_time;

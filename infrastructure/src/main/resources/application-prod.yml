@@ -1,0 +1,9 @@
+postgres:
+  url: ${PG_URL}
+  schema: ${PG_DATABASE}
+  username: ${PG_USER}
+  password: ${PG_PASSWORD}
+
+jwt:
+  token: ${JWT_TOKEN_SECRET}
+  expire: ${JWT_TOKEN_EXPIRE}

@@ -50,6 +50,7 @@ public class UpdateLinkUseCaseTest {
                 "a",
                 "https://localhost.com",
                 Instant.now().plus(5, ChronoUnit.DAYS),
+                Instant.now().plus(5, ChronoUnit.DAYS),
                 LinkExecutions.TWO_TIMES_A_MONTH,
                 expectedProfile
         );
@@ -104,6 +105,7 @@ public class UpdateLinkUseCaseTest {
         final var aLink = Link.newLink(
                 "a",
                 "https://localhost.com",
+                Instant.now().plus(5, ChronoUnit.DAYS),
                 Instant.now().plus(5, ChronoUnit.DAYS),
                 LinkExecutions.NO_REPEAT,
                 expectedProfile

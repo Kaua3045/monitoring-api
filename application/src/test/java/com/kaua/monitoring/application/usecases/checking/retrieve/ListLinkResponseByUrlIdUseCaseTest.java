@@ -48,6 +48,7 @@ public class ListLinkResponseByUrlIdUseCaseTest {
                 "local",
                 "https://localhost.com",
                 Instant.now().plus(5, ChronoUnit.DAYS),
+                Instant.now().plus(5, ChronoUnit.DAYS),
                 LinkExecutions.NO_REPEAT,
                 expectedProfile
         );
@@ -102,6 +103,7 @@ public class ListLinkResponseByUrlIdUseCaseTest {
         final var expectedLink = Link.newLink(
                 "local",
                 "https://localhost.com",
+                Instant.now().plus(5, ChronoUnit.DAYS),
                 Instant.now().plus(5, ChronoUnit.DAYS),
                 LinkExecutions.NO_REPEAT,
                 expectedProfile

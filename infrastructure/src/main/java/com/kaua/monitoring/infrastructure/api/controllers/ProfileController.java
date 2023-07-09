@@ -6,27 +6,40 @@ import com.kaua.monitoring.infrastructure.exceptions.ImageSizeNotValidException;
 import com.kaua.monitoring.infrastructure.exceptions.ImageTypeNotValidException;
 import com.kaua.monitoring.infrastructure.profile.inputs.CreateProfileBody;
 import com.kaua.monitoring.infrastructure.services.ProfileService;
+import io.github.bucket4j.Bandwidth;
+import io.github.bucket4j.Bucket;
+import io.github.bucket4j.Refill;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.Duration;
 import java.util.List;
 
 @RestController
 public class ProfileController implements ProfileAPI {
 
     private final ProfileService profileService;
+    private Bucket bucket;
 
     public ProfileController(final ProfileService profileService) {
         this.profileService = profileService;
+        Bandwidth limit = Bandwidth.classic(15, Refill.greedy(15, Duration.ofMinutes(1)));
+        this.bucket = Bucket.builder()
+                .addLimit(limit)
+                .build();
     }
 
     @Override
     public ResponseEntity<?> create(CreateProfileBody body) {
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(this.profileService.createProfile(body));
+        if (bucket.tryConsume(1)) {
+            return ResponseEntity
+                    .status(HttpStatus.CREATED)
+                    .body(this.profileService.createProfile(body));
+        }
+
+        return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).build();
     }
 
     @Override
@@ -53,9 +66,13 @@ public class ProfileController implements ProfileAPI {
             MultipartFile avatarFile,
             String type
     ) {
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(this.profileService.updateProfile(profileId, username, password, resourceOf(avatarFile), type));
+        if (bucket.tryConsume(1)) {
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(this.profileService.updateProfile(profileId, username, password, resourceOf(avatarFile), type));
+        }
+
+        return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).build();
     }
 
     @Override

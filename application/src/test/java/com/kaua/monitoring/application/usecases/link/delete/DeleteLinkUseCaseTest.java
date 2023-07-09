@@ -32,6 +32,7 @@ public class DeleteLinkUseCaseTest {
                 "teste",
                 "https://localhost.com",
                 Instant.now().plus(5, ChronoUnit.DAYS),
+                Instant.now().plus(5, ChronoUnit.DAYS),
                 LinkExecutions.NO_REPEAT,
                 Profile.newProfile(
                         "123",

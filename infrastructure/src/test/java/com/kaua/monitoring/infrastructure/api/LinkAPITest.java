@@ -151,6 +151,7 @@ public class LinkAPITest {
         final var expectedTitle = "Teste";
         final var expectedUrl = "https://teste.com";
         final var expectedExecuteDate = Instant.now().plus(5, ChronoUnit.DAYS);
+        final var expectedNextExecuteDate = Instant.now().plus(5, ChronoUnit.DAYS);
         final var expectedLinkExecution = LinkExecutions.EVERY_DAYS;
         final var expectedProfileId = Profile
                 .newProfile(
@@ -164,6 +165,7 @@ public class LinkAPITest {
                 expectedTitle,
                 expectedUrl,
                 expectedExecuteDate,
+                expectedNextExecuteDate,
                 expectedLinkExecution,
                 expectedProfileId
         );
@@ -233,6 +235,7 @@ public class LinkAPITest {
         final var aLink = Link.newLink(
                 "Teste",
                 "https://teste.com",
+                Instant.now().plus(5, ChronoUnit.DAYS),
                 Instant.now().plus(5, ChronoUnit.DAYS),
                 LinkExecutions.EVERY_DAYS,
                 aProfile

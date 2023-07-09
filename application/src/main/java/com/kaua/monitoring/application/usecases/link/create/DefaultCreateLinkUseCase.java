@@ -28,10 +28,13 @@ public class DefaultCreateLinkUseCase extends CreateLinkUseCase {
         final var profileExists = this.profileGateway.findById(aCommand.profileId())
                 .orElseThrow(() -> new NotFoundException(Profile.class, aCommand.profileId()));
 
+        final var aNextExecuteDate = aCommand.executeDate();
+
         final var aLink = Link.newLink(
                 aCommand.title(),
                 aCommand.url(),
                 aCommand.executeDate(),
+                aNextExecuteDate,
                 LinkExecutions.valueOf(aCommand.linkExecution()),
                 profileExists
         );

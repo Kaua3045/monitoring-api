@@ -49,12 +49,14 @@ public class ListLinkByProfileIdUseCaseTest {
                         "local",
                         "https://localhost.com",
                         Instant.now().plus(5, ChronoUnit.DAYS),
+                        Instant.now().plus(5, ChronoUnit.DAYS),
                         LinkExecutions.NO_REPEAT,
                         expectedProfile
                 ),
                 Link.newLink(
                         "teste 2",
                         "https://localhost.com",
+                        Instant.now().plus(5, ChronoUnit.DAYS),
                         Instant.now().plus(5, ChronoUnit.DAYS),
                         LinkExecutions.TWO_TIMES_A_MONTH,
                         expectedProfile

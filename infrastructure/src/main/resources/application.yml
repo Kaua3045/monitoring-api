@@ -5,8 +5,8 @@ server:
 
 spring:
   jwt:
-    secret: 50645367566B5970337336763979244226452948404D6251655468576D5A7134
-    expire: 1
+    secret: ${jwt.token}
+    expire: ${jwt.expire}
   batch:
     jdbc:
       initialize-schema: always

@@ -1,11 +1,14 @@
 version: '3.7'
 
 services:
-  postgres:
-    container_name: monitoring_postgres
-    image: postgres:latest
-    environment:
-      - POSTGRES_DB=monitoring
-      - POSTGRES_PASSWORD=123456
+  monitoring-api:
+    container_name: monitoring-api
+    build: .
     ports:
-      - "5432:5432"
+      - "8080:8080"
+    logging:
+      driver: "awslogs"
+      options:
+        awslogs-region: "sa-east-1"
+        awslogs-group: "monitoring-api"
+        awslogs-stream-prefix: "api-java"

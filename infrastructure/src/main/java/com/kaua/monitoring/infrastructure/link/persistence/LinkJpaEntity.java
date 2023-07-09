@@ -25,6 +25,9 @@ public class LinkJpaEntity implements Serializable {
     @Column(name = "execute_date", nullable = false)
     private Instant executeDate;
 
+    @Column(name = "next_execute_date")
+    private Instant nextExecuteDate;
+
     @Enumerated(EnumType.STRING)
     private LinkExecutions linkExecution;
 
@@ -39,6 +42,7 @@ public class LinkJpaEntity implements Serializable {
             final String title,
             final String url,
             final Instant executeDate,
+            final Instant nextExecuteDate,
             final LinkExecutions linkExecution,
             final ProfileJpaEntity profile
     ) {
@@ -46,6 +50,7 @@ public class LinkJpaEntity implements Serializable {
         this.title = title;
         this.url = url;
         this.executeDate = executeDate;
+        this.nextExecuteDate = nextExecuteDate;
         this.linkExecution = linkExecution;
         this.profile = profile;
     }

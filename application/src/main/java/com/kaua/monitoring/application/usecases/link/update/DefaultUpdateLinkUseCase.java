@@ -37,10 +37,13 @@ public class DefaultUpdateLinkUseCase extends UpdateLinkUseCase {
                 ? linkExists.getLinkExecution()
                 : LinkExecutions.valueOf(aCommand.linkExecution());
 
+        final var aNextExecuteDate = aCommand.executeDate();
+
         final var aLinkUpdated = linkExists.update(
                 aTitle,
                 aUrl,
                 aExecuteDate,
+                aNextExecuteDate,
                 aLinkExecution
         );
 

@@ -9,6 +9,7 @@ import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,6 +19,7 @@ public class Link extends Aggregate<LinkID> {
     private String title;
     private String url;
     private Instant executeDate;
+    private Instant nextExecuteDate;
     private LinkExecutions linkExecution;
     private Profile profile;
 
@@ -26,6 +28,7 @@ public class Link extends Aggregate<LinkID> {
             final String aTitle,
             final String aUrl,
             final Instant aExecuteDate,
+            final Instant aNextExecuteDate,
             final LinkExecutions aLinkExecution,
             final Profile aProfile
     ) {
@@ -33,6 +36,7 @@ public class Link extends Aggregate<LinkID> {
         this.title = aTitle;
         this.url = aUrl;
         this.executeDate = aExecuteDate;
+        this.nextExecuteDate = aNextExecuteDate;
         this.linkExecution = aLinkExecution;
         this.profile = aProfile;
     }
@@ -41,6 +45,7 @@ public class Link extends Aggregate<LinkID> {
             final String aTitle,
             final String aUrl,
             final Instant aExecuteDate,
+            final Instant aNextExecuteDate,
             final LinkExecutions aLinkExecution,
             final Profile aProfile
     ) {
@@ -49,6 +54,7 @@ public class Link extends Aggregate<LinkID> {
                 aTitle,
                 aUrl,
                 aExecuteDate,
+                aNextExecuteDate,
                 aLinkExecution,
                 aProfile
         );
@@ -58,11 +64,13 @@ public class Link extends Aggregate<LinkID> {
             final String aTitle,
             final String aUrl,
             final Instant aExecuteDate,
+            final Instant aNextExecuteDate,
             final LinkExecutions aLinkExecution
     ) {
         this.title = aTitle;
         this.url = aUrl;
         this.executeDate = aExecuteDate;
+        this.nextExecuteDate = aNextExecuteDate;
         this.linkExecution = aLinkExecution;
         return this;
     }
@@ -83,7 +91,7 @@ public class Link extends Aggregate<LinkID> {
             errors.add(new Error("'executeDate' should not be null"));
         }
 
-        if (executeDate != null && executeDate.isBefore(Instant.now())) {
+        if (executeDate != null && executeDate.isBefore(Instant.now().minus(3, ChronoUnit.HOURS).truncatedTo(ChronoUnit.MICROS))) {
             errors.add(new Error("'executeDate' cannot be a date that has already passed"));
         }
 

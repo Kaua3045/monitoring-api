@@ -57,8 +57,10 @@ public class LinkService {
             throw new DomainException(List.of(new Error("'linkExecution' should not be null")));
         }
 
+
         final var aLocalDateTime = LocalDateTime.parse(body.executeDate());
-        final var aZonedDateTime = aLocalDateTime.atZone(ZoneId.systemDefault())
+
+        final var aZonedDateTime = aLocalDateTime.atZone(ZoneId.of("America/Sao_Paulo"))
                 .withZoneSameInstant(ZoneId.of("UTC"));
 
         final var aCommand = new CreateLinkCommand(
@@ -102,7 +104,7 @@ public class LinkService {
         final var aExecuteDate = body.executeDate() == null || body.executeDate().isBlank()
                 ? null
                 : LocalDateTime.parse(body.executeDate())
-                .atZone(ZoneId.systemDefault())
+                .atZone(ZoneId.of("America/Sao_Paulo"))
                 .withZoneSameInstant(ZoneId.of("UTC"))
                 .toInstant();
 

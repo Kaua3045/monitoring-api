@@ -20,6 +20,7 @@ public class LinkResponseTest {
                 "teste",
                 "https://teste.com",
                 Instant.now().plus(5, ChronoUnit.DAYS),
+                Instant.now().plus(5, ChronoUnit.DAYS),
                 LinkExecutions.NO_REPEAT,
                 Profile.newProfile(
                         "123",

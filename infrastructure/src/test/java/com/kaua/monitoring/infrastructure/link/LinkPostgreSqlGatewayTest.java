@@ -45,6 +45,7 @@ public class LinkPostgreSqlGatewayTest {
         final var expectedTitle = "teste";
         final var expectedUrl = "https://localhost.com";
         final var expectedExecuteDate = Instant.now().plus(5, ChronoUnit.DAYS);
+        final var expectedNextExecuteDate = Instant.now().plus(5, ChronoUnit.DAYS);
 
         final var expectedRepeat = LinkExecutions.NO_REPEAT;
 
@@ -52,6 +53,7 @@ public class LinkPostgreSqlGatewayTest {
                 expectedTitle,
                 expectedUrl,
                 expectedExecuteDate,
+                expectedNextExecuteDate,
                 expectedRepeat,
                 expectedProfile
         );
@@ -93,6 +95,7 @@ public class LinkPostgreSqlGatewayTest {
         final var expectedTitle = "teste";
         final var expectedUrl = "https://localhost.com";
         final var expectedExecuteDate = Instant.now().plus(5, ChronoUnit.DAYS);
+        final var expectedNextExecuteDate = Instant.now().plus(5, ChronoUnit.DAYS);
 
         final var expectedRepeat = LinkExecutions.ON_SPECIFIC_DAY;
 
@@ -100,6 +103,7 @@ public class LinkPostgreSqlGatewayTest {
                 expectedTitle,
                 expectedUrl,
                 expectedExecuteDate,
+                expectedNextExecuteDate,
                 expectedRepeat,
                 expectedProfile
         );
@@ -134,6 +138,7 @@ public class LinkPostgreSqlGatewayTest {
         final var expectedTitle = "teste";
         final var expectedUrl = "https://localhost.com";
         final var expectedExecuteDate = Instant.now().plus(5, ChronoUnit.DAYS);
+        final var expectedNextExecuteDate = Instant.now().plus(5, ChronoUnit.DAYS);
 
         final var expectedRepeat = LinkExecutions.TWO_TIMES_A_MONTH;
 
@@ -141,6 +146,7 @@ public class LinkPostgreSqlGatewayTest {
                 expectedTitle,
                 expectedUrl,
                 expectedExecuteDate,
+                expectedNextExecuteDate,
                 expectedRepeat,
                 expectedProfile
         );
@@ -247,12 +253,14 @@ public class LinkPostgreSqlGatewayTest {
         final var expectedTitle = "teste";
         final var expectedUrl = "https://localhost.com";
         final var expectedExecuteDate = Instant.now().plus(5, ChronoUnit.DAYS);
+        final var expectedNextExecuteDate = Instant.now().plus(5, ChronoUnit.DAYS);
 
         final var expectedRepeat = LinkExecutions.TWO_TIMES_A_MONTH;
 
         final var aLink = Link.newLink(
                 "pequeno",
                 "https://pequeno.com",
+                Instant.now().plus(1, ChronoUnit.DAYS),
                 Instant.now().plus(1, ChronoUnit.DAYS),
                 LinkExecutions.NO_REPEAT,
                 expectedProfile
@@ -268,6 +276,7 @@ public class LinkPostgreSqlGatewayTest {
                 expectedTitle,
                 expectedUrl,
                 expectedExecuteDate,
+                expectedNextExecuteDate,
                 expectedRepeat
         );
 
@@ -298,12 +307,14 @@ public class LinkPostgreSqlGatewayTest {
                         "Encurtador",
                         "https://curto.io",
                         Instant.now().plus(5, ChronoUnit.HOURS),
+                        null,
                         LinkExecutions.NO_REPEAT,
                         aProfile
                 )),
                 LinkJpaFactory.toEntity(Link.newLink(
                         "Teste",
                         "https://teste.com",
+                        Instant.now().plus(5, ChronoUnit.HOURS),
                         Instant.now().plus(5, ChronoUnit.HOURS),
                         LinkExecutions.ON_SPECIFIC_DAY,
                         aProfile
@@ -312,12 +323,14 @@ public class LinkPostgreSqlGatewayTest {
                         "Local",
                         "https://localhost.com",
                         Instant.now().plus(5, ChronoUnit.HOURS),
+                        Instant.now().plus(5, ChronoUnit.HOURS),
                         LinkExecutions.ON_SPECIFIC_DAY,
                         aProfile
                 )),
                 LinkJpaFactory.toEntity(Link.newLink(
                         "Famoso",
                         "https://famoso.com",
+                        Instant.now().plus(5, ChronoUnit.HOURS),
                         Instant.now().plus(5, ChronoUnit.HOURS),
                         LinkExecutions.ON_SPECIFIC_DAY,
                         aProfile

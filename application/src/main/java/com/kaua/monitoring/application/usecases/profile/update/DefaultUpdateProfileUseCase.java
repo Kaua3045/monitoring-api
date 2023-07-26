@@ -2,7 +2,7 @@ package com.kaua.monitoring.application.usecases.profile.update;
 
 import com.kaua.monitoring.application.exceptions.DomainException;
 import com.kaua.monitoring.application.exceptions.NotFoundException;
-import com.kaua.monitoring.application.exceptions.either.Either;
+import com.kaua.monitoring.application.either.Either;
 import com.kaua.monitoring.application.gateways.AvatarGateway;
 import com.kaua.monitoring.application.gateways.EncrypterGateway;
 import com.kaua.monitoring.application.gateways.ProfileGateway;

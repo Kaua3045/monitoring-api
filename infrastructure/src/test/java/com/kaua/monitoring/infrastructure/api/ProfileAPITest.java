@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kaua.monitoring.application.exceptions.DomainException;
 import com.kaua.monitoring.application.exceptions.EmailAlreadyExistsException;
 import com.kaua.monitoring.application.exceptions.NotFoundException;
-import com.kaua.monitoring.application.exceptions.either.Either;
+import com.kaua.monitoring.application.either.Either;
 import com.kaua.monitoring.application.usecases.profile.create.CreateProfileUseCase;
 import com.kaua.monitoring.application.usecases.profile.delete.DeleteProfileCommand;
 import com.kaua.monitoring.application.usecases.profile.delete.DeleteProfileUseCase;

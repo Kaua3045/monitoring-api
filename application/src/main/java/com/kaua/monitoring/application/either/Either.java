@@ -1,4 +1,4 @@
-package com.kaua.monitoring.application.exceptions.either;
+package com.kaua.monitoring.application.either;
 
 import java.util.NoSuchElementException;
 

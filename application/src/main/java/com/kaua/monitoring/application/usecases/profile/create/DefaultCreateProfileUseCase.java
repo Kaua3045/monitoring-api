@@ -2,7 +2,7 @@ package com.kaua.monitoring.application.usecases.profile.create;
 
 import com.kaua.monitoring.application.exceptions.DomainException;
 import com.kaua.monitoring.application.exceptions.EmailAlreadyExistsException;
-import com.kaua.monitoring.application.exceptions.either.Either;
+import com.kaua.monitoring.application.either.Either;
 import com.kaua.monitoring.application.gateways.EncrypterGateway;
 import com.kaua.monitoring.application.gateways.JwtGateway;
 import com.kaua.monitoring.application.gateways.ProfileGateway;

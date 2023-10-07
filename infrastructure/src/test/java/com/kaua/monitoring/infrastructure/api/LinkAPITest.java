@@ -3,7 +3,7 @@ package com.kaua.monitoring.infrastructure.api;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kaua.monitoring.application.exceptions.DomainException;
 import com.kaua.monitoring.application.exceptions.NotFoundException;
-import com.kaua.monitoring.application.exceptions.either.Either;
+import com.kaua.monitoring.application.either.Either;
 import com.kaua.monitoring.application.usecases.link.create.CreateLinkUseCase;
 import com.kaua.monitoring.application.usecases.link.delete.DeleteLinkUseCase;
 import com.kaua.monitoring.application.usecases.link.outputs.CreateLinkOutput;

@@ -1,7 +1,7 @@
 package com.kaua.monitoring.application.usecases.security;
 
 import com.kaua.monitoring.application.exceptions.NotFoundException;
-import com.kaua.monitoring.application.exceptions.either.Either;
+import com.kaua.monitoring.application.either.Either;
 import com.kaua.monitoring.application.gateways.EncrypterGateway;
 import com.kaua.monitoring.application.gateways.JwtGateway;
 import com.kaua.monitoring.application.gateways.ProfileGateway;

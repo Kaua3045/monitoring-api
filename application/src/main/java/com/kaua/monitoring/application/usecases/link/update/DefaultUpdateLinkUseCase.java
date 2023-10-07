@@ -2,7 +2,7 @@ package com.kaua.monitoring.application.usecases.link.update;
 
 import com.kaua.monitoring.application.exceptions.DomainException;
 import com.kaua.monitoring.application.exceptions.NotFoundException;
-import com.kaua.monitoring.application.exceptions.either.Either;
+import com.kaua.monitoring.application.either.Either;
 import com.kaua.monitoring.application.gateways.LinkGateway;
 import com.kaua.monitoring.application.usecases.link.outputs.UpdateLinkOutput;
 import com.kaua.monitoring.domain.links.Link;
